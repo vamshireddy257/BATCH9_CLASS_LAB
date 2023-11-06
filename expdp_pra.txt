@@ -1,0 +1,74 @@
+expdp dmp
+directory
+dumpfile
+logfile
+full=y
+schemas=
+tables=schema.table,
+content=all/metadata_only/data_only
+parallel=
+file_size
+estimate_only=
+exclude=
+query=
+flashback_scn=
+flashback_time=
+version=
+tablespaces=
+network_link=
+parfile=
+job_name=
+
+
+impdp
+directory=
+dumpfile=
+logfile=
+schemas=soe
+tables
+remap_schema=soe:scott
+remap_table=emp:employee
+remap_tablespace=
+job_name
+table_exists_action=skip/replace/truncate/append
+
+create scott identified tiger;
+
+select * from emp where deptno=10;
+10 rec
+
+
+19c --12c
+
+
+select OWNER,sum(bytes)/1024/1024/1000 "SIZE_IN_GB" from dba_segments where owner ='SOE' group by owner order by owner;
+
+expdp directory=datapump_dir dumpfile=exp_soe.dmp logfile=estimate_soe_exp.log schemas=soe 
+
+source --> soe --> soe_tbs
+target --> soe --> users
+
+impdp directory=import_dir dumpfile=exp_soe.dmp logfile=imp_orders_061123.log remap_table=orders2:test_orders
+
+sys/scott#123@to_savings as sysdba
+
+impdp directory=import_dir dumpfile=exp_soe.dmp logfile=imp_orders_061123.log remap_schema=soe:scott
+
+impdp directory=import_dir dumpfile=exp_soe.dmp logfile=imp_soe_loans_061123.log remap_tablespace=soetbs:sbi_ts
+
+soe
+
+orders 
+
+
+
+"sys/scott#123@to_demats as sysdba"
+
+/u01 - 5G
+/u02 - 3G
+/u03 - 6G
+
+network_link=to_dblink
+
+
+expdp directory=dir1,dir2,dir3 dumpfile=dir1:dumpfile1.dmp,dir2:dumpfile2,dir3:dumpfile3 file_size= 3G
