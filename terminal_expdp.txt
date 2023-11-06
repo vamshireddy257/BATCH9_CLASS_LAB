@@ -1,0 +1,3773 @@
+login as: oracle
+oracle@192.168.0.174's password:
+    +----------------------------------------------------------------------+
+    ¦                 • MobaXterm Personal Edition v23.3 •                 ¦
+    ¦               (SSH client, X server and network tools)               ¦
+    ¦                                                                      ¦
+    ¦ ? SSH session to oracle@192.168.0.174                                ¦
+    ¦   • Direct SSH      :  ?                                             ¦
+    ¦   • SSH compression :  ?                                             ¦
+    ¦   • SSH-browser     :  ?                                             ¦
+    ¦   • X11-forwarding  :  ?  (remote display is forwarded through SSH)  ¦
+    ¦                                                                      ¦
+    ¦ ? For more info, ctrl+click on help or visit our website.            ¦
+    +----------------------------------------------------------------------+
+
+Last login: Sun Nov  5 09:42:53 2023 from 192.168.0.234
+[oracle@oraclelab2 ~]$ ps -ef|grep smon
+oracle   23199     1  0 11:01 ?        00:00:00 ora_smon_sbiprod
+oracle   24124 24068  0 11:09 pts/1    00:00:00 grep --color=auto smon
+[oracle@oraclelab2 ~]$
+[oracle@oraclelab2 ~]$ . oraenv
+ORACLE_SID = [oracle] ? sbiprod
+The Oracle base has been set to /u01/app/oracle
+[oracle@oraclelab2 ~]$
+[oracle@oraclelab2 ~]$ sqlplus / as sysdba
+
+SQL*Plus: Release 19.0.0.0.0 - Production on Mon Nov 6 11:09:22 2023
+Version 19.3.0.0.0
+
+Copyright (c) 1982, 2019, Oracle.  All rights reserved.
+
+
+Connected to:
+Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Version 19.3.0.0.0
+
+SQL>
+SQL>
+SQL> show pdbs
+
+    CON_ID CON_NAME                       OPEN MODE  RESTRICTED
+---------- ------------------------------ ---------- ----------
+         2 PDB$SEED                       READ ONLY  NO
+         3 SAVINGS                        READ WRITE NO
+         4 LOANS                          READ WRITE NO
+         5 DEMATS                         READ WRITE NO
+         7 SBI                            MOUNTED
+SQL>
+SQL> exit
+Disconnected from Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Version 19.3.0.0.0
+[oracle@oraclelab2 ~]$
+[oracle@oraclelab2 ~]$
+[oracle@oraclelab2 ~]$ mkdir -p /u01/import
+[oracle@oraclelab2 ~]$
+[oracle@oraclelab2 ~]$
+[oracle@oraclelab2 ~]$
+[oracle@oraclelab2 ~]$ cd /u01/import
+[oracle@oraclelab2 import]$ ls -lrt
+total 330488
+-rw-r-----. 1 oracle oinstall 338419712 Nov  6 11:11 exp_soe.dmp
+[oracle@oraclelab2 import]$
+[oracle@oraclelab2 import]$
+[oracle@oraclelab2 import]$ ps -ef|grep tns
+root        35     2  0 Nov05 ?        00:00:00 [netns]
+oracle    4689     1  0 Nov05 ?        00:00:00 /u01/app/oracle/product/19.0.0.0/dbhome_1/bin/tnslsnr LISTENER -inherit
+oracle   25034 24068  0 11:23 pts/1    00:00:00 grep --color=auto tns
+[oracle@oraclelab2 import]$
+[oracle@oraclelab2 import]$ cd $ORACLE_HOME/network/admin
+[oracle@oraclelab2 admin]$
+[oracle@oraclelab2 admin]$ ls -lrt
+total 68
+-rwxrwxrwx. 1 oracle oinstall  1536 Feb 14  2018 shrept.lst
+drwxrwxrwx. 2 oracle oinstall    64 Oct 25 17:06 samples
+-rw-r--r--. 1 oracle oinstall 16384 Nov  4 11:41 nag.dmp
+-rw-r--r--. 1 oracle oinstall  1345 Nov  4 11:41 nag.log
+-rw-r--r--. 1 oracle oinstall  1256 Nov  4 12:14 naga.log
+-rw-r--r--. 1 oracle oinstall 16384 Nov  4 12:37 oracle@192.0.168.123
+-rw-r--r--. 1 oracle oinstall 16384 Nov  4 12:51 arun.dmp
+-rw-r--r--. 1 oracle oinstall   908 Nov  5 09:51 listener.ora
+-rw-r--r--. 1 oracle oinstall  1260 Nov  5 09:55 tnsnames.ora
+[oracle@oraclelab2 admin]$ view tnsnames.ora
+[oracle@oraclelab2 admin]$
+[oracle@oraclelab2 admin]$
+[oracle@oraclelab2 admin]$ vi tnsnames.ora
+[oracle@oraclelab2 admin]$
+[oracle@oraclelab2 admin]$
+[oracle@oraclelab2 admin]$
+[oracle@oraclelab2 admin]$
+[oracle@oraclelab2 admin]$ sqlplus / as sysdba
+
+SQL*Plus: Release 19.0.0.0.0 - Production on Mon Nov 6 11:26:29 2023
+Version 19.3.0.0.0
+
+Copyright (c) 1982, 2019, Oracle.  All rights reserved.
+
+
+Connected to:
+Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Version 19.3.0.0.0
+
+SQL>
+SQL>
+SQL> alter session set container=savings;
+
+Session altered.
+
+SQL>
+SQL>
+SQL>
+SQL> desc dba_data_files;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ FILE_NAME                                          VARCHAR2(513)
+ FILE_ID                                            NUMBER
+ TABLESPACE_NAME                                    VARCHAR2(30)
+ BYTES                                              NUMBER
+ BLOCKS                                             NUMBER
+ STATUS                                             VARCHAR2(9)
+ RELATIVE_FNO                                       NUMBER
+ AUTOEXTENSIBLE                                     VARCHAR2(3)
+ MAXBYTES                                           NUMBER
+ MAXBLOCKS                                          NUMBER
+ INCREMENT_BY                                       NUMBER
+ USER_BYTES                                         NUMBER
+ USER_BLOCKS                                        NUMBER
+ ONLINE_STATUS                                      VARCHAR2(7)
+ LOST_WRITE_PROTECT                                 VARCHAR2(7)
+
+SQL> select file_name from dba_tablespaces;
+select file_name from dba_tablespaces
+       *
+ERROR at line 1:
+ORA-00904: "FILE_NAME": invalid identifier
+
+
+SQL> select file_name from dba_data_files;
+
+FILE_NAME
+--------------------------------------------------------------------------------
+/u01/app/oracle/oradata/SBIPROD/08FFEAC72FAD30EBE0656240ADE77859/datafile/o1_mf_
+system_ln1glg5g_.dbf
+
+/u01/app/oracle/oradata/SBIPROD/08FFEAC72FAD30EBE0656240ADE77859/datafile/o1_mf_
+sysaux_ln1glg5n_.dbf
+
+/u01/app/oracle/oradata/SBIPROD/08FFEAC72FAD30EBE0656240ADE77859/datafile/o1_mf_
+undotbs1_ln1glg5o_.dbf
+
+/u01/app/oracle/oradata/SBIPROD/08FFEAC72FAD30EBE0656240ADE77859/datafile/o1_mf_
+users_ln1glojs_.dbf
+
+FILE_NAME
+--------------------------------------------------------------------------------
+
+/u01/app/oracle/oradata/SBIPROD/saving_ts_001.dbf
+
+SQL> create tablespace soetbs datafile '/u01/app/oracle/oradata/SBIPROD/soetbs_001.dbf' size 2G autoextend on;
+
+Tablespace created.
+
+SQL> exit
+Disconnected from Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Version 19.3.0.0.0
+[oracle@oraclelab2 admin]$
+[oracle@oraclelab2 admin]$
+[oracle@oraclelab2 admin]$
+[oracle@oraclelab2 admin]$
+[oracle@oraclelab2 admin]$
+[oracle@oraclelab2 admin]$ cd /u01/import
+[oracle@oraclelab2 import]$ ls -lrt
+total 330488
+-rw-r-----. 1 oracle oinstall 338419712 Nov  6 11:11 exp_soe.dmp
+[oracle@oraclelab2 import]$
+[oracle@oraclelab2 import]$
+[oracle@oraclelab2 import]$ sqlplus / as sysdba
+
+SQL*Plus: Release 19.0.0.0.0 - Production on Mon Nov 6 11:29:40 2023
+Version 19.3.0.0.0
+
+Copyright (c) 1982, 2019, Oracle.  All rights reserved.
+
+
+Connected to:
+Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Version 19.3.0.0.0
+
+SQL>
+SQL>
+SQL> create or replace directory import_dir as '/u01/import';
+
+Directory created.
+
+SQL> exit
+Disconnected from Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Version 19.3.0.0.0
+[oracle@oraclelab2 import]$
+[oracle@oraclelab2 import]$
+[oracle@oraclelab2 import]$
+[oracle@oraclelab2 import]$ impdp directory=import_dir dumpfile=exp_soe.dmp logfile=imp_soe_061123.log
+
+Import: Release 19.0.0.0.0 - Production on Mon Nov 6 11:31:24 2023
+Version 19.3.0.0.0
+
+Copyright (c) 1982, 2019, Oracle and/or its affiliates.  All rights reserved.
+
+Username: / as sysdba
+Password:
+
+Connected to: Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+
+Warning: Oracle Data Pump operations are not typically needed when connected to the root or seed of a container database.
+
+Master table "SYS"."SYS_IMPORT_FULL_01" successfully loaded/unloaded
+Starting "SYS"."SYS_IMPORT_FULL_01":  /******** AS SYSDBA directory=import_dir dumpfile=exp_soe.dmp logfile=imp_soe_061123.log
+Processing object type SCHEMA_EXPORT/USER
+ORA-39083: Object type USER:"SOE" failed to create with error:
+ORA-65096: invalid common user or role name
+
+Failing sql is:
+ CREATE USER "SOE" IDENTIFIED BY VALUES 'S:B90246BCD61EB2520AFB634F44B75D2D1A735A448A1FE5112FB485ECA44C;T:F054583E576A2C094E13B569269486C7D048E755443FAE41FD37EA2BC2814E320D64BF8F2BFE7D5B6E1F70990804587E9667B971FBBBB880ED0899AD99B463F66C5CAA9AB7B3895F750E2ED0140CA13E' DEFAULT TABLESPACE "SOETBS" TEMPORARY TABLESPACE "TEMP"
+
+Processing object type SCHEMA_EXPORT/SYSTEM_GRANT
+ORA-39083: Object type SYSTEM_GRANT failed to create with error:
+ORA-01917: user or role 'SOE' does not exist
+
+Failing sql is:
+GRANT ADMINISTER SQL MANAGEMENT OBJECT TO "SOE"
+
+ORA-39083: Object type SYSTEM_GRANT failed to create with error:
+ORA-01917: user or role 'SOE' does not exist
+
+Failing sql is:
+GRANT ADMINISTER ANY SQL TUNING SET TO "SOE"
+
+ORA-39083: Object type SYSTEM_GRANT failed to create with error:
+ORA-01917: user or role 'SOE' does not exist
+
+Failing sql is:
+GRANT ADMINISTER SQL TUNING SET TO "SOE"
+
+ORA-39083: Object type SYSTEM_GRANT failed to create with error:
+ORA-01917: user or role 'SOE' does not exist
+
+Failing sql is:
+GRANT MANAGE SCHEDULER TO "SOE"
+
+ORA-39083: Object type SYSTEM_GRANT failed to create with error:
+ORA-01917: user or role 'SOE' does not exist
+
+Failing sql is:
+GRANT CREATE JOB TO "SOE"
+
+ORA-39083: Object type SYSTEM_GRANT failed to create with error:
+ORA-01917: user or role 'SOE' does not exist
+
+Failing sql is:
+GRANT ADVISOR TO "SOE"
+
+ORA-39083: Object type SYSTEM_GRANT failed to create with error:
+ORA-01917: user or role 'SOE' does not exist
+
+Failing sql is:
+GRANT ANALYZE ANY DICTIONARY TO "SOE"
+
+ORA-39083: Object type SYSTEM_GRANT failed to create with error:
+ORA-01917: user or role 'SOE' does not exist
+
+Failing sql is:
+GRANT CREATE MATERIALIZED VIEW TO "SOE"
+
+ORA-39083: Object type SYSTEM_GRANT failed to create with error:
+ORA-01917: user or role 'SOE' does not exist
+
+Failing sql is:
+GRANT ANALYZE ANY TO "SOE"
+
+ORA-39083: Object type SYSTEM_GRANT failed to create with error:
+ORA-01917: user or role 'SOE' does not exist
+
+Failing sql is:
+GRANT CREATE VIEW TO "SOE"
+
+ORA-39083: Object type SYSTEM_GRANT failed to create with error:
+ORA-01917: user or role 'SOE' does not exist
+
+Failing sql is:
+GRANT ALTER SESSION TO "SOE"
+
+ORA-39083: Object type SYSTEM_GRANT failed to create with error:
+ORA-01917: user or role 'SOE' does not exist
+
+Failing sql is:
+GRANT ALTER SYSTEM TO "SOE"
+
+Processing object type SCHEMA_EXPORT/ROLE_GRANT
+ORA-39083: Object type ROLE_GRANT failed to create with error:
+ORA-01917: user or role 'SOE' does not exist
+
+Failing sql is:
+ GRANT "CONNECT" TO "SOE"
+
+ORA-39083: Object type ROLE_GRANT failed to create with error:
+ORA-01917: user or role 'SOE' does not exist
+
+Failing sql is:
+ GRANT "RESOURCE" TO "SOE"
+
+ORA-39083: Object type ROLE_GRANT failed to create with error:
+ORA-01919: role 'PLUSTRACE' does not exist
+
+Failing sql is:
+ GRANT "PLUSTRACE" TO "SOE"
+
+Processing object type SCHEMA_EXPORT/DEFAULT_ROLE
+ORA-39083: Object type DEFAULT_ROLE:"SOE" failed to create with error:
+ORA-01918: user 'SOE' does not exist
+
+Failing sql is:
+ ALTER USER "SOE" DEFAULT ROLE ALL
+
+Processing object type SCHEMA_EXPORT/TABLESPACE_QUOTA
+ORA-39083: Object type TABLESPACE_QUOTA:"SOE"."SOETBS" failed to create with error:
+ORA-01918: user 'SOE' does not exist
+
+Failing sql is:
+DECLARE   TEMP_COUNT NUMBER;   SQLSTR VARCHAR2(200); BEGIN   SQLSTR := 'ALTER USER "SOE" QUOTA UNLIMITED ON "SOETBS"';  EXECUTE IMMEDIATE SQLSTR;EXCEPTION   WHEN OTHERS THEN    IF SQLCODE = -30041 THEN       SQLSTR := 'SELECT COUNT(*) FROM USER_TABLESPACES               WHERE TABLESPACE_NAME = ''SOETBS'' AND CONTENTS = ''TEMPORARY''';      EXECUTE IMMEDIATE SQLSTR INTO TEMP_COUNT;      IF TEMP_COUNT = 1 THEN RETURN;       ELSE RAISE;       END IF;    ELSE      RAISE;    END IF;END;
+
+Processing object type SCHEMA_EXPORT/PRE_SCHEMA/PROCACT_SCHEMA
+ORA-39083: Object type PROCACT_SCHEMA failed to create with error:
+ORA-31625: Schema SOE is needed to import this object, but is unaccessible
+ORA-01435: user does not exist
+
+Failing sql is:
+BEGIN
+sys.dbms_logrep_imp.instantiate_schema(schema_name=>SYS_CONTEXT('USERENV','CURRENT_SCHEMA'), export_db_name=>'ORADB.LOCALDOMAIN', inst_scn=>'2359728');COMMIT; END;
+
+Processing object type SCHEMA_EXPORT/SEQUENCE/SEQUENCE
+ORA-39083: Object type SEQUENCE:"SOE"."LOGON_SEQ" failed to create with error:
+ORA-01917: user or role '' does not exist
+
+Failing sql is:
+ CREATE SEQUENCE  "SOE"."LOGON_SEQ"  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 456141 CACHE 100000 NOORDER  NOCYCLE  NOKEEP  NOSCALE  GLOBAL
+
+ORA-39083: Object type SEQUENCE:"SOE"."ADDRESS_SEQ" failed to create with error:
+ORA-01917: user or role '' does not exist
+
+Failing sql is:
+ CREATE SEQUENCE  "SOE"."ADDRESS_SEQ"  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 130001 CACHE 100000 NOORDER  NOCYCLE  NOKEEP  NOSCALE  GLOBAL
+
+ORA-39083: Object type SEQUENCE:"SOE"."ORDERS_SEQ" failed to create with error:
+ORA-01917: user or role '' does not exist
+
+Failing sql is:
+ CREATE SEQUENCE  "SOE"."ORDERS_SEQ"  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 131406 CACHE 100000 NOORDER  NOCYCLE  NOKEEP  NOSCALE  GLOBAL
+
+ORA-39083: Object type SEQUENCE:"SOE"."CARD_DETAILS_SEQ" failed to create with error:
+ORA-01917: user or role '' does not exist
+
+Failing sql is:
+ CREATE SEQUENCE  "SOE"."CARD_DETAILS_SEQ"  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 130001 CACHE 100000 NOORDER  NOCYCLE  NOKEEP  NOSCALE  GLOBAL
+
+ORA-39083: Object type SEQUENCE:"SOE"."CUSTOMER_SEQ" failed to create with error:
+ORA-01917: user or role '' does not exist
+
+Failing sql is:
+ CREATE SEQUENCE  "SOE"."CUSTOMER_SEQ"  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 120001 CACHE 100000 NOORDER  NOCYCLE  NOKEEP  NOSCALE  GLOBAL
+
+Processing object type SCHEMA_EXPORT/TABLE/TABLE
+ORA-39083: Object type TABLE:"SOE"."WAREHOUSES" failed to create with error:
+ORA-00959: tablespace 'SOETBS' does not exist
+
+Failing sql is:
+CREATE TABLE "SOE"."WAREHOUSES" ("WAREHOUSE_ID" NUMBER(6,0), "WAREHOUSE_NAME" VARCHAR2(35 BYTE), "LOCATION_ID" NUMBER(4,0)) SEGMENT CREATION IMMEDIATE PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255  NOCOMPRESS LOGGING STORAGE(INITIAL 1048576 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645 PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT) TABLESPACE "SOETBS"   NO INMEMORY
+
+ORA-39083: Object type TABLE:"SOE"."JOB_HISTORY" failed to create with error:
+ORA-00959: tablespace 'SOETBS' does not exist
+
+Failing sql is:
+CREATE TABLE "SOE"."JOB_HISTORY" ("JOB_HIST_ID" NUMBER GENERATED BY DEFAULT AS IDENTITY MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 247 CACHE 20 NOORDER  NOCYCLE  NOKEEP  NOSCALE  NOT NULL ENABLE, "EMP_NO" NUMBER(4,0), "JOB_CODE" CHAR(4 BYTE), "START_DATE" DATE CONSTRAINT "NN_START_DATE" NOT NULL ENABLE, "END_DATE" DATE CONSTRAINT "NN_END_DATE" NOT NULL ENABLE) SEGMENT CREATION IMMEDIATE PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255  NOCOMPRESS LOGGING STORAGE(INITIAL 1048576 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645 PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT) TABLESPACE "SOETBS"   NO INMEMORY
+
+ORA-39083: Object type TABLE:"SOE"."PRODUCT_DESCRIPTIONS" failed to create with error:
+ORA-00959: tablespace 'SOETBS' does not exist
+
+Failing sql is:
+CREATE TABLE "SOE"."PRODUCT_DESCRIPTIONS" ("PRODUCT_ID" NUMBER(6,0), "LANGUAGE_ID" VARCHAR2(3 BYTE), "TRANSLATED_NAME" NVARCHAR2(50) CONSTRAINT "TRANSLATED_NAME_NN" NOT NULL ENABLE, "TRANSLATED_DESCRIPTION" NVARCHAR2(2000) CONSTRAINT "TRANSLATED_DESC_NN" NOT NULL ENABLE) SEGMENT CREATION IMMEDIATE PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255  NOCOMPRESS LOGGING STORAGE(INITIAL 1048576 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645 PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT) TABLESPACE "SOETBS"   NO INMEMORY
+
+ORA-39083: Object type TABLE:"SOE"."ADDRESSES" failed to create with error:
+ORA-00959: tablespace 'SOETBS' does not exist
+
+Failing sql is:
+CREATE TABLE "SOE"."ADDRESSES" ("ADDRESS_ID" NUMBER(12,0) CONSTRAINT "ADDRESS_ID_NN" NOT NULL ENABLE, "CUSTOMER_ID" NUMBER(12,0) CONSTRAINT "ADDRESS_CUST_ID_NN" NOT NULL ENABLE, "DATE_CREATED" DATE CONSTRAINT "ADDRESS_DATEC_NN" NOT NULL ENABLE, "HOUSE_NO_OR_NAME" VARCHAR2(60 BYTE), "STREET_NAME" VARCHAR2(60 BYTE), "TOWN" VARCHAR2(60 BYTE), "COUNTY" VARCHAR2(60 BYTE), "COUNTRY" VARCHAR2(60 BYTE), "POST_CODE" VARCHAR2(12 BYTE), "ZIP_CODE" VARCHAR2(12 BYTE)) SEGMENT CREATION IMMEDIATE PCTFREE 10 PCTUSED 40 INITRANS 16 MAXTRANS 255  NOCOMPRESS LOGGING STORAGE(INITIAL 8388608 NEXT 8388608 MINEXTENTS 1 MAXEXTENTS 2147483645 PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT) TABLESPACE "SOETBS"   NO INMEMORY
+
+ORA-39083: Object type TABLE:"SOE"."CARD_DETAILS" failed to create with error:
+ORA-00959: tablespace 'SOETBS' does not exist
+
+Failing sql is:
+CREATE TABLE "SOE"."CARD_DETAILS" ("CARD_ID" NUMBER(12,0) CONSTRAINT "CARD_ID_NN" NOT NULL ENABLE, "CUSTOMER_ID" NUMBER(12,0) CONSTRAINT "CARD_CUST_ID_NN" NOT NULL ENABLE, "CARD_TYPE" VARCHAR2(30 BYTE) CONSTRAINT "CARD_TYPE_NN" NOT NULL ENABLE, "CARD_NUMBER" NUMBER(12,0) CONSTRAINT "CARD_NUMBER_NN" NOT NULL ENABLE, "EXPIRY_DATE" DATE CONSTRAINT "EXPIRY_DATE_NN" NOT NULL ENABLE, "IS_VALID" VARCHAR2(1 BYTE) CONSTRAINT "IS_VALID_NN" NOT NULL ENABLE, "SECURITY_CODE" NUMBER(6,0)) SEGMENT CREATION IMMEDIATE PCTFREE 10 PCTUSED 40 INITRANS 16 MAXTRANS 255  NOCOMPRESS LOGGING STORAGE(INITIAL 8388608 NEXT 8388608 MINEXTENTS 1 MAXEXTENTS 2147483645 PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT) TABLESPACE "SOETBS"   NO INMEMORY
+
+ORA-39083: Object type TABLE:"SOE"."ORDER_ITEMS" failed to create with error:
+ORA-00959: tablespace 'SOETBS' does not exist
+
+Failing sql is:
+CREATE TABLE "SOE"."ORDER_ITEMS" ("ORDER_ID" NUMBER(12,0) CONSTRAINT "OI_ORDER_ID_NN" NOT NULL ENABLE, "LINE_ITEM_ID" NUMBER(3,0) CONSTRAINT "OI_LINEITEM_ID_NN" NOT NULL ENABLE, "PRODUCT_ID" NUMBER(6,0) CONSTRAINT "OI_PRODUCT_ID_NN" NOT NULL ENABLE, "UNIT_PRICE" NUMBER(8,2), "QUANTITY" NUMBER(8,0), "DISPATCH_DATE" DATE, "RETURN_DATE" DATE, "GIFT_WRAP" VARCHAR2(20 BYTE), "CONDITION" VARCHAR2(20 BYTE), "SUPPLIER_ID" NUMBER(6,0), "ESTIMATED_DELIVERY" DATE) SEGMENT CREATION IMMEDIATE PCTFREE 10 PCTUSED 40 INITRANS 16 MAXTRANS 255  NOCOMPRESS LOGGING STORAGE(INITIAL 8388608 NEXT 8388608 MINEXTENTS 1 MAXEXTENTS 2147483645 PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT) TABLESPACE "SOETBS"   NO INMEMORY
+
+ORA-39083: Object type TABLE:"SOE"."ORDERENTRY_METADATA" failed to create with error:
+ORA-00959: tablespace 'SOETBS' does not exist
+
+Failing sql is:
+CREATE TABLE "SOE"."ORDERENTRY_METADATA" ("METADATA_KEY" VARCHAR2(30 BYTE), "METADATA_VALUE" VARCHAR2(30 BYTE)) SEGMENT CREATION IMMEDIATE PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255  NOCOMPRESS LOGGING STORAGE(INITIAL 1048576 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645 PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT) TABLESPACE "SOETBS"   NO INMEMORY
+
+ORA-39083: Object type TABLE:"SOE"."LOGON" failed to create with error:
+ORA-00959: tablespace 'SOETBS' does not exist
+
+Failing sql is:
+CREATE TABLE "SOE"."LOGON" ("LOGON_ID" NUMBER CONSTRAINT "LOGON_LOGON_ID_NN" NOT NULL ENABLE, "CUSTOMER_ID" NUMBER CONSTRAINT "LOGON_CUSTOMER_ID_NN" NOT NULL ENABLE, "LOGON_DATE" DATE) SEGMENT CREATION IMMEDIATE PCTFREE 10 PCTUSED 40 INITRANS 16 MAXTRANS 255  NOCOMPRESS LOGGING STORAGE(INITIAL 8388608 NEXT 8388608 MINEXTENTS 1 MAXEXTENTS 2147483645 PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT) TABLESPACE "SOETBS"   NO INMEMORY
+
+ORA-39083: Object type TABLE:"SOE"."V" failed to create with error:
+ORA-00959: tablespace 'SOETBS' does not exist
+
+Failing sql is:
+CREATE TABLE "SOE"."V" ("RID" NUMBER GENERATED BY DEFAULT ON NULL AS IDENTITY MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 1 CACHE 20 NOORDER  NOCYCLE  NOKEEP  NOSCALE  NOT NULL ENABLE, "X" VARCHAR2(1000 BYTE)) SEGMENT CREATION IMMEDIATE PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255  NOCOMPRESS LOGGING STORAGE(INITIAL 1048576 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645 PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT) TABLESPACE "SOETBS"   NO INMEMORY
+
+ORA-39083: Object type TABLE:"SOE"."PRODUCT_INFORMATION" failed to create with error:
+ORA-00959: tablespace 'SOETBS' does not exist
+
+Failing sql is:
+CREATE TABLE "SOE"."PRODUCT_INFORMATION" ("PRODUCT_ID" NUMBER(6,0) CONSTRAINT "PRODUCT_PRODUCT_ID_NN" NOT NULL ENABLE, "PRODUCT_NAME" VARCHAR2(50 BYTE) CONSTRAINT "PRODUCT_PRODUCT_NAME_NN" NOT NULL ENABLE, "PRODUCT_DESCRIPTION" VARCHAR2(2000 BYTE), "CATEGORY_ID" NUMBER(4,0) CONSTRAINT "PRODUCT_CATEGORY_ID_NN" NOT NULL ENABLE, "WEIGHT_CLASS" NUMBER(1,0), "WARRANTY_PERIOD" INTERVAL YEAR (2) TO MONTH, "SUPPLIER_ID" NUMBER(6,0), "PRODUCT_STATUS" VARCHAR2(20 BYTE), "LIST_PRICE" NUMBER(8,2), "MIN_PRICE" NUMBER(8,2), "CATALOG_URL" VARCHAR2(50 BYTE)) SEGMENT CREATION IMMEDIATE PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255  NOCOMPRESS LOGGING STORAGE(INITIAL 1048576 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645 PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT) TABLESPACE "SOETBS"   NO INMEMORY
+
+ORA-39083: Object type TABLE:"SOE"."CUSTOMERS" failed to create with error:
+ORA-00959: tablespace 'SOETBS' does not exist
+
+Failing sql is:
+CREATE TABLE "SOE"."CUSTOMERS" ("CUSTOMER_ID" NUMBER(12,0) CONSTRAINT "CUST_CUSTID_NN" NOT NULL ENABLE, "CUST_FIRST_NAME" VARCHAR2(40 BYTE) CONSTRAINT "CUST_FNAME_NN" NOT NULL ENABLE, "CUST_LAST_NAME" VARCHAR2(40 BYTE) CONSTRAINT "CUST_LNAME_NN" NOT NULL ENABLE, "NLS_LANGUAGE" VARCHAR2(3 BYTE), "NLS_TERRITORY" VARCHAR2(30 BYTE), "CREDIT_LIMIT" NUMBER(9,2), "CUST_EMAIL" VARCHAR2(100 BYTE), "ACCOUNT_MGR_ID" NUMBER(12,0), "CUSTOMER_SINCE" DATE, "CUSTOMER_CLASS" VARCHAR2(40 BYTE), "SUGGESTIONS" VARCHAR2(40 BYTE), "DOB" DATE, "MAILSHOT" VARCHAR2(1 BYTE), "PARTNER_MAILSHOT" VARCHAR2(1 BYTE), "PREFERRED_ADDRESS" NUMBER(12,0), "PREFERRED_CARD" NUMBER(12,0)) SEGMENT CREATION IMMEDIATE PCTFREE 10 PCTUSED 40 INITRANS 16 MAXTRANS 255  NOCOMPRESS LOGGING STORAGE(INITIAL 8388608 NEXT 8388608 MINEXTENTS 1 MAXEXTENTS 2147483645 PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT) TABLESPACE "SOETBS"   NO INMEMORY
+
+ORA-39083: Object type TABLE:"SOE"."EMP" failed to create with error:
+ORA-00959: tablespace 'SOETBS' does not exist
+
+Failing sql is:
+CREATE TABLE "SOE"."EMP" ("EMP_NO" NUMBER(4,0), "ENAME" VARCHAR2(20 BYTE), "HIRE_DATE" DATE, "DEPT_NO" NUMBER(2,0), "JOB_CODE" CHAR(4 BYTE), "SALARY" NUMBER(8,2), "MGR_ID" NUMBER(4,0), "TERMINATED" CHAR(1 BYTE) DEFAULT 'N', "NOTES" VARCHAR2(1000 BYTE)) SEGMENT CREATION IMMEDIATE PCTFREE 10 PCTUSED 0 INITRANS 1 MAXTRANS 255  NOCOMPRESS LOGGING STORAGE(INITIAL 1048576 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645 PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT) TABLESPACE "SOETBS"   NO INMEMORY
+
+ORA-39083: Object type TABLE:"SOE"."ORDERS" failed to create with error:
+ORA-00959: tablespace 'SOETBS' does not exist
+
+Failing sql is:
+CREATE TABLE "SOE"."ORDERS" ("ORDER_ID" NUMBER(12,0) CONSTRAINT "ORDER_ORDER_ID_NN" NOT NULL ENABLE, "ORDER_DATE" TIMESTAMP (6) WITH LOCAL TIME ZONE CONSTRAINT "ORDER_DATE_NN" NOT NULL ENABLE, "ORDER_MODE" VARCHAR2(8 BYTE), "CUSTOMER_ID" NUMBER(12,0) CONSTRAINT "ORDER_CUSTOMER_ID_NN" NOT NULL ENABLE, "ORDER_STATUS" NUMBER(2,0), "ORDER_TOTAL" NUMBER(8,2), "SALES_REP_ID" NUMBER(6,0), "PROMOTION_ID" NUMBER(6,0), "WAREHOUSE_ID" NUMBER(6,0), "DELIVERY_TYPE" VARCHAR2(15 BYTE), "COST_OF_DELIVERY" NUMBER(6,0), "WAIT_TILL_ALL_AVAILABLE" VARCHAR2(15 BYTE), "DELIVERY_ADDRESS_ID" NUMBER(12,0), "CUSTOMER_CLASS" VARCHAR2(30 BYTE), "CARD_ID" NUMBER(12,0), "INVOICE_ADDRESS_ID" NUMBER(12,0)) SEGMENT CREATION IMMEDIATE PCTFREE 10 PCTUSED 40 INITRANS 16 MAXTRANS 255  NOCOMPRESS LOGGING STORAGE(INITIAL 8388608 NEXT 8388608 MINEXTENTS 1 MAXEXTENTS 2147483645 PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT) TABLESPACE "SOETBS"   NO INMEMORY
+
+ORA-39083: Object type TABLE:"SOE"."INVENTORIES" failed to create with error:
+ORA-00959: tablespace 'SOETBS' does not exist
+
+Failing sql is:
+CREATE TABLE "SOE"."INVENTORIES" ("PRODUCT_ID" NUMBER(6,0) CONSTRAINT "INVENTORY_PROODUCT_ID_NN" NOT NULL ENABLE, "WAREHOUSE_ID" NUMBER(6,0) CONSTRAINT "INVENTORY_WAREHOUSE_ID_NN" NOT NULL ENABLE, "QUANTITY_ON_HAND" NUMBER(8,0) CONSTRAINT "INVENTORY_QOH_NN" NOT NULL ENABLE) SEGMENT CREATION IMMEDIATE PCTFREE 90 PCTUSED 5 INITRANS 16 MAXTRANS 255  NOCOMPRESS LOGGING STORAGE(INITIAL 1048576 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645 PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT) TABLESPACE "SOETBS"   NO INMEMORY
+
+ORA-39083: Object type TABLE:"SOE"."DEPT" failed to create with error:
+ORA-00959: tablespace 'SOETBS' does not exist
+
+Failing sql is:
+CREATE TABLE "SOE"."DEPT" ("DEPT_NO" NUMBER(2,0), "DNAME" VARCHAR2(22 BYTE)) SEGMENT CREATION IMMEDIATE PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255  NOCOMPRESS LOGGING STORAGE(INITIAL 1048576 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645 PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT) TABLESPACE "SOETBS"   NO INMEMORY
+
+ORA-39083: Object type TABLE:"SOE"."JOBS" failed to create with error:
+ORA-00959: tablespace 'SOETBS' does not exist
+
+Failing sql is:
+CREATE TABLE "SOE"."JOBS" ("JOB_CODE" CHAR(4 BYTE), "JOB_NAME" VARCHAR2(22 BYTE)) SEGMENT CREATION IMMEDIATE PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255  NOCOMPRESS LOGGING STORAGE(INITIAL 1048576 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645 PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT) TABLESPACE "SOETBS"   NO INMEMORY
+
+Processing object type SCHEMA_EXPORT/TABLE/TABLE_DATA
+Processing object type SCHEMA_EXPORT/TABLE/IDENTITY_COLUMN
+ORA-39112: Dependent object type IDENTITY_COLUMN:"SOE"."JOB_HISTORY" skipped, base object type TABLE:"SOE"."JOB_HISTORY" creation failed
+
+ORA-39112: Dependent object type IDENTITY_COLUMN:"SOE"."V" skipped, base object type TABLE:"SOE"."V" creation failed
+
+Processing object type SCHEMA_EXPORT/PACKAGE/PACKAGE_SPEC
+ORA-39083: Object type PACKAGE failed to create with error:
+ORA-31625: Schema SOE is needed to import this object, but is unaccessible
+ORA-01435: user does not exist
+
+Failing sql is:
+CREATE EDITIONABLE PACKAGE ORDERENTRY
+AS
+  --
+  --
+  --
+  -- Package     : Order Entry Package Spec
+  -- Version     : 2.0
+  -- Author      : Dominic Giles
+  -- Last Update : 15th November 2012
+  -- Description : Used in stress test of Oracle by swingbench test harness
+  --
+  --
+  --
+PROCEDURE setPLSQLCOMMIT(commitInPLSQL varchar2);
+FUNCTION browseProducts
+  (
+    cust_id customers.customer_id%type,
+    min_sleep INTEGER,
+    max_sleep INTEGER)
+  RETURN varchar;
+FUNCTION newOrder
+  (
+    cust_id customers.customer_id%type,
+    min_sleep INTEGER,
+    max_sleep INTEGER)
+  RETURN varchar;
+FUNCTION newCustomer(
+    p_fname customers.cust_first_name%type,
+    p_lname customers.cust_last_name%type,
+    p_nls_lang customers.nls_language%type,
+    p_nls_terr customers.nls_territory%type,
+    p_town addresses.town%type,
+    p_county addresses.county%type,
+    p_country addresses.country%type,
+    p_min_sleep INTEGER,
+    p_max_sleep INTEGER)
+  RETURN VARCHAR;
+FUNCTION updateCustomerDetails(
+    p_fname customers.cust_first_name%type,
+    p_lname customers.cust_last_name%type,
+    p_town addresses.town%type,
+    p_county addresses.county%type,
+    p_country addresses.country%type,
+    min_sleep INTEGER,
+    max_sleep INTEGER)
+  RETURN VARCHAR;
+FUNCTION processOrders
+  (
+    min_sleep INTEGER,
+
+Processing object type SCHEMA_EXPORT/FUNCTION/FUNCTION
+ORA-39083: Object type FUNCTION failed to create with error:
+ORA-31625: Schema SOE is needed to import this object, but is unaccessible
+ORA-01435: user does not exist
+
+Failing sql is:
+CREATE EDITIONABLE FUNCTION     CONSUME_CPU( N NUMBER) RETURN NUMBER
+IS
+ -- this function keeps consuming from CPU till N seconds is elapsed
+ V TIMESTAMP;
+ X NUMBER ;
+BEGIN
+ V := SYSTIMESTAMP;
+ WHILE EXTRACT( SECOND from SYSTIMESTAMP - V ) < N  LOOP
+  X := SQRT(DBMS_RANDOM.VALUE(1,10000));
+ END LOOP;
+ RETURN 0;
+END;
+
+Processing object type SCHEMA_EXPORT/PROCEDURE/PROCEDURE
+ORA-39083: Object type PROCEDURE failed to create with error:
+ORA-31625: Schema SOE is needed to import this object, but is unaccessible
+ORA-01435: user does not exist
+
+Failing sql is:
+CREATE EDITIONABLE PROCEDURE show_recm (in_task_name IN VARCHAR2) IS
+CURSOR curs IS
+SELECT DISTINCT action_id, command, attr1, attr2, attr3, attr4
+FROM user_advisor_actions
+WHERE task_name = in_task_name
+ORDER BY action_id;
+v_action number;
+v_command VARCHAR2(32);
+v_attr1 VARCHAR2(4000);
+v_attr2 VARCHAR2(4000);
+v_attr3 VARCHAR2(4000);
+v_attr4 VARCHAR2(4000);
+v_attr5 VARCHAR2(4000);
+BEGIN
+OPEN curs;
+DBMS_OUTPUT.PUT_LINE('=========================================');
+DBMS_OUTPUT.PUT_LINE('Task_name = ' || in_task_name);
+LOOP
+FETCH curs INTO
+v_action, v_command, v_attr1, v_attr2, v_attr3, v_attr4 ;
+EXIT when curs%NOTFOUND;
+DBMS_OUTPUT.PUT_LINE('Action ID: ' || v_action);
+DBMS_OUTPUT.PUT_LINE('Command : ' || v_command);
+DBMS_OUTPUT.PUT_LINE('Attr1 (name) : ' || SUBSTR(v_attr1,1,30));
+DBMS_OUTPUT.PUT_LINE('Attr2 (tablespace): ' || SUBSTR(v_attr2,1,30));
+DBMS_OUTPUT.PUT_LINE('Attr3 : ' || SUBSTR(v_attr3,1,30));
+DBMS_OUTPUT.PUT_LINE('Attr4 : ' || v_attr4);
+DBMS_OUTPUT.PUT_LINE('Attr5 : ' || v_attr5);
+DBMS_OUTPUT.PUT_LINE('----------------------------------------');
+END LOOP;
+CLOSE curs;
+DBMS_OUTPUT.PUT_LINE('=========END RECOMMENDATIONS============');
+END show_recm;
+
+Processing object type SCHEMA_EXPORT/PACKAGE/COMPILE_PACKAGE/PACKAGE_SPEC/ALTER_PACKAGE_SPEC
+ORA-39112: Dependent object type ALTER_PACKAGE_SPEC:"SOE"."ORDERENTRY" skipped, base object type PACKAGE:"SOE"."ORDERENTRY" creation failed
+
+Processing object type SCHEMA_EXPORT/FUNCTION/ALTER_FUNCTION
+ORA-39112: Dependent object type ALTER_FUNCTION:"SOE"."CONSUME_CPU" skipped, base object type FUNCTION:"SOE"."CONSUME_CPU" creation failed
+
+Processing object type SCHEMA_EXPORT/PROCEDURE/ALTER_PROCEDURE
+ORA-39112: Dependent object type ALTER_PROCEDURE:"SOE"."SHOW_RECM" skipped, base object type PROCEDURE:"SOE"."SHOW_RECM" creation failed
+
+Processing object type SCHEMA_EXPORT/VIEW/VIEW
+ORA-39083: Object type VIEW failed to create with error:
+ORA-31625: Schema SOE is needed to import this object, but is unaccessible
+ORA-01435: user does not exist
+
+Failing sql is:
+CREATE FORCE EDITIONABLE VIEW "SOE"."PRODUCTS" ("PRODUCT_ID", "LANGUAGE_ID", "PRODUCT_NAME", "CATEGORY_ID", "PRODUCT_DESCRIPTION", "WEIGHT_CLASS", "WARRANTY_PERIOD", "SUPPLIER_ID", "PRODUCT_STATUS", "LIST_PRICE", "MIN_PRICE", "CATALOG_URL") AS SELECT i.product_id
+,      d.language_id
+,      CASE WHEN d.language_id IS NOT NULL
+            THEN d.translated_name
+            ELSE TRANSLATE(i.product_name USING NCHAR_CS)
+       END    AS product_name
+,      i.category_id
+,      CASE WHEN d.language_id IS NOT NULL
+            THEN d.translated_description
+            ELSE TRANSLATE(i.product_description USING NCHAR_CS)
+       END    AS product_description
+,      i.weight_class
+,      i.warranty_period
+,      i.supplier_id
+,      i.product_status
+,      i.list_price
+,      i.min_price
+,      i.catalog_url
+FROM   product_information  i
+,      product_descriptions d
+WHERE  d.product_id  (+) = i.product_id
+
+ORA-39083: Object type VIEW failed to create with error:
+ORA-31625: Schema SOE is needed to import this object, but is unaccessible
+ORA-01435: user does not exist
+
+Failing sql is:
+CREATE FORCE EDITIONABLE VIEW "SOE"."PRODUCT_PRICES" ("CATEGORY_ID", "#_OF_PRODUCTS", "LOW_PRICE", "HIGH_PRICE") AS SELECT category_id
+,      COUNT(*)        as "#_OF_PRODUCTS"
+,      MIN(list_price) as low_price
+,      MAX(list_price) as high_price
+FROM   product_information
+GROUP BY category_id
+
+Processing object type SCHEMA_EXPORT/PACKAGE/PACKAGE_BODY
+ORA-39083: Object type PACKAGE_BODY failed to create with error:
+ORA-31625: Schema SOE is needed to import this object, but is unaccessible
+ORA-01435: user does not exist
+
+Failing sql is:
+CREATE EDITIONABLE PACKAGE BODY ORDERENTRY AS
+  --
+  --
+  -- Package     : Order Entry Package Body
+  -- Version     : 2.0
+  -- Author      : Dominic Giles
+  -- Last Update : 14 June 2011
+  -- Description : Used in stress test of Oracle by swingbench test harness
+  --
+  --
+  MAX_BROWSE_CATEGORY integer := 6;
+  MIN_PROD_ID         integer := 1;
+  MAX_PROD_ID         integer := 1000;
+  SELECT_STATEMENTS   integer := 1;
+  INSERT_STATEMENTS   integer := 2;
+  UPDATE_STATEMENTS   integer := 3;
+  DELETE_STATEMENTS   integer := 4;
+  COMMIT_STATEMENTS   integer := 5;
+  ROLLBACK_STATEMENTS integer := 6;
+  SLEEP_TIME          integer := 7;
+  MIN_CATEGORY        integer := 1;
+  MAX_CATEGORY        integer := 199;
+  MIN_PRODS_TO_BUY    integer := 2;
+  MAX_PRODS_TO_BUY    integer := 6;
+  MIN_WAREHOUSE_ID    integer := 1;
+  MAX_WAREHOUSE_ID    integer := 1000;
+  AWAITING_PROCESSING integer := 4;
+  ORDER_PROCESSED     integer := 10;
+  MAX_CREDITLIMIT     integer := 5000;
+  MIN_CREDITLIMIT     integer := 100;
+  MIN_SALESID         integer := 145;
+  MAX_SALESID         integer := 171;
+  MIN_COST_DELIVERY   integer := 1;
+  MAX_COST_DELIVERY   integer := 5;
+  ROW_RETURNS         integer := 15;
+  HOUSE_NO_RANGE      integer := 200;
+  PLSQLCOMMIT         boolean := false;
+  CUSTOMER_CLASS      customers.customer_class%type := 'Occasional';
+  SUGGESTIONS         customers.suggestions%type := 'Books';
+  MAILSHOT            customers.mailshot%type := 'Y';
+
+
+Processing object type SCHEMA_EXPORT/TABLE/INDEX/INDEX
+ORA-39112: Dependent object type INDEX:"SOE"."WHS_LOCATION_IX" skipped, base object type TABLE:"SOE"."WAREHOUSES" creation failed
+
+ORA-39112: Dependent object type INDEX:"SOE"."WAREHOUSES_PK" skipped, base object type TABLE:"SOE"."WAREHOUSES" creation failed
+
+ORA-39112: Dependent object type INDEX:"SOE"."PRD_DESC_PK" skipped, base object type TABLE:"SOE"."PRODUCT_DESCRIPTIONS" creation failed
+
+ORA-39112: Dependent object type INDEX:"SOE"."PROD_NAME_IX" skipped, base object type TABLE:"SOE"."PRODUCT_DESCRIPTIONS" creation failed
+
+ORA-39112: Dependent object type INDEX:"SOE"."ADDRESS_PK" skipped, base object type TABLE:"SOE"."ADDRESSES" creation failed
+
+ORA-39112: Dependent object type INDEX:"SOE"."ADDRESS_CUST_IX" skipped, base object type TABLE:"SOE"."ADDRESSES" creation failed
+
+ORA-39112: Dependent object type INDEX:"SOE"."CARD_DETAILS_PK" skipped, base object type TABLE:"SOE"."CARD_DETAILS" creation failed
+
+ORA-39112: Dependent object type INDEX:"SOE"."CARDDETAILS_CUST_IX" skipped, base object type TABLE:"SOE"."CARD_DETAILS" creation failed
+
+ORA-39112: Dependent object type INDEX:"SOE"."ORDER_ITEMS_PK" skipped, base object type TABLE:"SOE"."ORDER_ITEMS" creation failed
+
+ORA-39112: Dependent object type INDEX:"SOE"."ITEM_ORDER_IX" skipped, base object type TABLE:"SOE"."ORDER_ITEMS" creation failed
+
+ORA-39112: Dependent object type INDEX:"SOE"."ITEM_PRODUCT_IX" skipped, base object type TABLE:"SOE"."ORDER_ITEMS" creation failed
+
+ORA-39112: Dependent object type INDEX:"SOE"."PROD_SUPPLIER_IX" skipped, base object type TABLE:"SOE"."PRODUCT_INFORMATION" creation failed
+
+ORA-39112: Dependent object type INDEX:"SOE"."PROD_CATEGORY_IX" skipped, base object type TABLE:"SOE"."PRODUCT_INFORMATION" creation failed
+
+ORA-39112: Dependent object type INDEX:"SOE"."CUST_ACCOUNT_MANAGER_IX" skipped, base object type TABLE:"SOE"."CUSTOMERS" creation failed
+
+ORA-39112: Dependent object type INDEX:"SOE"."CUST_DOB_IX" skipped, base object type TABLE:"SOE"."CUSTOMERS" creation failed
+
+ORA-39112: Dependent object type INDEX:"SOE"."CUSTOMERS_PK" skipped, base object type TABLE:"SOE"."CUSTOMERS" creation failed
+
+ORA-39112: Dependent object type INDEX:"SOE"."CUST_EMAIL_IX" skipped, base object type TABLE:"SOE"."CUSTOMERS" creation failed
+
+ORA-39112: Dependent object type INDEX:"SOE"."DEPT_IX" skipped, base object type TABLE:"SOE"."EMP" creation failed
+
+ORA-39112: Dependent object type INDEX:"SOE"."EMP_PK" skipped, base object type TABLE:"SOE"."EMP" creation failed
+
+ORA-39112: Dependent object type INDEX:"SOE"."ORD_WAREHOUSE_IX" skipped, base object type TABLE:"SOE"."ORDERS" creation failed
+
+ORA-39112: Dependent object type INDEX:"SOE"."ORDER_PK" skipped, base object type TABLE:"SOE"."ORDERS" creation failed
+
+ORA-39112: Dependent object type INDEX:"SOE"."ORD_SALES_REP_IX" skipped, base object type TABLE:"SOE"."ORDERS" creation failed
+
+ORA-39112: Dependent object type INDEX:"SOE"."ORD_ORDER_DATE_IX" skipped, base object type TABLE:"SOE"."ORDERS" creation failed
+
+ORA-39112: Dependent object type INDEX:"SOE"."ORD_CUSTOMER_IX" skipped, base object type TABLE:"SOE"."ORDERS" creation failed
+
+ORA-39112: Dependent object type INDEX:"SOE"."INV_PRODUCT_IX" skipped, base object type TABLE:"SOE"."INVENTORIES" creation failed
+
+ORA-39112: Dependent object type INDEX:"SOE"."INV_WAREHOUSE_IX" skipped, base object type TABLE:"SOE"."INVENTORIES" creation failed
+
+Processing object type SCHEMA_EXPORT/TABLE/INDEX/FUNCTIONAL_INDEX/INDEX
+ORA-39112: Dependent object type INDEX:"SOE"."CUST_FUNC_LOWER_NAME_IX" skipped, base object type TABLE:"SOE"."CUSTOMERS" creation failed
+
+Processing object type SCHEMA_EXPORT/TABLE/CONSTRAINT/CONSTRAINT
+ORA-39112: Dependent object type CONSTRAINT:"SOE"."WAREHOUSES_PK" skipped, base object type TABLE:"SOE"."WAREHOUSES" creation failed
+
+ORA-39112: Dependent object type CONSTRAINT:"SOE"."JOBS_HISTORY_PK" skipped, base object type TABLE:"SOE"."JOB_HISTORY" creation failed
+
+ORA-39112: Dependent object type CONSTRAINT:"SOE"."PRODUCT_DESCRIPTIONS_PK" skipped, base object type TABLE:"SOE"."PRODUCT_DESCRIPTIONS" creation failed
+
+ORA-39112: Dependent object type CONSTRAINT:"SOE"."ADDRESS_PK" skipped, base object type TABLE:"SOE"."ADDRESSES" creation failed
+
+ORA-39112: Dependent object type CONSTRAINT:"SOE"."CARD_DETAILS_PK" skipped, base object type TABLE:"SOE"."CARD_DETAILS" creation failed
+
+ORA-39112: Dependent object type CONSTRAINT:"SOE"."ORDER_ITEMS_PK" skipped, base object type TABLE:"SOE"."ORDER_ITEMS" creation failed
+
+ORA-39112: Dependent object type CONSTRAINT:"SOE"."PRODUCT_STATUS_LOV" skipped, base object type TABLE:"SOE"."PRODUCT_INFORMATION" creation failed
+
+ORA-39112: Dependent object type CONSTRAINT:"SOE"."PRODUCT_INFORMATION_PK" skipped, base object type TABLE:"SOE"."PRODUCT_INFORMATION" creation failed
+
+ORA-39112: Dependent object type CONSTRAINT:"SOE"."CUSTOMERS_PK" skipped, base object type TABLE:"SOE"."CUSTOMERS" creation failed
+
+ORA-39112: Dependent object type CONSTRAINT:"SOE"."CUSTOMER_ID_MIN" skipped, base object type TABLE:"SOE"."CUSTOMERS" creation failed
+
+ORA-39112: Dependent object type CONSTRAINT:"SOE"."CUSTOMER_CREDIT_LIMIT_MAX" skipped, base object type TABLE:"SOE"."CUSTOMERS" creation failed
+
+ORA-39112: Dependent object type CONSTRAINT:"SOE"."CHK_TERMINATED" skipped, base object type TABLE:"SOE"."EMP" creation failed
+
+ORA-39112: Dependent object type CONSTRAINT:"SOE"."EMP_PK" skipped, base object type TABLE:"SOE"."EMP" creation failed
+
+ORA-39112: Dependent object type CONSTRAINT:"SOE"."ORDER_MODE_LOV" skipped, base object type TABLE:"SOE"."ORDERS" creation failed
+
+ORA-39112: Dependent object type CONSTRAINT:"SOE"."ORDER_PK" skipped, base object type TABLE:"SOE"."ORDERS" creation failed
+
+ORA-39112: Dependent object type CONSTRAINT:"SOE"."ORDER_TOTAL_MIN" skipped, base object type TABLE:"SOE"."ORDERS" creation failed
+
+ORA-39112: Dependent object type CONSTRAINT:"SOE"."INVENTORY_PK" skipped, base object type TABLE:"SOE"."INVENTORIES" creation failed
+
+ORA-39112: Dependent object type CONSTRAINT:"SOE"."DEPT_PK" skipped, base object type TABLE:"SOE"."DEPT" creation failed
+
+ORA-39112: Dependent object type CONSTRAINT:"SOE"."JOBS_PK" skipped, base object type TABLE:"SOE"."JOBS" creation failed
+
+Processing object type SCHEMA_EXPORT/TABLE/INDEX/STATISTICS/INDEX_STATISTICS
+Processing object type SCHEMA_EXPORT/TABLE/INDEX/STATISTICS/FUNCTIONAL_INDEX/INDEX_STATISTICS
+Processing object type SCHEMA_EXPORT/TABLE/CONSTRAINT/REF_CONSTRAINT
+ORA-39112: Dependent object type REF_CONSTRAINT:"SOE"."SYS_C007620" skipped, base object type TABLE:"SOE"."JOB_HISTORY" creation failed
+
+ORA-39112: Dependent object type REF_CONSTRAINT:"SOE"."ADD_CUST_FK" skipped, base object type TABLE:"SOE"."ADDRESSES" creation failed
+
+ORA-39112: Dependent object type REF_CONSTRAINT:"SOE"."ORDER_ITEMS_PRODUCT_ID_FK" skipped, base object type TABLE:"SOE"."ORDER_ITEMS" creation failed
+
+ORA-39112: Dependent object type REF_CONSTRAINT:"SOE"."ORDER_ITEMS_ORDER_ID_FK" skipped, base object type TABLE:"SOE"."ORDER_ITEMS" creation failed
+
+ORA-39112: Dependent object type REF_CONSTRAINT:"SOE"."DEPT_FK_EMP" skipped, base object type TABLE:"SOE"."EMP" creation failed
+
+ORA-39112: Dependent object type REF_CONSTRAINT:"SOE"."JOBS_FK_EMP" skipped, base object type TABLE:"SOE"."EMP" creation failed
+
+ORA-39112: Dependent object type REF_CONSTRAINT:"SOE"."ORDERS_CUSTOMER_ID_FK" skipped, base object type TABLE:"SOE"."ORDERS" creation failed
+
+ORA-39112: Dependent object type REF_CONSTRAINT:"SOE"."INVENTORIES_PRODUCT_ID_FK" skipped, base object type TABLE:"SOE"."INVENTORIES" creation failed
+
+ORA-39112: Dependent object type REF_CONSTRAINT:"SOE"."INVENTORIES_WAREHOUSES_FK" skipped, base object type TABLE:"SOE"."INVENTORIES" creation failed
+
+Processing object type SCHEMA_EXPORT/TABLE/INDEX/BITMAP_INDEX/INDEX
+ORA-39112: Dependent object type INDEX:"SOE"."I1" skipped, base object type TABLE:"SOE"."EMP" creation failed
+
+Processing object type SCHEMA_EXPORT/TABLE/INDEX/STATISTICS/BITMAP_INDEX/INDEX_STATISTICS
+Processing object type SCHEMA_EXPORT/TABLE/STATISTICS/TABLE_STATISTICS
+Processing object type SCHEMA_EXPORT/STATISTICS/MARKER
+Job "SYS"."SYS_IMPORT_FULL_01" completed with 107 error(s) at Mon Nov 6 11:31:42 2023 elapsed 0 00:00:05
+
+[oracle@oraclelab2 import]$
+[oracle@oraclelab2 import]$
+[oracle@oraclelab2 import]$
+[oracle@oraclelab2 import]$ impdp directory=import_dir dumpfile=exp_soe.dmp logfile=imp_soe_061123.log
+
+Import: Release 19.0.0.0.0 - Production on Mon Nov 6 11:31:52 2023
+Version 19.3.0.0.0
+
+Copyright (c) 1982, 2019, Oracle and/or its affiliates.  All rights reserved.
+
+Username: sys/scott#123@to_savings as sysdba
+
+Connected to: Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+ORA-39002: invalid operation
+ORA-39070: Unable to open the log file.
+ORA-39087: directory name IMPORT_DIR is invalid
+
+
+[oracle@oraclelab2 import]$
+[oracle@oraclelab2 import]$ ls -lrt
+total 330524
+-rw-r-----. 1 oracle oinstall 338419712 Nov  6 11:11 exp_soe.dmp
+-rw-r--r--. 1 oracle oinstall     35270 Nov  6 11:31 imp_soe_061123.log
+[oracle@oraclelab2 import]$ rm imp_soe_061123.log
+[oracle@oraclelab2 import]$
+[oracle@oraclelab2 import]$
+[oracle@oraclelab2 import]$ sqlplus / as sysdba
+
+SQL*Plus: Release 19.0.0.0.0 - Production on Mon Nov 6 11:33:12 2023
+Version 19.3.0.0.0
+
+Copyright (c) 1982, 2019, Oracle.  All rights reserved.
+
+
+Connected to:
+Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Version 19.3.0.0.0
+
+SQL> alter session set container=savings;4
+  2
+SQL> alter session set container=savings;
+
+Session altered.
+
+SQL>
+SQL>
+SQL> create or replace directory import_dir as '/u01/import';
+
+Directory created.
+
+SQL>
+SQL>
+SQL> exit
+Disconnected from Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Version 19.3.0.0.0
+[oracle@oraclelab2 import]$
+[oracle@oraclelab2 import]$
+[oracle@oraclelab2 import]$
+[oracle@oraclelab2 import]$ impdp directory=import_dir dumpfile=exp_soe.dmp logfile=imp_soe_061123.log
+
+Import: Release 19.0.0.0.0 - Production on Mon Nov 6 11:34:08 2023
+Version 19.3.0.0.0
+
+Copyright (c) 1982, 2019, Oracle and/or its affiliates.  All rights reserved.
+
+Username: sys/scott#123@to_savings as sysdba
+
+Connected to: Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Master table "SYS"."SYS_IMPORT_FULL_01" successfully loaded/unloaded
+Starting "SYS"."SYS_IMPORT_FULL_01":  sys/********@to_savings AS SYSDBA directory=import_dir dumpfile=exp_soe.dmp logfile=imp_soe_061123.log
+Processing object type SCHEMA_EXPORT/USER
+Processing object type SCHEMA_EXPORT/SYSTEM_GRANT
+Processing object type SCHEMA_EXPORT/ROLE_GRANT
+ORA-39083: Object type ROLE_GRANT failed to create with error:
+ORA-01919: role 'PLUSTRACE' does not exist
+
+Failing sql is:
+ GRANT "PLUSTRACE" TO "SOE"
+
+Processing object type SCHEMA_EXPORT/DEFAULT_ROLE
+Processing object type SCHEMA_EXPORT/TABLESPACE_QUOTA
+Processing object type SCHEMA_EXPORT/PRE_SCHEMA/PROCACT_SCHEMA
+Processing object type SCHEMA_EXPORT/SEQUENCE/SEQUENCE
+Processing object type SCHEMA_EXPORT/TABLE/TABLE
+Processing object type SCHEMA_EXPORT/TABLE/TABLE_DATA
+. . imported "SOE"."ORDER_ITEMS"                         170.4 MB 3735896 rows
+. . imported "SOE"."ORDERS"                              114.9 MB 1352070 rows
+. . imported "SOE"."INVENTORIES"                         15.27 MB  902171 rows
+. . imported "SOE"."LOGON"                               9.065 MB  442208 rows
+. . imported "SOE"."CUSTOMERS"                           4.983 MB   45703 rows
+. . imported "SOE"."ADDRESSES"                           4.084 MB   55703 rows
+. . imported "SOE"."CARD_DETAILS"                        2.402 MB   55703 rows
+. . imported "SOE"."PRODUCT_DESCRIPTIONS"                224.1 KB    1000 rows
+. . imported "SOE"."PRODUCT_INFORMATION"                 186.4 KB    1000 rows
+. . imported "SOE"."EMP"                                 51.39 KB     879 rows
+. . imported "SOE"."WAREHOUSES"                          36.03 KB    1000 rows
+. . imported "SOE"."JOB_HISTORY"                         14.60 KB     246 rows
+. . imported "SOE"."JOBS"                                5.976 KB      23 rows
+. . imported "SOE"."ORDERENTRY_METADATA"                 5.609 KB       4 rows
+. . imported "SOE"."DEPT"                                5.632 KB       7 rows
+. . imported "SOE"."V"                                       0 KB       0 rows
+Processing object type SCHEMA_EXPORT/TABLE/IDENTITY_COLUMN
+Processing object type SCHEMA_EXPORT/PACKAGE/PACKAGE_SPEC
+Processing object type SCHEMA_EXPORT/FUNCTION/FUNCTION
+Processing object type SCHEMA_EXPORT/PROCEDURE/PROCEDURE
+Processing object type SCHEMA_EXPORT/PACKAGE/COMPILE_PACKAGE/PACKAGE_SPEC/ALTER_PACKAGE_SPEC
+Processing object type SCHEMA_EXPORT/FUNCTION/ALTER_FUNCTION
+Processing object type SCHEMA_EXPORT/PROCEDURE/ALTER_PROCEDURE
+Processing object type SCHEMA_EXPORT/VIEW/VIEW
+Processing object type SCHEMA_EXPORT/PACKAGE/PACKAGE_BODY
+Processing object type SCHEMA_EXPORT/TABLE/INDEX/INDEX
+Processing object type SCHEMA_EXPORT/TABLE/INDEX/FUNCTIONAL_INDEX/INDEX
+Processing object type SCHEMA_EXPORT/TABLE/CONSTRAINT/CONSTRAINT
+Processing object type SCHEMA_EXPORT/TABLE/INDEX/STATISTICS/INDEX_STATISTICS
+Processing object type SCHEMA_EXPORT/TABLE/INDEX/STATISTICS/FUNCTIONAL_INDEX/INDEX_STATISTICS
+Processing object type SCHEMA_EXPORT/TABLE/CONSTRAINT/REF_CONSTRAINT
+Processing object type SCHEMA_EXPORT/TABLE/INDEX/BITMAP_INDEX/INDEX
+Processing object type SCHEMA_EXPORT/TABLE/INDEX/STATISTICS/BITMAP_INDEX/INDEX_STATISTICS
+Processing object type SCHEMA_EXPORT/TABLE/STATISTICS/TABLE_STATISTICS
+Processing object type SCHEMA_EXPORT/STATISTICS/MARKER
+ORA-39082: Object type PACKAGE BODY:"SOE"."ORDERENTRY" created with compilation warnings
+
+Job "SYS"."SYS_IMPORT_FULL_01" completed with 2 error(s) at Mon Nov 6 11:35:04 2023 elapsed 0 00:00:41
+
+[oracle@oraclelab2 import]$
+[oracle@oraclelab2 import]$
+[oracle@oraclelab2 import]$
+[oracle@oraclelab2 import]$ sqlplus / as sysdba
+
+SQL*Plus: Release 19.0.0.0.0 - Production on Mon Nov 6 11:36:28 2023
+Version 19.3.0.0.0
+
+Copyright (c) 1982, 2019, Oracle.  All rights reserved.
+
+
+Connected to:
+Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Version 19.3.0.0.0
+
+SQL>
+SQL>
+SQL> alter session set container=savings;
+
+Session altered.
+
+SQL>
+SQL>
+SQL>
+SQL> select username from dba_users where username='SOE';
+
+USERNAME
+--------------------------------------------------------------------------------
+SOE
+
+SQL> select table_name,owner from dba_tables where owner='SOE';
+
+TABLE_NAME
+--------------------------------------------------------------------------------
+OWNER
+--------------------------------------------------------------------------------
+WAREHOUSES
+SOE
+
+JOB_HISTORY
+SOE
+
+PRODUCT_DESCRIPTIONS
+SOE
+
+
+TABLE_NAME
+--------------------------------------------------------------------------------
+OWNER
+--------------------------------------------------------------------------------
+ADDRESSES
+SOE
+
+CARD_DETAILS
+SOE
+
+ORDER_ITEMS
+SOE
+
+
+TABLE_NAME
+--------------------------------------------------------------------------------
+OWNER
+--------------------------------------------------------------------------------
+ORDERENTRY_METADATA
+SOE
+
+LOGON
+SOE
+
+V
+SOE
+
+
+TABLE_NAME
+--------------------------------------------------------------------------------
+OWNER
+--------------------------------------------------------------------------------
+PRODUCT_INFORMATION
+SOE
+
+CUSTOMERS
+SOE
+
+EMP
+SOE
+
+
+TABLE_NAME
+--------------------------------------------------------------------------------
+OWNER
+--------------------------------------------------------------------------------
+ORDERS
+SOE
+
+INVENTORIES
+SOE
+
+DEPT
+SOE
+
+
+TABLE_NAME
+--------------------------------------------------------------------------------
+OWNER
+--------------------------------------------------------------------------------
+JOBS
+SOE
+
+
+16 rows selected.
+
+SQL> exit
+Disconnected from Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Version 19.3.0.0.0
+[oracle@oraclelab2 import]$
+[oracle@oraclelab2 import]$
+[oracle@oraclelab2 import]$
+[oracle@oraclelab2 import]$
+[oracle@oraclelab2 import]$
+[oracle@oraclelab2 import]$ impdp directory=import_dir dumpfile=exp_soe.dmp logfile=imp_orders_061123.log tables=soe.orders remap_table=soe.orders:soe.test_orders
+
+Import: Release 19.0.0.0.0 - Production on Mon Nov 6 11:39:23 2023
+Version 19.3.0.0.0
+
+Copyright (c) 1982, 2019, Oracle and/or its affiliates.  All rights reserved.
+
+Username: sys/scott#123@to_savings as sysdba
+
+Connected to: Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Master table "SYS"."SYS_IMPORT_TABLE_01" successfully loaded/unloaded
+Starting "SYS"."SYS_IMPORT_TABLE_01":  sys/********@to_savings AS SYSDBA directory=import_dir dumpfile=exp_soe.dmp logfile=imp_orders_061123.log tables=soe.orders remap_table=soe.orders:soe.test_orders
+Processing object type SCHEMA_EXPORT/TABLE/TABLE
+ORA-39083: Object type TABLE:"SOE"."SOE" failed to create with error:
+ORA-02264: name already used by an existing constraint
+
+Failing sql is:
+CREATE TABLE "SOE"."SOE" ("ORDER_ID" NUMBER(12,0) CONSTRAINT "ORDER_ORDER_ID_NN" NOT NULL ENABLE, "ORDER_DATE" TIMESTAMP (6) WITH LOCAL TIME ZONE CONSTRAINT "ORDER_DATE_NN" NOT NULL ENABLE, "ORDER_MODE" VARCHAR2(8 BYTE), "CUSTOMER_ID" NUMBER(12,0) CONSTRAINT "ORDER_CUSTOMER_ID_NN" NOT NULL ENABLE, "ORDER_STATUS" NUMBER(2,0), "ORDER_TOTAL" NUMBER(8,2), "SALES_REP_ID" NUMBER(6,0), "PROMOTION_ID" NUMBER(6,0), "WAREHOUSE_ID" NUMBER(6,0), "DELIVERY_TYPE" VARCHAR2(15 BYTE), "COST_OF_DELIVERY" NUMBER(6,0), "WAIT_TILL_ALL_AVAILABLE" VARCHAR2(15 BYTE), "DELIVERY_ADDRESS_ID" NUMBER(12,0), "CUSTOMER_CLASS" VARCHAR2(30 BYTE), "CARD_ID" NUMBER(12,0), "INVOICE_ADDRESS_ID" NUMBER(12,0)) SEGMENT CREATION IMMEDIATE PCTFREE 10 PCTUSED 40 INITRANS 16 MAXTRANS 255  NOCOMPRESS LOGGING STORAGE(INITIAL 8388608 NEXT 8388608 MINEXTENTS 1 MAXEXTENTS 2147483645 PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT) TABLESPACE "SOETBS"   NO INMEMORY
+
+Processing object type SCHEMA_EXPORT/TABLE/TABLE_DATA
+Processing object type SCHEMA_EXPORT/TABLE/INDEX/INDEX
+ORA-39112: Dependent object type INDEX:"SOE"."ORD_WAREHOUSE_IX" skipped, base object type TABLE:"SOE"."ORDERS" creation failed
+
+ORA-39112: Dependent object type INDEX:"SOE"."ORDER_PK" skipped, base object type TABLE:"SOE"."ORDERS" creation failed
+
+ORA-39112: Dependent object type INDEX:"SOE"."ORD_SALES_REP_IX" skipped, base object type TABLE:"SOE"."ORDERS" creation failed
+
+ORA-39112: Dependent object type INDEX:"SOE"."ORD_ORDER_DATE_IX" skipped, base object type TABLE:"SOE"."ORDERS" creation failed
+
+ORA-39112: Dependent object type INDEX:"SOE"."ORD_CUSTOMER_IX" skipped, base object type TABLE:"SOE"."ORDERS" creation failed
+
+Processing object type SCHEMA_EXPORT/TABLE/CONSTRAINT/CONSTRAINT
+ORA-39112: Dependent object type CONSTRAINT:"SOE"."ORDER_MODE_LOV" skipped, base object type TABLE:"SOE"."ORDERS" creation failed
+
+ORA-39112: Dependent object type CONSTRAINT:"SOE"."ORDER_PK" skipped, base object type TABLE:"SOE"."ORDERS" creation failed
+
+ORA-39112: Dependent object type CONSTRAINT:"SOE"."ORDER_TOTAL_MIN" skipped, base object type TABLE:"SOE"."ORDERS" creation failed
+
+Processing object type SCHEMA_EXPORT/TABLE/INDEX/STATISTICS/INDEX_STATISTICS
+Processing object type SCHEMA_EXPORT/TABLE/CONSTRAINT/REF_CONSTRAINT
+ORA-39112: Dependent object type REF_CONSTRAINT:"SOE"."ORDERS_CUSTOMER_ID_FK" skipped, base object type TABLE:"SOE"."ORDERS" creation failed
+
+Processing object type SCHEMA_EXPORT/TABLE/STATISTICS/TABLE_STATISTICS
+Processing object type SCHEMA_EXPORT/STATISTICS/MARKER
+Job "SYS"."SYS_IMPORT_TABLE_01" completed with 10 error(s) at Mon Nov 6 11:39:45 2023 elapsed 0 00:00:03
+
+[oracle@oraclelab2 import]$
+[oracle@oraclelab2 import]$
+[oracle@oraclelab2 import]$
+[oracle@oraclelab2 import]$ impdp directory=import_dir dumpfile=exp_soe.dmp logfile=imp_orders_061123.log tables=soe.orders   remap_table=orders:test_orders
+
+Import: Release 19.0.0.0.0 - Production on Mon Nov 6 11:41:03 2023
+Version 19.3.0.0.0
+
+Copyright (c) 1982, 2019, Oracle and/or its affiliates.  All rights reserved.
+
+Username:  sys/scott#123@to_savings as sysdba
+
+Connected to: Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Master table "SYS"."SYS_IMPORT_TABLE_01" successfully loaded/unloaded
+Starting "SYS"."SYS_IMPORT_TABLE_01":  sys/********@to_savings AS SYSDBA directory=import_dir dumpfile=exp_soe.dmp logfile=imp_orders_061123.log tables=soe.orders remap_table=orders:test_orders
+Processing object type SCHEMA_EXPORT/TABLE/TABLE
+ORA-39083: Object type TABLE:"SOE"."TEST_ORDERS" failed to create with error:
+ORA-02264: name already used by an existing constraint
+
+Failing sql is:
+CREATE TABLE "SOE"."TEST_ORDERS" ("ORDER_ID" NUMBER(12,0) CONSTRAINT "ORDER_ORDER_ID_NN" NOT NULL ENABLE, "ORDER_DATE" TIMESTAMP (6) WITH LOCAL TIME ZONE CONSTRAINT "ORDER_DATE_NN" NOT NULL ENABLE, "ORDER_MODE" VARCHAR2(8 BYTE), "CUSTOMER_ID" NUMBER(12,0) CONSTRAINT "ORDER_CUSTOMER_ID_NN" NOT NULL ENABLE, "ORDER_STATUS" NUMBER(2,0), "ORDER_TOTAL" NUMBER(8,2), "SALES_REP_ID" NUMBER(6,0), "PROMOTION_ID" NUMBER(6,0), "WAREHOUSE_ID" NUMBER(6,0), "DELIVERY_TYPE" VARCHAR2(15 BYTE), "COST_OF_DELIVERY" NUMBER(6,0), "WAIT_TILL_ALL_AVAILABLE" VARCHAR2(15 BYTE), "DELIVERY_ADDRESS_ID" NUMBER(12,0), "CUSTOMER_CLASS" VARCHAR2(30 BYTE), "CARD_ID" NUMBER(12,0), "INVOICE_ADDRESS_ID" NUMBER(12,0)) SEGMENT CREATION IMMEDIATE PCTFREE 10 PCTUSED 40 INITRANS 16 MAXTRANS 255  NOCOMPRESS LOGGING STORAGE(INITIAL 8388608 NEXT 8388608 MINEXTENTS 1 MAXEXTENTS 2147483645 PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT) TABLESPACE "SOETBS"   NO INMEMORY
+
+Processing object type SCHEMA_EXPORT/TABLE/TABLE_DATA
+Processing object type SCHEMA_EXPORT/TABLE/INDEX/INDEX
+ORA-39112: Dependent object type INDEX:"SOE"."ORD_WAREHOUSE_IX" skipped, base object type TABLE:"SOE"."ORDERS" creation failed
+
+ORA-39112: Dependent object type INDEX:"SOE"."ORDER_PK" skipped, base object type TABLE:"SOE"."ORDERS" creation failed
+
+ORA-39112: Dependent object type INDEX:"SOE"."ORD_SALES_REP_IX" skipped, base object type TABLE:"SOE"."ORDERS" creation failed
+
+ORA-39112: Dependent object type INDEX:"SOE"."ORD_ORDER_DATE_IX" skipped, base object type TABLE:"SOE"."ORDERS" creation failed
+
+ORA-39112: Dependent object type INDEX:"SOE"."ORD_CUSTOMER_IX" skipped, base object type TABLE:"SOE"."ORDERS" creation failed
+
+Processing object type SCHEMA_EXPORT/TABLE/CONSTRAINT/CONSTRAINT
+ORA-39112: Dependent object type CONSTRAINT:"SOE"."ORDER_MODE_LOV" skipped, base object type TABLE:"SOE"."ORDERS" creation failed
+
+ORA-39112: Dependent object type CONSTRAINT:"SOE"."ORDER_PK" skipped, base object type TABLE:"SOE"."ORDERS" creation failed
+
+ORA-39112: Dependent object type CONSTRAINT:"SOE"."ORDER_TOTAL_MIN" skipped, base object type TABLE:"SOE"."ORDERS" creation failed
+
+Processing object type SCHEMA_EXPORT/TABLE/INDEX/STATISTICS/INDEX_STATISTICS
+Processing object type SCHEMA_EXPORT/TABLE/CONSTRAINT/REF_CONSTRAINT
+ORA-39112: Dependent object type REF_CONSTRAINT:"SOE"."ORDERS_CUSTOMER_ID_FK" skipped, base object type TABLE:"SOE"."ORDERS" creation failed
+
+Processing object type SCHEMA_EXPORT/TABLE/STATISTICS/TABLE_STATISTICS
+Processing object type SCHEMA_EXPORT/STATISTICS/MARKER
+Job "SYS"."SYS_IMPORT_TABLE_01" completed with 10 error(s) at Mon Nov 6 11:41:17 2023 elapsed 0 00:00:02
+
+[oracle@oraclelab2 import]$
+[oracle@oraclelab2 import]$
+[oracle@oraclelab2 import]$
+[oracle@oraclelab2 import]$
+[oracle@oraclelab2 import]$ impdp directory=import_dir dumpfile=orders2_061123.dmp logfile=imp_orders_061123.log remap_table=orders2:test_orders
+
+Import: Release 19.0.0.0.0 - Production on Mon Nov 6 11:46:02 2023
+Version 19.3.0.0.0
+
+Copyright (c) 1982, 2019, Oracle and/or its affiliates.  All rights reserved.
+
+Username: sys/scott#123@to_savings as sysdba
+
+Connected to: Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Master table "SYS"."SYS_IMPORT_FULL_01" successfully loaded/unloaded
+Starting "SYS"."SYS_IMPORT_FULL_01":  sys/********@to_savings AS SYSDBA directory=import_dir dumpfile=orders2_061123.dmp logfile=imp_orders_061123.log remap_table=orders2:test_orders
+Processing object type TABLE_EXPORT/TABLE/TABLE
+Processing object type TABLE_EXPORT/TABLE/TABLE_DATA
+. . imported "SOE"."TEST_ORDERS"                         114.9 MB 1352070 rows
+Processing object type TABLE_EXPORT/TABLE/STATISTICS/TABLE_STATISTICS
+Processing object type TABLE_EXPORT/TABLE/STATISTICS/MARKER
+Job "SYS"."SYS_IMPORT_FULL_01" successfully completed at Mon Nov 6 11:46:30 2023 elapsed 0 00:00:11
+
+[oracle@oraclelab2 import]$
+[oracle@oraclelab2 import]$ ls -lrt
+total 448416
+-rw-r-----. 1 oracle oinstall 338419712 Nov  6 11:11 exp_soe.dmp
+-rw-r--r--. 1 oracle oinstall      3810 Nov  6 11:35 imp_soe_061123.log
+-rw-r-----. 1 oracle oinstall 120750080 Nov  6 11:45 orders2_061123.dmp
+-rw-r--r--. 1 oracle oinstall       923 Nov  6 11:46 imp_orders_061123.log
+[oracle@oraclelab2 import]$ impdp directory=import_dir dumpfile=exp_soe.dmp logfile=imp_orders_061123.log remap_schema=soe:scott
+
+Import: Release 19.0.0.0.0 - Production on Mon Nov 6 11:47:55 2023
+Version 19.3.0.0.0
+
+Copyright (c) 1982, 2019, Oracle and/or its affiliates.  All rights reserved.
+
+Username: sys/scott#123@to_savings as sysdba
+
+Connected to: Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Master table "SYS"."SYS_IMPORT_FULL_01" successfully loaded/unloaded
+Starting "SYS"."SYS_IMPORT_FULL_01":  sys/********@to_savings AS SYSDBA directory=import_dir dumpfile=exp_soe.dmp logfile=imp_orders_061123.log remap_schema=soe:scott
+Processing object type SCHEMA_EXPORT/USER
+Processing object type SCHEMA_EXPORT/SYSTEM_GRANT
+Processing object type SCHEMA_EXPORT/ROLE_GRANT
+ORA-39083: Object type ROLE_GRANT failed to create with error:
+ORA-01919: role 'PLUSTRACE' does not exist
+
+Failing sql is:
+ GRANT "PLUSTRACE" TO "SCOTT"
+
+Processing object type SCHEMA_EXPORT/DEFAULT_ROLE
+Processing object type SCHEMA_EXPORT/TABLESPACE_QUOTA
+Processing object type SCHEMA_EXPORT/PRE_SCHEMA/PROCACT_SCHEMA
+Processing object type SCHEMA_EXPORT/SEQUENCE/SEQUENCE
+Processing object type SCHEMA_EXPORT/TABLE/TABLE
+Processing object type SCHEMA_EXPORT/TABLE/TABLE_DATA
+. . imported "SCOTT"."ORDER_ITEMS"                       170.4 MB 3735896 rows
+. . imported "SCOTT"."ORDERS"                            114.9 MB 1352070 rows
+. . imported "SCOTT"."INVENTORIES"                       15.27 MB  902171 rows
+. . imported "SCOTT"."LOGON"                             9.065 MB  442208 rows
+. . imported "SCOTT"."CUSTOMERS"                         4.983 MB   45703 rows
+. . imported "SCOTT"."ADDRESSES"                         4.084 MB   55703 rows
+. . imported "SCOTT"."CARD_DETAILS"                      2.402 MB   55703 rows
+. . imported "SCOTT"."PRODUCT_DESCRIPTIONS"              224.1 KB    1000 rows
+. . imported "SCOTT"."PRODUCT_INFORMATION"               186.4 KB    1000 rows
+. . imported "SCOTT"."EMP"                               51.39 KB     879 rows
+. . imported "SCOTT"."WAREHOUSES"                        36.03 KB    1000 rows
+. . imported "SCOTT"."JOB_HISTORY"                       14.60 KB     246 rows
+. . imported "SCOTT"."JOBS"                              5.976 KB      23 rows
+. . imported "SCOTT"."ORDERENTRY_METADATA"               5.609 KB       4 rows
+. . imported "SCOTT"."DEPT"                              5.632 KB       7 rows
+. . imported "SCOTT"."V"                                     0 KB       0 rows
+Processing object type SCHEMA_EXPORT/TABLE/IDENTITY_COLUMN
+Processing object type SCHEMA_EXPORT/PACKAGE/PACKAGE_SPEC
+Processing object type SCHEMA_EXPORT/FUNCTION/FUNCTION
+Processing object type SCHEMA_EXPORT/PROCEDURE/PROCEDURE
+Processing object type SCHEMA_EXPORT/PACKAGE/COMPILE_PACKAGE/PACKAGE_SPEC/ALTER_PACKAGE_SPEC
+Processing object type SCHEMA_EXPORT/FUNCTION/ALTER_FUNCTION
+Processing object type SCHEMA_EXPORT/PROCEDURE/ALTER_PROCEDURE
+Processing object type SCHEMA_EXPORT/VIEW/VIEW
+Processing object type SCHEMA_EXPORT/PACKAGE/PACKAGE_BODY
+Processing object type SCHEMA_EXPORT/TABLE/INDEX/INDEX
+Processing object type SCHEMA_EXPORT/TABLE/INDEX/FUNCTIONAL_INDEX/INDEX
+Processing object type SCHEMA_EXPORT/TABLE/CONSTRAINT/CONSTRAINT
+Processing object type SCHEMA_EXPORT/TABLE/INDEX/STATISTICS/INDEX_STATISTICS
+Processing object type SCHEMA_EXPORT/TABLE/INDEX/STATISTICS/FUNCTIONAL_INDEX/INDEX_STATISTICS
+Processing object type SCHEMA_EXPORT/TABLE/CONSTRAINT/REF_CONSTRAINT
+Processing object type SCHEMA_EXPORT/TABLE/INDEX/BITMAP_INDEX/INDEX
+Processing object type SCHEMA_EXPORT/TABLE/INDEX/STATISTICS/BITMAP_INDEX/INDEX_STATISTICS
+Processing object type SCHEMA_EXPORT/TABLE/STATISTICS/TABLE_STATISTICS
+Processing object type SCHEMA_EXPORT/STATISTICS/MARKER
+ORA-39082: Object type PACKAGE BODY:"SCOTT"."ORDERENTRY" created with compilation warnings
+
+Job "SYS"."SYS_IMPORT_FULL_01" completed with 2 error(s) at Mon Nov 6 11:48:49 2023 elapsed 0 00:00:43
+
+[oracle@oraclelab2 import]$
+[oracle@oraclelab2 import]$
+[oracle@oraclelab2 import]$ cd $ORACLE_HOME/network/admin
+[oracle@oraclelab2 admin]$
+[oracle@oraclelab2 admin]$ ls -lrt
+total 68
+-rwxrwxrwx. 1 oracle oinstall  1536 Feb 14  2018 shrept.lst
+drwxrwxrwx. 2 oracle oinstall    64 Oct 25 17:06 samples
+-rw-r--r--. 1 oracle oinstall 16384 Nov  4 11:41 nag.dmp
+-rw-r--r--. 1 oracle oinstall  1345 Nov  4 11:41 nag.log
+-rw-r--r--. 1 oracle oinstall  1256 Nov  4 12:14 naga.log
+-rw-r--r--. 1 oracle oinstall 16384 Nov  4 12:37 oracle@192.0.168.123
+-rw-r--r--. 1 oracle oinstall 16384 Nov  4 12:51 arun.dmp
+-rw-r--r--. 1 oracle oinstall   908 Nov  6 11:24 listener.ora
+-rw-r--r--. 1 oracle oinstall  1260 Nov  6 11:24 tnsnames.ora
+[oracle@oraclelab2 admin]$ vi tnsnames.ora
+[oracle@oraclelab2 admin]$
+[oracle@oraclelab2 admin]$
+[oracle@oraclelab2 admin]$
+[oracle@oraclelab2 admin]$ sqlplus sys/scott#123@to_loans as sysdba
+
+SQL*Plus: Release 19.0.0.0.0 - Production on Mon Nov 6 11:51:39 2023
+Version 19.3.0.0.0
+
+Copyright (c) 1982, 2019, Oracle.  All rights reserved.
+
+ERROR:
+ORA-12514: TNS:listener does not currently know of service requested in connect
+descriptor
+
+
+Enter user-name:
+ERROR:
+ORA-01017: invalid username/password; logon denied
+
+
+Enter user-name:
+ERROR:
+ORA-01017: invalid username/password; logon denied
+
+
+SP2-0157: unable to CONNECT to ORACLE after 3 attempts, exiting SQL*Plus
+[oracle@oraclelab2 admin]$
+[oracle@oraclelab2 admin]$
+[oracle@oraclelab2 admin]$ lsnrctl status
+
+LSNRCTL for Linux: Version 19.0.0.0.0 - Production on 06-NOV-2023 11:51:48
+
+Copyright (c) 1991, 2019, Oracle.  All rights reserved.
+
+Connecting to (DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=192.168.0.174)(PORT=1521)))
+STATUS of the LISTENER
+------------------------
+Alias                     LISTENER
+Version                   TNSLSNR for Linux: Version 19.0.0.0.0 - Production
+Start Date                06-NOV-2023 11:24:10
+Uptime                    0 days 0 hr. 27 min. 38 sec
+Trace Level               off
+Security                  ON: Local OS Authentication
+SNMP                      OFF
+Listener Parameter File   /u01/app/oracle/product/19.0.0.0/dbhome_1/network/admin/listener.ora
+Listener Log File         /u01/app/oracle/diag/tnslsnr/oraclelab2/listener/alert/log.xml
+Listening Endpoints Summary...
+  (DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=192.168.0.174)(PORT=1521)))
+Services Summary...
+Service "demats" has 1 instance(s).
+  Instance "sbiprod", status UNKNOWN, has 1 handler(s) for this service...
+Service "savings" has 1 instance(s).
+  Instance "sbiprod", status UNKNOWN, has 1 handler(s) for this service...
+Service "sbi" has 1 instance(s).
+  Instance "sbiprod", status UNKNOWN, has 1 handler(s) for this service...
+Service "sbiprod" has 1 instance(s).
+  Instance "sbiprod", status UNKNOWN, has 1 handler(s) for this service...
+The command completed successfully
+[oracle@oraclelab2 admin]$
+[oracle@oraclelab2 admin]$
+[oracle@oraclelab2 admin]$
+[oracle@oraclelab2 admin]$ vi tnsnames.ora
+[oracle@oraclelab2 admin]$
+[oracle@oraclelab2 admin]$
+[oracle@oraclelab2 admin]$ sqlplus sys/scott#123@to_sbi as sysdba
+
+SQL*Plus: Release 19.0.0.0.0 - Production on Mon Nov 6 11:52:40 2023
+Version 19.3.0.0.0
+
+Copyright (c) 1982, 2019, Oracle.  All rights reserved.
+
+Last Successful login time: Mon Nov 06 2023 11:48:06 +05:30
+
+Connected to:
+Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Version 19.3.0.0.0
+
+SQL> create or replace directory import_dir as '/u01/import';
+create or replace directory import_dir as '/u01/import'
+*
+ERROR at line 1:
+ORA-01109: database not open
+
+
+SQL> alter pluggable database open;
+
+Pluggable database altered.
+
+SQL>  create or replace directory import_dir as '/u01/import';
+
+Directory created.
+
+SQL>
+SQL>
+SQL>
+SQL> exit
+Disconnected from Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Version 19.3.0.0.0
+[oracle@oraclelab2 admin]$
+[oracle@oraclelab2 admin]$
+[oracle@oraclelab2 admin]$ impdp directory=import_dir dumpfile=exp_soe.dmp logfile=imp_soe_loans_061123.log
+
+Import: Release 19.0.0.0.0 - Production on Mon Nov 6 11:53:39 2023
+Version 19.3.0.0.0
+
+Copyright (c) 1982, 2019, Oracle and/or its affiliates.  All rights reserved.
+
+Username: sys/scott#123@to_sbi
+
+UDI-28009: operation generated ORACLE error 28009
+ORA-28009: connection as SYS should be as SYSDBA or SYSOPER
+
+Username:
+UDI-00005: unexpected End-Of-File encountered while reading input.
+
+
+[oracle@oraclelab2 admin]$
+[oracle@oraclelab2 admin]$ impdp directory=import_dir dumpfile=exp_soe.dmp logfile=imp_soe_loans_061123.log
+
+Import: Release 19.0.0.0.0 - Production on Mon Nov 6 11:53:54 2023
+Version 19.3.0.0.0
+
+Copyright (c) 1982, 2019, Oracle and/or its affiliates.  All rights reserved.
+
+Username: sys/scott#123@to_sbi as sysdba
+
+Connected to: Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Master table "SYS"."SYS_IMPORT_FULL_01" successfully loaded/unloaded
+Starting "SYS"."SYS_IMPORT_FULL_01":  sys/********@to_sbi AS SYSDBA directory=import_dir dumpfile=exp_soe.dmp logfile=imp_soe_loans_061123.log
+Processing object type SCHEMA_EXPORT/USER
+ORA-39083: Object type USER:"SOE" failed to create with error:
+ORA-00959: tablespace 'SOETBS' does not exist
+
+Failing sql is:
+ CREATE USER "SOE" IDENTIFIED BY VALUES 'S:B90246BCD61EB2520AFB634F44B75D2D1A735A448A1FE5112FB485ECA44C;T:F054583E576A2C094E13B569269486C7D048E755443FAE41FD37EA2BC2814E320D64BF8F2BFE7D5B6E1F70990804587E9667B971FBBBB880ED0899AD99B463F66C5CAA9AB7B3895F750E2ED0140CA13E' DEFAULT TABLESPACE "SOETBS" TEMPORARY TABLESPACE "TEMP"
+
+Processing object type SCHEMA_EXPORT/SYSTEM_GRANT
+ORA-39083: Object type SYSTEM_GRANT failed to create with error:
+ORA-01917: user or role 'SOE' does not exist
+
+Failing sql is:
+GRANT ADMINISTER SQL MANAGEMENT OBJECT TO "SOE"
+
+ORA-39083: Object type SYSTEM_GRANT failed to create with error:
+ORA-01917: user or role 'SOE' does not exist
+
+Failing sql is:
+GRANT ADMINISTER ANY SQL TUNING SET TO "SOE"
+
+ORA-39083: Object type SYSTEM_GRANT failed to create with error:
+ORA-01917: user or role 'SOE' does not exist
+
+Failing sql is:
+GRANT ADMINISTER SQL TUNING SET TO "SOE"
+
+ORA-39083: Object type SYSTEM_GRANT failed to create with error:
+ORA-01917: user or role 'SOE' does not exist
+
+Failing sql is:
+GRANT MANAGE SCHEDULER TO "SOE"
+
+ORA-39083: Object type SYSTEM_GRANT failed to create with error:
+ORA-01917: user or role 'SOE' does not exist
+
+Failing sql is:
+GRANT CREATE JOB TO "SOE"
+
+ORA-39083: Object type SYSTEM_GRANT failed to create with error:
+ORA-01917: user or role 'SOE' does not exist
+
+Failing sql is:
+GRANT ADVISOR TO "SOE"
+
+ORA-39083: Object type SYSTEM_GRANT failed to create with error:
+ORA-01917: user or role 'SOE' does not exist
+
+Failing sql is:
+GRANT ANALYZE ANY DICTIONARY TO "SOE"
+
+ORA-39083: Object type SYSTEM_GRANT failed to create with error:
+ORA-01917: user or role 'SOE' does not exist
+
+Failing sql is:
+GRANT CREATE MATERIALIZED VIEW TO "SOE"
+
+ORA-39083: Object type SYSTEM_GRANT failed to create with error:
+ORA-01917: user or role 'SOE' does not exist
+
+Failing sql is:
+GRANT ANALYZE ANY TO "SOE"
+
+ORA-39083: Object type SYSTEM_GRANT failed to create with error:
+ORA-01917: user or role 'SOE' does not exist
+
+Failing sql is:
+GRANT CREATE VIEW TO "SOE"
+
+ORA-39083: Object type SYSTEM_GRANT failed to create with error:
+ORA-01917: user or role 'SOE' does not exist
+
+Failing sql is:
+GRANT ALTER SESSION TO "SOE"
+
+ORA-39083: Object type SYSTEM_GRANT failed to create with error:
+ORA-01917: user or role 'SOE' does not exist
+
+Failing sql is:
+GRANT ALTER SYSTEM TO "SOE"
+
+Processing object type SCHEMA_EXPORT/ROLE_GRANT
+ORA-39083: Object type ROLE_GRANT failed to create with error:
+ORA-01917: user or role 'SOE' does not exist
+
+Failing sql is:
+ GRANT "CONNECT" TO "SOE"
+
+ORA-39083: Object type ROLE_GRANT failed to create with error:
+ORA-01917: user or role 'SOE' does not exist
+
+Failing sql is:
+ GRANT "RESOURCE" TO "SOE"
+
+ORA-39083: Object type ROLE_GRANT failed to create with error:
+ORA-01919: role 'PLUSTRACE' does not exist
+
+Failing sql is:
+ GRANT "PLUSTRACE" TO "SOE"
+
+Processing object type SCHEMA_EXPORT/DEFAULT_ROLE
+ORA-39083: Object type DEFAULT_ROLE:"SOE" failed to create with error:
+ORA-01918: user 'SOE' does not exist
+
+Failing sql is:
+ ALTER USER "SOE" DEFAULT ROLE ALL
+
+Processing object type SCHEMA_EXPORT/TABLESPACE_QUOTA
+ORA-39083: Object type TABLESPACE_QUOTA:"SOE"."SOETBS" failed to create with error:
+ORA-01918: user 'SOE' does not exist
+
+Failing sql is:
+DECLARE   TEMP_COUNT NUMBER;   SQLSTR VARCHAR2(200); BEGIN   SQLSTR := 'ALTER USER "SOE" QUOTA UNLIMITED ON "SOETBS"';  EXECUTE IMMEDIATE SQLSTR;EXCEPTION   WHEN OTHERS THEN    IF SQLCODE = -30041 THEN       SQLSTR := 'SELECT COUNT(*) FROM USER_TABLESPACES               WHERE TABLESPACE_NAME = ''SOETBS'' AND CONTENTS = ''TEMPORARY''';      EXECUTE IMMEDIATE SQLSTR INTO TEMP_COUNT;      IF TEMP_COUNT = 1 THEN RETURN;       ELSE RAISE;       END IF;    ELSE      RAISE;    END IF;END;
+
+Processing object type SCHEMA_EXPORT/PRE_SCHEMA/PROCACT_SCHEMA
+ORA-39083: Object type PROCACT_SCHEMA failed to create with error:
+ORA-31625: Schema SOE is needed to import this object, but is unaccessible
+ORA-01435: user does not exist
+
+Failing sql is:
+BEGIN
+sys.dbms_logrep_imp.instantiate_schema(schema_name=>SYS_CONTEXT('USERENV','CURRENT_SCHEMA'), export_db_name=>'ORADB.LOCALDOMAIN', inst_scn=>'2359728');COMMIT; END;
+
+Processing object type SCHEMA_EXPORT/SEQUENCE/SEQUENCE
+ORA-39083: Object type SEQUENCE:"SOE"."LOGON_SEQ" failed to create with error:
+ORA-01917: user or role '' does not exist
+
+Failing sql is:
+ CREATE SEQUENCE  "SOE"."LOGON_SEQ"  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 456141 CACHE 100000 NOORDER  NOCYCLE  NOKEEP  NOSCALE  GLOBAL
+
+ORA-39083: Object type SEQUENCE:"SOE"."ADDRESS_SEQ" failed to create with error:
+ORA-01917: user or role '' does not exist
+
+Failing sql is:
+ CREATE SEQUENCE  "SOE"."ADDRESS_SEQ"  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 130001 CACHE 100000 NOORDER  NOCYCLE  NOKEEP  NOSCALE  GLOBAL
+
+ORA-39083: Object type SEQUENCE:"SOE"."ORDERS_SEQ" failed to create with error:
+ORA-01917: user or role '' does not exist
+
+Failing sql is:
+ CREATE SEQUENCE  "SOE"."ORDERS_SEQ"  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 131406 CACHE 100000 NOORDER  NOCYCLE  NOKEEP  NOSCALE  GLOBAL
+
+ORA-39083: Object type SEQUENCE:"SOE"."CARD_DETAILS_SEQ" failed to create with error:
+ORA-01917: user or role '' does not exist
+
+Failing sql is:
+ CREATE SEQUENCE  "SOE"."CARD_DETAILS_SEQ"  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 130001 CACHE 100000 NOORDER  NOCYCLE  NOKEEP  NOSCALE  GLOBAL
+
+ORA-39083: Object type SEQUENCE:"SOE"."CUSTOMER_SEQ" failed to create with error:
+ORA-01917: user or role '' does not exist
+
+Failing sql is:
+ CREATE SEQUENCE  "SOE"."CUSTOMER_SEQ"  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 120001 CACHE 100000 NOORDER  NOCYCLE  NOKEEP  NOSCALE  GLOBAL
+
+Processing object type SCHEMA_EXPORT/TABLE/TABLE
+ORA-39083: Object type TABLE:"SOE"."WAREHOUSES" failed to create with error:
+ORA-00959: tablespace 'SOETBS' does not exist
+
+Failing sql is:
+CREATE TABLE "SOE"."WAREHOUSES" ("WAREHOUSE_ID" NUMBER(6,0), "WAREHOUSE_NAME" VARCHAR2(35 BYTE), "LOCATION_ID" NUMBER(4,0)) SEGMENT CREATION IMMEDIATE PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255  NOCOMPRESS LOGGING STORAGE(INITIAL 1048576 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645 PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT) TABLESPACE "SOETBS"   NO INMEMORY
+
+ORA-39083: Object type TABLE:"SOE"."JOB_HISTORY" failed to create with error:
+ORA-00959: tablespace 'SOETBS' does not exist
+
+Failing sql is:
+CREATE TABLE "SOE"."JOB_HISTORY" ("JOB_HIST_ID" NUMBER GENERATED BY DEFAULT AS IDENTITY MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 247 CACHE 20 NOORDER  NOCYCLE  NOKEEP  NOSCALE  NOT NULL ENABLE, "EMP_NO" NUMBER(4,0), "JOB_CODE" CHAR(4 BYTE), "START_DATE" DATE CONSTRAINT "NN_START_DATE" NOT NULL ENABLE, "END_DATE" DATE CONSTRAINT "NN_END_DATE" NOT NULL ENABLE) SEGMENT CREATION IMMEDIATE PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255  NOCOMPRESS LOGGING STORAGE(INITIAL 1048576 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645 PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT) TABLESPACE "SOETBS"   NO INMEMORY
+
+ORA-39083: Object type TABLE:"SOE"."PRODUCT_DESCRIPTIONS" failed to create with error:
+ORA-00959: tablespace 'SOETBS' does not exist
+
+Failing sql is:
+CREATE TABLE "SOE"."PRODUCT_DESCRIPTIONS" ("PRODUCT_ID" NUMBER(6,0), "LANGUAGE_ID" VARCHAR2(3 BYTE), "TRANSLATED_NAME" NVARCHAR2(50) CONSTRAINT "TRANSLATED_NAME_NN" NOT NULL ENABLE, "TRANSLATED_DESCRIPTION" NVARCHAR2(2000) CONSTRAINT "TRANSLATED_DESC_NN" NOT NULL ENABLE) SEGMENT CREATION IMMEDIATE PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255  NOCOMPRESS LOGGING STORAGE(INITIAL 1048576 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645 PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT) TABLESPACE "SOETBS"   NO INMEMORY
+
+ORA-39083: Object type TABLE:"SOE"."ADDRESSES" failed to create with error:
+ORA-00959: tablespace 'SOETBS' does not exist
+
+Failing sql is:
+CREATE TABLE "SOE"."ADDRESSES" ("ADDRESS_ID" NUMBER(12,0) CONSTRAINT "ADDRESS_ID_NN" NOT NULL ENABLE, "CUSTOMER_ID" NUMBER(12,0) CONSTRAINT "ADDRESS_CUST_ID_NN" NOT NULL ENABLE, "DATE_CREATED" DATE CONSTRAINT "ADDRESS_DATEC_NN" NOT NULL ENABLE, "HOUSE_NO_OR_NAME" VARCHAR2(60 BYTE), "STREET_NAME" VARCHAR2(60 BYTE), "TOWN" VARCHAR2(60 BYTE), "COUNTY" VARCHAR2(60 BYTE), "COUNTRY" VARCHAR2(60 BYTE), "POST_CODE" VARCHAR2(12 BYTE), "ZIP_CODE" VARCHAR2(12 BYTE)) SEGMENT CREATION IMMEDIATE PCTFREE 10 PCTUSED 40 INITRANS 16 MAXTRANS 255  NOCOMPRESS LOGGING STORAGE(INITIAL 8388608 NEXT 8388608 MINEXTENTS 1 MAXEXTENTS 2147483645 PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT) TABLESPACE "SOETBS"   NO INMEMORY
+
+ORA-39083: Object type TABLE:"SOE"."CARD_DETAILS" failed to create with error:
+ORA-00959: tablespace 'SOETBS' does not exist
+
+Failing sql is:
+CREATE TABLE "SOE"."CARD_DETAILS" ("CARD_ID" NUMBER(12,0) CONSTRAINT "CARD_ID_NN" NOT NULL ENABLE, "CUSTOMER_ID" NUMBER(12,0) CONSTRAINT "CARD_CUST_ID_NN" NOT NULL ENABLE, "CARD_TYPE" VARCHAR2(30 BYTE) CONSTRAINT "CARD_TYPE_NN" NOT NULL ENABLE, "CARD_NUMBER" NUMBER(12,0) CONSTRAINT "CARD_NUMBER_NN" NOT NULL ENABLE, "EXPIRY_DATE" DATE CONSTRAINT "EXPIRY_DATE_NN" NOT NULL ENABLE, "IS_VALID" VARCHAR2(1 BYTE) CONSTRAINT "IS_VALID_NN" NOT NULL ENABLE, "SECURITY_CODE" NUMBER(6,0)) SEGMENT CREATION IMMEDIATE PCTFREE 10 PCTUSED 40 INITRANS 16 MAXTRANS 255  NOCOMPRESS LOGGING STORAGE(INITIAL 8388608 NEXT 8388608 MINEXTENTS 1 MAXEXTENTS 2147483645 PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT) TABLESPACE "SOETBS"   NO INMEMORY
+
+ORA-39083: Object type TABLE:"SOE"."ORDER_ITEMS" failed to create with error:
+ORA-00959: tablespace 'SOETBS' does not exist
+
+Failing sql is:
+CREATE TABLE "SOE"."ORDER_ITEMS" ("ORDER_ID" NUMBER(12,0) CONSTRAINT "OI_ORDER_ID_NN" NOT NULL ENABLE, "LINE_ITEM_ID" NUMBER(3,0) CONSTRAINT "OI_LINEITEM_ID_NN" NOT NULL ENABLE, "PRODUCT_ID" NUMBER(6,0) CONSTRAINT "OI_PRODUCT_ID_NN" NOT NULL ENABLE, "UNIT_PRICE" NUMBER(8,2), "QUANTITY" NUMBER(8,0), "DISPATCH_DATE" DATE, "RETURN_DATE" DATE, "GIFT_WRAP" VARCHAR2(20 BYTE), "CONDITION" VARCHAR2(20 BYTE), "SUPPLIER_ID" NUMBER(6,0), "ESTIMATED_DELIVERY" DATE) SEGMENT CREATION IMMEDIATE PCTFREE 10 PCTUSED 40 INITRANS 16 MAXTRANS 255  NOCOMPRESS LOGGING STORAGE(INITIAL 8388608 NEXT 8388608 MINEXTENTS 1 MAXEXTENTS 2147483645 PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT) TABLESPACE "SOETBS"   NO INMEMORY
+
+ORA-39083: Object type TABLE:"SOE"."ORDERENTRY_METADATA" failed to create with error:
+ORA-00959: tablespace 'SOETBS' does not exist
+
+Failing sql is:
+CREATE TABLE "SOE"."ORDERENTRY_METADATA" ("METADATA_KEY" VARCHAR2(30 BYTE), "METADATA_VALUE" VARCHAR2(30 BYTE)) SEGMENT CREATION IMMEDIATE PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255  NOCOMPRESS LOGGING STORAGE(INITIAL 1048576 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645 PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT) TABLESPACE "SOETBS"   NO INMEMORY
+
+ORA-39083: Object type TABLE:"SOE"."LOGON" failed to create with error:
+ORA-00959: tablespace 'SOETBS' does not exist
+
+Failing sql is:
+CREATE TABLE "SOE"."LOGON" ("LOGON_ID" NUMBER CONSTRAINT "LOGON_LOGON_ID_NN" NOT NULL ENABLE, "CUSTOMER_ID" NUMBER CONSTRAINT "LOGON_CUSTOMER_ID_NN" NOT NULL ENABLE, "LOGON_DATE" DATE) SEGMENT CREATION IMMEDIATE PCTFREE 10 PCTUSED 40 INITRANS 16 MAXTRANS 255  NOCOMPRESS LOGGING STORAGE(INITIAL 8388608 NEXT 8388608 MINEXTENTS 1 MAXEXTENTS 2147483645 PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT) TABLESPACE "SOETBS"   NO INMEMORY
+
+ORA-39083: Object type TABLE:"SOE"."V" failed to create with error:
+ORA-00959: tablespace 'SOETBS' does not exist
+
+Failing sql is:
+CREATE TABLE "SOE"."V" ("RID" NUMBER GENERATED BY DEFAULT ON NULL AS IDENTITY MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 1 CACHE 20 NOORDER  NOCYCLE  NOKEEP  NOSCALE  NOT NULL ENABLE, "X" VARCHAR2(1000 BYTE)) SEGMENT CREATION IMMEDIATE PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255  NOCOMPRESS LOGGING STORAGE(INITIAL 1048576 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645 PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT) TABLESPACE "SOETBS"   NO INMEMORY
+
+ORA-39083: Object type TABLE:"SOE"."PRODUCT_INFORMATION" failed to create with error:
+ORA-00959: tablespace 'SOETBS' does not exist
+
+Failing sql is:
+CREATE TABLE "SOE"."PRODUCT_INFORMATION" ("PRODUCT_ID" NUMBER(6,0) CONSTRAINT "PRODUCT_PRODUCT_ID_NN" NOT NULL ENABLE, "PRODUCT_NAME" VARCHAR2(50 BYTE) CONSTRAINT "PRODUCT_PRODUCT_NAME_NN" NOT NULL ENABLE, "PRODUCT_DESCRIPTION" VARCHAR2(2000 BYTE), "CATEGORY_ID" NUMBER(4,0) CONSTRAINT "PRODUCT_CATEGORY_ID_NN" NOT NULL ENABLE, "WEIGHT_CLASS" NUMBER(1,0), "WARRANTY_PERIOD" INTERVAL YEAR (2) TO MONTH, "SUPPLIER_ID" NUMBER(6,0), "PRODUCT_STATUS" VARCHAR2(20 BYTE), "LIST_PRICE" NUMBER(8,2), "MIN_PRICE" NUMBER(8,2), "CATALOG_URL" VARCHAR2(50 BYTE)) SEGMENT CREATION IMMEDIATE PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255  NOCOMPRESS LOGGING STORAGE(INITIAL 1048576 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645 PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT) TABLESPACE "SOETBS"   NO INMEMORY
+
+ORA-39083: Object type TABLE:"SOE"."CUSTOMERS" failed to create with error:
+ORA-00959: tablespace 'SOETBS' does not exist
+
+Failing sql is:
+CREATE TABLE "SOE"."CUSTOMERS" ("CUSTOMER_ID" NUMBER(12,0) CONSTRAINT "CUST_CUSTID_NN" NOT NULL ENABLE, "CUST_FIRST_NAME" VARCHAR2(40 BYTE) CONSTRAINT "CUST_FNAME_NN" NOT NULL ENABLE, "CUST_LAST_NAME" VARCHAR2(40 BYTE) CONSTRAINT "CUST_LNAME_NN" NOT NULL ENABLE, "NLS_LANGUAGE" VARCHAR2(3 BYTE), "NLS_TERRITORY" VARCHAR2(30 BYTE), "CREDIT_LIMIT" NUMBER(9,2), "CUST_EMAIL" VARCHAR2(100 BYTE), "ACCOUNT_MGR_ID" NUMBER(12,0), "CUSTOMER_SINCE" DATE, "CUSTOMER_CLASS" VARCHAR2(40 BYTE), "SUGGESTIONS" VARCHAR2(40 BYTE), "DOB" DATE, "MAILSHOT" VARCHAR2(1 BYTE), "PARTNER_MAILSHOT" VARCHAR2(1 BYTE), "PREFERRED_ADDRESS" NUMBER(12,0), "PREFERRED_CARD" NUMBER(12,0)) SEGMENT CREATION IMMEDIATE PCTFREE 10 PCTUSED 40 INITRANS 16 MAXTRANS 255  NOCOMPRESS LOGGING STORAGE(INITIAL 8388608 NEXT 8388608 MINEXTENTS 1 MAXEXTENTS 2147483645 PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT) TABLESPACE "SOETBS"   NO INMEMORY
+
+ORA-39083: Object type TABLE:"SOE"."EMP" failed to create with error:
+ORA-00959: tablespace 'SOETBS' does not exist
+
+Failing sql is:
+CREATE TABLE "SOE"."EMP" ("EMP_NO" NUMBER(4,0), "ENAME" VARCHAR2(20 BYTE), "HIRE_DATE" DATE, "DEPT_NO" NUMBER(2,0), "JOB_CODE" CHAR(4 BYTE), "SALARY" NUMBER(8,2), "MGR_ID" NUMBER(4,0), "TERMINATED" CHAR(1 BYTE) DEFAULT 'N', "NOTES" VARCHAR2(1000 BYTE)) SEGMENT CREATION IMMEDIATE PCTFREE 10 PCTUSED 0 INITRANS 1 MAXTRANS 255  NOCOMPRESS LOGGING STORAGE(INITIAL 1048576 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645 PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT) TABLESPACE "SOETBS"   NO INMEMORY
+
+ORA-39083: Object type TABLE:"SOE"."ORDERS" failed to create with error:
+ORA-00959: tablespace 'SOETBS' does not exist
+
+Failing sql is:
+CREATE TABLE "SOE"."ORDERS" ("ORDER_ID" NUMBER(12,0) CONSTRAINT "ORDER_ORDER_ID_NN" NOT NULL ENABLE, "ORDER_DATE" TIMESTAMP (6) WITH LOCAL TIME ZONE CONSTRAINT "ORDER_DATE_NN" NOT NULL ENABLE, "ORDER_MODE" VARCHAR2(8 BYTE), "CUSTOMER_ID" NUMBER(12,0) CONSTRAINT "ORDER_CUSTOMER_ID_NN" NOT NULL ENABLE, "ORDER_STATUS" NUMBER(2,0), "ORDER_TOTAL" NUMBER(8,2), "SALES_REP_ID" NUMBER(6,0), "PROMOTION_ID" NUMBER(6,0), "WAREHOUSE_ID" NUMBER(6,0), "DELIVERY_TYPE" VARCHAR2(15 BYTE), "COST_OF_DELIVERY" NUMBER(6,0), "WAIT_TILL_ALL_AVAILABLE" VARCHAR2(15 BYTE), "DELIVERY_ADDRESS_ID" NUMBER(12,0), "CUSTOMER_CLASS" VARCHAR2(30 BYTE), "CARD_ID" NUMBER(12,0), "INVOICE_ADDRESS_ID" NUMBER(12,0)) SEGMENT CREATION IMMEDIATE PCTFREE 10 PCTUSED 40 INITRANS 16 MAXTRANS 255  NOCOMPRESS LOGGING STORAGE(INITIAL 8388608 NEXT 8388608 MINEXTENTS 1 MAXEXTENTS 2147483645 PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT) TABLESPACE "SOETBS"   NO INMEMORY
+
+ORA-39083: Object type TABLE:"SOE"."INVENTORIES" failed to create with error:
+ORA-00959: tablespace 'SOETBS' does not exist
+
+Failing sql is:
+CREATE TABLE "SOE"."INVENTORIES" ("PRODUCT_ID" NUMBER(6,0) CONSTRAINT "INVENTORY_PROODUCT_ID_NN" NOT NULL ENABLE, "WAREHOUSE_ID" NUMBER(6,0) CONSTRAINT "INVENTORY_WAREHOUSE_ID_NN" NOT NULL ENABLE, "QUANTITY_ON_HAND" NUMBER(8,0) CONSTRAINT "INVENTORY_QOH_NN" NOT NULL ENABLE) SEGMENT CREATION IMMEDIATE PCTFREE 90 PCTUSED 5 INITRANS 16 MAXTRANS 255  NOCOMPRESS LOGGING STORAGE(INITIAL 1048576 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645 PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT) TABLESPACE "SOETBS"   NO INMEMORY
+
+ORA-39083: Object type TABLE:"SOE"."DEPT" failed to create with error:
+ORA-00959: tablespace 'SOETBS' does not exist
+
+Failing sql is:
+CREATE TABLE "SOE"."DEPT" ("DEPT_NO" NUMBER(2,0), "DNAME" VARCHAR2(22 BYTE)) SEGMENT CREATION IMMEDIATE PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255  NOCOMPRESS LOGGING STORAGE(INITIAL 1048576 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645 PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT) TABLESPACE "SOETBS"   NO INMEMORY
+
+ORA-39083: Object type TABLE:"SOE"."JOBS" failed to create with error:
+ORA-00959: tablespace 'SOETBS' does not exist
+
+Failing sql is:
+CREATE TABLE "SOE"."JOBS" ("JOB_CODE" CHAR(4 BYTE), "JOB_NAME" VARCHAR2(22 BYTE)) SEGMENT CREATION IMMEDIATE PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255  NOCOMPRESS LOGGING STORAGE(INITIAL 1048576 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645 PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT) TABLESPACE "SOETBS"   NO INMEMORY
+
+Processing object type SCHEMA_EXPORT/TABLE/TABLE_DATA
+Processing object type SCHEMA_EXPORT/TABLE/IDENTITY_COLUMN
+ORA-39112: Dependent object type IDENTITY_COLUMN:"SOE"."JOB_HISTORY" skipped, base object type TABLE:"SOE"."JOB_HISTORY" creation failed
+
+ORA-39112: Dependent object type IDENTITY_COLUMN:"SOE"."V" skipped, base object type TABLE:"SOE"."V" creation failed
+
+Processing object type SCHEMA_EXPORT/PACKAGE/PACKAGE_SPEC
+ORA-39083: Object type PACKAGE failed to create with error:
+ORA-31625: Schema SOE is needed to import this object, but is unaccessible
+ORA-01435: user does not exist
+
+Failing sql is:
+CREATE EDITIONABLE PACKAGE ORDERENTRY
+AS
+  --
+  --
+  --
+  -- Package     : Order Entry Package Spec
+  -- Version     : 2.0
+  -- Author      : Dominic Giles
+  -- Last Update : 15th November 2012
+  -- Description : Used in stress test of Oracle by swingbench test harness
+  --
+  --
+  --
+PROCEDURE setPLSQLCOMMIT(commitInPLSQL varchar2);
+FUNCTION browseProducts
+  (
+    cust_id customers.customer_id%type,
+    min_sleep INTEGER,
+    max_sleep INTEGER)
+  RETURN varchar;
+FUNCTION newOrder
+  (
+    cust_id customers.customer_id%type,
+    min_sleep INTEGER,
+    max_sleep INTEGER)
+  RETURN varchar;
+FUNCTION newCustomer(
+    p_fname customers.cust_first_name%type,
+    p_lname customers.cust_last_name%type,
+    p_nls_lang customers.nls_language%type,
+    p_nls_terr customers.nls_territory%type,
+    p_town addresses.town%type,
+    p_county addresses.county%type,
+    p_country addresses.country%type,
+    p_min_sleep INTEGER,
+    p_max_sleep INTEGER)
+  RETURN VARCHAR;
+FUNCTION updateCustomerDetails(
+    p_fname customers.cust_first_name%type,
+    p_lname customers.cust_last_name%type,
+    p_town addresses.town%type,
+    p_county addresses.county%type,
+    p_country addresses.country%type,
+    min_sleep INTEGER,
+    max_sleep INTEGER)
+  RETURN VARCHAR;
+FUNCTION processOrders
+  (
+    min_sleep INTEGER,
+
+Processing object type SCHEMA_EXPORT/FUNCTION/FUNCTION
+ORA-39083: Object type FUNCTION failed to create with error:
+ORA-31625: Schema SOE is needed to import this object, but is unaccessible
+ORA-01435: user does not exist
+
+Failing sql is:
+CREATE EDITIONABLE FUNCTION     CONSUME_CPU( N NUMBER) RETURN NUMBER
+IS
+ -- this function keeps consuming from CPU till N seconds is elapsed
+ V TIMESTAMP;
+ X NUMBER ;
+BEGIN
+ V := SYSTIMESTAMP;
+ WHILE EXTRACT( SECOND from SYSTIMESTAMP - V ) < N  LOOP
+  X := SQRT(DBMS_RANDOM.VALUE(1,10000));
+ END LOOP;
+ RETURN 0;
+END;
+
+Processing object type SCHEMA_EXPORT/PROCEDURE/PROCEDURE
+ORA-39083: Object type PROCEDURE failed to create with error:
+ORA-31625: Schema SOE is needed to import this object, but is unaccessible
+ORA-01435: user does not exist
+
+Failing sql is:
+CREATE EDITIONABLE PROCEDURE show_recm (in_task_name IN VARCHAR2) IS
+CURSOR curs IS
+SELECT DISTINCT action_id, command, attr1, attr2, attr3, attr4
+FROM user_advisor_actions
+WHERE task_name = in_task_name
+ORDER BY action_id;
+v_action number;
+v_command VARCHAR2(32);
+v_attr1 VARCHAR2(4000);
+v_attr2 VARCHAR2(4000);
+v_attr3 VARCHAR2(4000);
+v_attr4 VARCHAR2(4000);
+v_attr5 VARCHAR2(4000);
+BEGIN
+OPEN curs;
+DBMS_OUTPUT.PUT_LINE('=========================================');
+DBMS_OUTPUT.PUT_LINE('Task_name = ' || in_task_name);
+LOOP
+FETCH curs INTO
+v_action, v_command, v_attr1, v_attr2, v_attr3, v_attr4 ;
+EXIT when curs%NOTFOUND;
+DBMS_OUTPUT.PUT_LINE('Action ID: ' || v_action);
+DBMS_OUTPUT.PUT_LINE('Command : ' || v_command);
+DBMS_OUTPUT.PUT_LINE('Attr1 (name) : ' || SUBSTR(v_attr1,1,30));
+DBMS_OUTPUT.PUT_LINE('Attr2 (tablespace): ' || SUBSTR(v_attr2,1,30));
+DBMS_OUTPUT.PUT_LINE('Attr3 : ' || SUBSTR(v_attr3,1,30));
+DBMS_OUTPUT.PUT_LINE('Attr4 : ' || v_attr4);
+DBMS_OUTPUT.PUT_LINE('Attr5 : ' || v_attr5);
+DBMS_OUTPUT.PUT_LINE('----------------------------------------');
+END LOOP;
+CLOSE curs;
+DBMS_OUTPUT.PUT_LINE('=========END RECOMMENDATIONS============');
+END show_recm;
+
+Processing object type SCHEMA_EXPORT/PACKAGE/COMPILE_PACKAGE/PACKAGE_SPEC/ALTER_PACKAGE_SPEC
+ORA-39112: Dependent object type ALTER_PACKAGE_SPEC:"SOE"."ORDERENTRY" skipped, base object type PACKAGE:"SOE"."ORDERENTRY" creation failed
+
+Processing object type SCHEMA_EXPORT/FUNCTION/ALTER_FUNCTION
+ORA-39112: Dependent object type ALTER_FUNCTION:"SOE"."CONSUME_CPU" skipped, base object type FUNCTION:"SOE"."CONSUME_CPU" creation failed
+
+Processing object type SCHEMA_EXPORT/PROCEDURE/ALTER_PROCEDURE
+ORA-39112: Dependent object type ALTER_PROCEDURE:"SOE"."SHOW_RECM" skipped, base object type PROCEDURE:"SOE"."SHOW_RECM" creation failed
+
+Processing object type SCHEMA_EXPORT/VIEW/VIEW
+ORA-39083: Object type VIEW failed to create with error:
+ORA-31625: Schema SOE is needed to import this object, but is unaccessible
+ORA-01435: user does not exist
+
+Failing sql is:
+CREATE FORCE EDITIONABLE VIEW "SOE"."PRODUCTS" ("PRODUCT_ID", "LANGUAGE_ID", "PRODUCT_NAME", "CATEGORY_ID", "PRODUCT_DESCRIPTION", "WEIGHT_CLASS", "WARRANTY_PERIOD", "SUPPLIER_ID", "PRODUCT_STATUS", "LIST_PRICE", "MIN_PRICE", "CATALOG_URL") AS SELECT i.product_id
+,      d.language_id
+,      CASE WHEN d.language_id IS NOT NULL
+            THEN d.translated_name
+            ELSE TRANSLATE(i.product_name USING NCHAR_CS)
+       END    AS product_name
+,      i.category_id
+,      CASE WHEN d.language_id IS NOT NULL
+            THEN d.translated_description
+            ELSE TRANSLATE(i.product_description USING NCHAR_CS)
+       END    AS product_description
+,      i.weight_class
+,      i.warranty_period
+,      i.supplier_id
+,      i.product_status
+,      i.list_price
+,      i.min_price
+,      i.catalog_url
+FROM   product_information  i
+,      product_descriptions d
+WHERE  d.product_id  (+) = i.product_id
+
+ORA-39083: Object type VIEW failed to create with error:
+ORA-31625: Schema SOE is needed to import this object, but is unaccessible
+ORA-01435: user does not exist
+
+Failing sql is:
+CREATE FORCE EDITIONABLE VIEW "SOE"."PRODUCT_PRICES" ("CATEGORY_ID", "#_OF_PRODUCTS", "LOW_PRICE", "HIGH_PRICE") AS SELECT category_id
+,      COUNT(*)        as "#_OF_PRODUCTS"
+,      MIN(list_price) as low_price
+,      MAX(list_price) as high_price
+FROM   product_information
+GROUP BY category_id
+
+Processing object type SCHEMA_EXPORT/PACKAGE/PACKAGE_BODY
+ORA-39083: Object type PACKAGE_BODY failed to create with error:
+ORA-31625: Schema SOE is needed to import this object, but is unaccessible
+ORA-01435: user does not exist
+
+Failing sql is:
+CREATE EDITIONABLE PACKAGE BODY ORDERENTRY AS
+  --
+  --
+  -- Package     : Order Entry Package Body
+  -- Version     : 2.0
+  -- Author      : Dominic Giles
+  -- Last Update : 14 June 2011
+  -- Description : Used in stress test of Oracle by swingbench test harness
+  --
+  --
+  MAX_BROWSE_CATEGORY integer := 6;
+  MIN_PROD_ID         integer := 1;
+  MAX_PROD_ID         integer := 1000;
+  SELECT_STATEMENTS   integer := 1;
+  INSERT_STATEMENTS   integer := 2;
+  UPDATE_STATEMENTS   integer := 3;
+  DELETE_STATEMENTS   integer := 4;
+  COMMIT_STATEMENTS   integer := 5;
+  ROLLBACK_STATEMENTS integer := 6;
+  SLEEP_TIME          integer := 7;
+  MIN_CATEGORY        integer := 1;
+  MAX_CATEGORY        integer := 199;
+  MIN_PRODS_TO_BUY    integer := 2;
+  MAX_PRODS_TO_BUY    integer := 6;
+  MIN_WAREHOUSE_ID    integer := 1;
+  MAX_WAREHOUSE_ID    integer := 1000;
+  AWAITING_PROCESSING integer := 4;
+  ORDER_PROCESSED     integer := 10;
+  MAX_CREDITLIMIT     integer := 5000;
+  MIN_CREDITLIMIT     integer := 100;
+  MIN_SALESID         integer := 145;
+  MAX_SALESID         integer := 171;
+  MIN_COST_DELIVERY   integer := 1;
+  MAX_COST_DELIVERY   integer := 5;
+  ROW_RETURNS         integer := 15;
+  HOUSE_NO_RANGE      integer := 200;
+  PLSQLCOMMIT         boolean := false;
+  CUSTOMER_CLASS      customers.customer_class%type := 'Occasional';
+  SUGGESTIONS         customers.suggestions%type := 'Books';
+  MAILSHOT            customers.mailshot%type := 'Y';
+
+
+Processing object type SCHEMA_EXPORT/TABLE/INDEX/INDEX
+ORA-39112: Dependent object type INDEX:"SOE"."WHS_LOCATION_IX" skipped, base object type TABLE:"SOE"."WAREHOUSES" creation failed
+
+ORA-39112: Dependent object type INDEX:"SOE"."WAREHOUSES_PK" skipped, base object type TABLE:"SOE"."WAREHOUSES" creation failed
+
+ORA-39112: Dependent object type INDEX:"SOE"."PRD_DESC_PK" skipped, base object type TABLE:"SOE"."PRODUCT_DESCRIPTIONS" creation failed
+
+ORA-39112: Dependent object type INDEX:"SOE"."PROD_NAME_IX" skipped, base object type TABLE:"SOE"."PRODUCT_DESCRIPTIONS" creation failed
+
+ORA-39112: Dependent object type INDEX:"SOE"."ADDRESS_PK" skipped, base object type TABLE:"SOE"."ADDRESSES" creation failed
+
+ORA-39112: Dependent object type INDEX:"SOE"."ADDRESS_CUST_IX" skipped, base object type TABLE:"SOE"."ADDRESSES" creation failed
+
+ORA-39112: Dependent object type INDEX:"SOE"."CARD_DETAILS_PK" skipped, base object type TABLE:"SOE"."CARD_DETAILS" creation failed
+
+ORA-39112: Dependent object type INDEX:"SOE"."CARDDETAILS_CUST_IX" skipped, base object type TABLE:"SOE"."CARD_DETAILS" creation failed
+
+ORA-39112: Dependent object type INDEX:"SOE"."ORDER_ITEMS_PK" skipped, base object type TABLE:"SOE"."ORDER_ITEMS" creation failed
+
+ORA-39112: Dependent object type INDEX:"SOE"."ITEM_ORDER_IX" skipped, base object type TABLE:"SOE"."ORDER_ITEMS" creation failed
+
+ORA-39112: Dependent object type INDEX:"SOE"."ITEM_PRODUCT_IX" skipped, base object type TABLE:"SOE"."ORDER_ITEMS" creation failed
+
+ORA-39112: Dependent object type INDEX:"SOE"."PROD_SUPPLIER_IX" skipped, base object type TABLE:"SOE"."PRODUCT_INFORMATION" creation failed
+
+ORA-39112: Dependent object type INDEX:"SOE"."PROD_CATEGORY_IX" skipped, base object type TABLE:"SOE"."PRODUCT_INFORMATION" creation failed
+
+ORA-39112: Dependent object type INDEX:"SOE"."CUST_ACCOUNT_MANAGER_IX" skipped, base object type TABLE:"SOE"."CUSTOMERS" creation failed
+
+ORA-39112: Dependent object type INDEX:"SOE"."CUST_DOB_IX" skipped, base object type TABLE:"SOE"."CUSTOMERS" creation failed
+
+ORA-39112: Dependent object type INDEX:"SOE"."CUSTOMERS_PK" skipped, base object type TABLE:"SOE"."CUSTOMERS" creation failed
+
+ORA-39112: Dependent object type INDEX:"SOE"."CUST_EMAIL_IX" skipped, base object type TABLE:"SOE"."CUSTOMERS" creation failed
+
+ORA-39112: Dependent object type INDEX:"SOE"."DEPT_IX" skipped, base object type TABLE:"SOE"."EMP" creation failed
+
+ORA-39112: Dependent object type INDEX:"SOE"."EMP_PK" skipped, base object type TABLE:"SOE"."EMP" creation failed
+
+ORA-39112: Dependent object type INDEX:"SOE"."ORD_WAREHOUSE_IX" skipped, base object type TABLE:"SOE"."ORDERS" creation failed
+
+ORA-39112: Dependent object type INDEX:"SOE"."ORDER_PK" skipped, base object type TABLE:"SOE"."ORDERS" creation failed
+
+ORA-39112: Dependent object type INDEX:"SOE"."ORD_SALES_REP_IX" skipped, base object type TABLE:"SOE"."ORDERS" creation failed
+
+ORA-39112: Dependent object type INDEX:"SOE"."ORD_ORDER_DATE_IX" skipped, base object type TABLE:"SOE"."ORDERS" creation failed
+
+ORA-39112: Dependent object type INDEX:"SOE"."ORD_CUSTOMER_IX" skipped, base object type TABLE:"SOE"."ORDERS" creation failed
+
+ORA-39112: Dependent object type INDEX:"SOE"."INV_PRODUCT_IX" skipped, base object type TABLE:"SOE"."INVENTORIES" creation failed
+
+ORA-39112: Dependent object type INDEX:"SOE"."INV_WAREHOUSE_IX" skipped, base object type TABLE:"SOE"."INVENTORIES" creation failed
+
+Processing object type SCHEMA_EXPORT/TABLE/INDEX/FUNCTIONAL_INDEX/INDEX
+ORA-39112: Dependent object type INDEX:"SOE"."CUST_FUNC_LOWER_NAME_IX" skipped, base object type TABLE:"SOE"."CUSTOMERS" creation failed
+
+Processing object type SCHEMA_EXPORT/TABLE/CONSTRAINT/CONSTRAINT
+ORA-39112: Dependent object type CONSTRAINT:"SOE"."WAREHOUSES_PK" skipped, base object type TABLE:"SOE"."WAREHOUSES" creation failed
+
+ORA-39112: Dependent object type CONSTRAINT:"SOE"."JOBS_HISTORY_PK" skipped, base object type TABLE:"SOE"."JOB_HISTORY" creation failed
+
+ORA-39112: Dependent object type CONSTRAINT:"SOE"."PRODUCT_DESCRIPTIONS_PK" skipped, base object type TABLE:"SOE"."PRODUCT_DESCRIPTIONS" creation failed
+
+ORA-39112: Dependent object type CONSTRAINT:"SOE"."ADDRESS_PK" skipped, base object type TABLE:"SOE"."ADDRESSES" creation failed
+
+ORA-39112: Dependent object type CONSTRAINT:"SOE"."CARD_DETAILS_PK" skipped, base object type TABLE:"SOE"."CARD_DETAILS" creation failed
+
+ORA-39112: Dependent object type CONSTRAINT:"SOE"."ORDER_ITEMS_PK" skipped, base object type TABLE:"SOE"."ORDER_ITEMS" creation failed
+
+ORA-39112: Dependent object type CONSTRAINT:"SOE"."PRODUCT_STATUS_LOV" skipped, base object type TABLE:"SOE"."PRODUCT_INFORMATION" creation failed
+
+ORA-39112: Dependent object type CONSTRAINT:"SOE"."PRODUCT_INFORMATION_PK" skipped, base object type TABLE:"SOE"."PRODUCT_INFORMATION" creation failed
+
+ORA-39112: Dependent object type CONSTRAINT:"SOE"."CUSTOMERS_PK" skipped, base object type TABLE:"SOE"."CUSTOMERS" creation failed
+
+ORA-39112: Dependent object type CONSTRAINT:"SOE"."CUSTOMER_ID_MIN" skipped, base object type TABLE:"SOE"."CUSTOMERS" creation failed
+
+ORA-39112: Dependent object type CONSTRAINT:"SOE"."CUSTOMER_CREDIT_LIMIT_MAX" skipped, base object type TABLE:"SOE"."CUSTOMERS" creation failed
+
+ORA-39112: Dependent object type CONSTRAINT:"SOE"."CHK_TERMINATED" skipped, base object type TABLE:"SOE"."EMP" creation failed
+
+ORA-39112: Dependent object type CONSTRAINT:"SOE"."EMP_PK" skipped, base object type TABLE:"SOE"."EMP" creation failed
+
+ORA-39112: Dependent object type CONSTRAINT:"SOE"."ORDER_MODE_LOV" skipped, base object type TABLE:"SOE"."ORDERS" creation failed
+
+ORA-39112: Dependent object type CONSTRAINT:"SOE"."ORDER_PK" skipped, base object type TABLE:"SOE"."ORDERS" creation failed
+
+ORA-39112: Dependent object type CONSTRAINT:"SOE"."ORDER_TOTAL_MIN" skipped, base object type TABLE:"SOE"."ORDERS" creation failed
+
+ORA-39112: Dependent object type CONSTRAINT:"SOE"."INVENTORY_PK" skipped, base object type TABLE:"SOE"."INVENTORIES" creation failed
+
+ORA-39112: Dependent object type CONSTRAINT:"SOE"."DEPT_PK" skipped, base object type TABLE:"SOE"."DEPT" creation failed
+
+ORA-39112: Dependent object type CONSTRAINT:"SOE"."JOBS_PK" skipped, base object type TABLE:"SOE"."JOBS" creation failed
+
+Processing object type SCHEMA_EXPORT/TABLE/INDEX/STATISTICS/INDEX_STATISTICS
+Processing object type SCHEMA_EXPORT/TABLE/INDEX/STATISTICS/FUNCTIONAL_INDEX/INDEX_STATISTICS
+Processing object type SCHEMA_EXPORT/TABLE/CONSTRAINT/REF_CONSTRAINT
+ORA-39112: Dependent object type REF_CONSTRAINT:"SOE"."SYS_C007620" skipped, base object type TABLE:"SOE"."JOB_HISTORY" creation failed
+
+ORA-39112: Dependent object type REF_CONSTRAINT:"SOE"."ADD_CUST_FK" skipped, base object type TABLE:"SOE"."ADDRESSES" creation failed
+
+ORA-39112: Dependent object type REF_CONSTRAINT:"SOE"."ORDER_ITEMS_PRODUCT_ID_FK" skipped, base object type TABLE:"SOE"."ORDER_ITEMS" creation failed
+
+ORA-39112: Dependent object type REF_CONSTRAINT:"SOE"."ORDER_ITEMS_ORDER_ID_FK" skipped, base object type TABLE:"SOE"."ORDER_ITEMS" creation failed
+
+ORA-39112: Dependent object type REF_CONSTRAINT:"SOE"."DEPT_FK_EMP" skipped, base object type TABLE:"SOE"."EMP" creation failed
+
+ORA-39112: Dependent object type REF_CONSTRAINT:"SOE"."JOBS_FK_EMP" skipped, base object type TABLE:"SOE"."EMP" creation failed
+
+ORA-39112: Dependent object type REF_CONSTRAINT:"SOE"."ORDERS_CUSTOMER_ID_FK" skipped, base object type TABLE:"SOE"."ORDERS" creation failed
+
+ORA-39112: Dependent object type REF_CONSTRAINT:"SOE"."INVENTORIES_PRODUCT_ID_FK" skipped, base object type TABLE:"SOE"."INVENTORIES" creation failed
+
+ORA-39112: Dependent object type REF_CONSTRAINT:"SOE"."INVENTORIES_WAREHOUSES_FK" skipped, base object type TABLE:"SOE"."INVENTORIES" creation failed
+
+Processing object type SCHEMA_EXPORT/TABLE/INDEX/BITMAP_INDEX/INDEX
+ORA-39112: Dependent object type INDEX:"SOE"."I1" skipped, base object type TABLE:"SOE"."EMP" creation failed
+
+Processing object type SCHEMA_EXPORT/TABLE/INDEX/STATISTICS/BITMAP_INDEX/INDEX_STATISTICS
+Processing object type SCHEMA_EXPORT/TABLE/STATISTICS/TABLE_STATISTICS
+Processing object type SCHEMA_EXPORT/STATISTICS/MARKER
+Job "SYS"."SYS_IMPORT_FULL_01" completed with 107 error(s) at Mon Nov 6 11:54:12 2023 elapsed 0 00:00:07
+
+[oracle@oraclelab2 admin]$
+[oracle@oraclelab2 admin]$
+[oracle@oraclelab2 admin]$
+[oracle@oraclelab2 admin]$ sqlplus sys/scott#123@to_loans as sysdba                                      
+SQL*Plus: Release 19.0.0.0.0 - Production on Mon Nov 6 11:54:37 2023
+Version 19.3.0.0.0
+
+Copyright (c) 1982, 2019, Oracle.  All rights reserved.
+
+ERROR:
+ORA-12514: TNS:listener does not currently know of service requested in connect
+descriptor
+
+
+Enter user-name:
+ERROR:
+ORA-01017: invalid username/password; logon denied
+
+
+Enter user-name:
+ERROR:
+ORA-01017: invalid username/password; logon denied
+
+
+SP2-0157: unable to CONNECT to ORACLE after 3 attempts, exiting SQL*Plus
+[oracle@oraclelab2 admin]$
+[oracle@oraclelab2 admin]$ sqlplus sys/scott#123@to_sbi as sysdba
+
+SQL*Plus: Release 19.0.0.0.0 - Production on Mon Nov 6 11:54:48 2023
+Version 19.3.0.0.0
+
+Copyright (c) 1982, 2019, Oracle.  All rights reserved.
+
+Last Successful login time: Mon Nov 06 2023 11:53:59 +05:30
+
+Connected to:
+Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Version 19.3.0.0.0
+
+SQL>
+SQL>
+SQL> select tablespace_name from dba_tablespaces;
+
+TABLESPACE_NAME
+------------------------------
+SYSTEM
+SYSAUX
+UNDOTBS1
+TEMP
+SBI_TS
+
+SQL> exit
+Disconnected from Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Version 19.3.0.0.0
+[oracle@oraclelab2 admin]$ impdp directory=import_dir dumpfile=exp_soe.dmp logfile=imp_soe_loans_061123.log remap_tablespace=soetbs:sbi_ts
+
+Import: Release 19.0.0.0.0 - Production on Mon Nov 6 11:55:37 2023
+Version 19.3.0.0.0
+
+Copyright (c) 1982, 2019, Oracle and/or its affiliates.  All rights reserved.
+
+Username: sys/scott#123@to_sbi as sysdba
+
+Connected to: Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Master table "SYS"."SYS_IMPORT_FULL_01" successfully loaded/unloaded
+Starting "SYS"."SYS_IMPORT_FULL_01":  sys/********@to_sbi AS SYSDBA directory=import_dir dumpfile=exp_soe.dmp logfile=imp_soe_loans_061123.log remap_tablespace=soetbs:sbi_ts
+Processing object type SCHEMA_EXPORT/USER
+Processing object type SCHEMA_EXPORT/SYSTEM_GRANT
+Processing object type SCHEMA_EXPORT/ROLE_GRANT
+ORA-39083: Object type ROLE_GRANT failed to create with error:
+ORA-01919: role 'PLUSTRACE' does not exist
+
+Failing sql is:
+ GRANT "PLUSTRACE" TO "SOE"
+
+Processing object type SCHEMA_EXPORT/DEFAULT_ROLE
+Processing object type SCHEMA_EXPORT/TABLESPACE_QUOTA
+Processing object type SCHEMA_EXPORT/PRE_SCHEMA/PROCACT_SCHEMA
+Processing object type SCHEMA_EXPORT/SEQUENCE/SEQUENCE
+Processing object type SCHEMA_EXPORT/TABLE/TABLE
+Processing object type SCHEMA_EXPORT/TABLE/TABLE_DATA
+
+
+
+ORA-39171: Job is experiencing a resumable wait.
+Resumable error: ORA-01653: unable to extend table SOE.ORDER_ITEMS by 1024 in tablespace SBI_TS
+Resumable stmt:  BEGIN    SYS.KUPW$WORKER.MAIN('SYS_IMPORT_FULL_01', 'SYS', 0, 0);  END;
+Resumable stmt status: SUSPENDED
+Resumable stmt start: 11/06/23 11:55:54 stmt suspend: 11/06/23 11:55:55
+. . imported "SOE"."ORDER_ITEMS"                         170.4 MB 3735896 rows
+. . imported "SOE"."ORDERS"                              114.9 MB 1352070 rows
+. . imported "SOE"."INVENTORIES"                         15.27 MB  902171 rows
+. . imported "SOE"."LOGON"                               9.065 MB  442208 rows
+. . imported "SOE"."CUSTOMERS"                           4.983 MB   45703 rows
+. . imported "SOE"."ADDRESSES"                           4.084 MB   55703 rows
+. . imported "SOE"."CARD_DETAILS"                        2.402 MB   55703 rows
+. . imported "SOE"."PRODUCT_DESCRIPTIONS"                224.1 KB    1000 rows
+. . imported "SOE"."PRODUCT_INFORMATION"                 186.4 KB    1000 rows
+. . imported "SOE"."EMP"                                 51.39 KB     879 rows
+. . imported "SOE"."WAREHOUSES"                          36.03 KB    1000 rows
+. . imported "SOE"."JOB_HISTORY"                         14.60 KB     246 rows
+. . imported "SOE"."JOBS"                                5.976 KB      23 rows
+. . imported "SOE"."ORDERENTRY_METADATA"                 5.609 KB       4 rows
+. . imported "SOE"."DEPT"                                5.632 KB       7 rows
+. . imported "SOE"."V"                                       0 KB       0 rows
+Processing object type SCHEMA_EXPORT/TABLE/IDENTITY_COLUMN
+Processing object type SCHEMA_EXPORT/PACKAGE/PACKAGE_SPEC
+Processing object type SCHEMA_EXPORT/FUNCTION/FUNCTION
+Processing object type SCHEMA_EXPORT/PROCEDURE/PROCEDURE
+Processing object type SCHEMA_EXPORT/PACKAGE/COMPILE_PACKAGE/PACKAGE_SPEC/ALTER_PACKAGE_SPEC
+Processing object type SCHEMA_EXPORT/FUNCTION/ALTER_FUNCTION
+Processing object type SCHEMA_EXPORT/PROCEDURE/ALTER_PROCEDURE
+Processing object type SCHEMA_EXPORT/VIEW/VIEW
+Processing object type SCHEMA_EXPORT/PACKAGE/PACKAGE_BODY
+Processing object type SCHEMA_EXPORT/TABLE/INDEX/INDEX
+Processing object type SCHEMA_EXPORT/TABLE/INDEX/FUNCTIONAL_INDEX/INDEX
+Processing object type SCHEMA_EXPORT/TABLE/CONSTRAINT/CONSTRAINT
+Processing object type SCHEMA_EXPORT/TABLE/INDEX/STATISTICS/INDEX_STATISTICS
+Processing object type SCHEMA_EXPORT/TABLE/INDEX/STATISTICS/FUNCTIONAL_INDEX/INDEX_STATISTICS
+Processing object type SCHEMA_EXPORT/TABLE/CONSTRAINT/REF_CONSTRAINT
+Processing object type SCHEMA_EXPORT/TABLE/INDEX/BITMAP_INDEX/INDEX
+Processing object type SCHEMA_EXPORT/TABLE/INDEX/STATISTICS/BITMAP_INDEX/INDEX_STATISTICS
+Processing object type SCHEMA_EXPORT/TABLE/STATISTICS/TABLE_STATISTICS
+Processing object type SCHEMA_EXPORT/STATISTICS/MARKER
+ORA-39082: Object type PACKAGE BODY:"SOE"."ORDERENTRY" created with compilation warnings
+
+Job "SYS"."SYS_IMPORT_FULL_01" completed with 3 error(s) at Mon Nov 6 12:05:42 2023 elapsed 0 00:09:52
+
+[oracle@oraclelab2 admin]$
+[oracle@oraclelab2 admin]$
+[oracle@oraclelab2 admin]$
+[oracle@oraclelab2 admin]$ sqlplus / as sysdba
+
+SQL*Plus: Release 19.0.0.0.0 - Production on Mon Nov 6 12:06:15 2023
+Version 19.3.0.0.0
+
+Copyright (c) 1982, 2019, Oracle.  All rights reserved.
+
+
+Connected to:
+Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Version 19.3.0.0.0
+
+SQL> show pdbs
+
+    CON_ID CON_NAME                       OPEN MODE  RESTRICTED
+---------- ------------------------------ ---------- ----------
+         2 PDB$SEED                       READ ONLY  NO
+         3 SAVINGS                        READ WRITE NO
+         4 LOANS                          READ WRITE NO
+         5 DEMATS                         READ WRITE NO
+         7 SBI                            READ WRITE NO
+SQL> exit
+Disconnected from Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Version 19.3.0.0.0
+[oracle@oraclelab2 admin]$ vi tnsnames.ora
+[oracle@oraclelab2 admin]$
+[oracle@oraclelab2 admin]$
+[oracle@oraclelab2 admin]$
+[oracle@oraclelab2 admin]$
+[oracle@oraclelab2 admin]$
+[oracle@oraclelab2 admin]$
+[oracle@oraclelab2 admin]$ lsnrctl status
+
+LSNRCTL for Linux: Version 19.0.0.0.0 - Production on 06-NOV-2023 12:07:24
+
+Copyright (c) 1991, 2019, Oracle.  All rights reserved.
+
+Connecting to (DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=192.168.0.174)(PORT=1521)))
+STATUS of the LISTENER
+------------------------
+Alias                     LISTENER
+Version                   TNSLSNR for Linux: Version 19.0.0.0.0 - Production
+Start Date                06-NOV-2023 11:24:10
+Uptime                    0 days 0 hr. 43 min. 14 sec
+Trace Level               off
+Security                  ON: Local OS Authentication
+SNMP                      OFF
+Listener Parameter File   /u01/app/oracle/product/19.0.0.0/dbhome_1/network/admin/listener.ora
+Listener Log File         /u01/app/oracle/diag/tnslsnr/oraclelab2/listener/alert/log.xml
+Listening Endpoints Summary...
+  (DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=192.168.0.174)(PORT=1521)))
+Services Summary...
+Service "demats" has 1 instance(s).
+  Instance "sbiprod", status UNKNOWN, has 1 handler(s) for this service...
+Service "savings" has 1 instance(s).
+  Instance "sbiprod", status UNKNOWN, has 1 handler(s) for this service...
+Service "sbi" has 1 instance(s).
+  Instance "sbiprod", status UNKNOWN, has 1 handler(s) for this service...
+Service "sbiprod" has 1 instance(s).
+  Instance "sbiprod", status UNKNOWN, has 1 handler(s) for this service...
+The command completed successfully
+[oracle@oraclelab2 admin]$ sqlplus sys/scott#123@to_demats as sysdba                                     
+SQL*Plus: Release 19.0.0.0.0 - Production on Mon Nov 6 12:07:37 2023
+Version 19.3.0.0.0
+
+Copyright (c) 1982, 2019, Oracle.  All rights reserved.
+
+Last Successful login time: Mon Nov 06 2023 11:55:49 +05:30
+
+Connected to:
+Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Version 19.3.0.0.0
+
+SQL>
+SQL>
+SQL> exit
+Disconnected from Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Version 19.3.0.0.0
+[oracle@oraclelab2 admin]$
+[oracle@oraclelab2 admin]$
+[oracle@oraclelab2 admin]$
+[oracle@oraclelab2 admin]$ cd /u01/import
+[oracle@oraclelab2 import]$ ls -lrt
+total 579432
+-rw-r-----. 1 oracle oinstall 338419712 Nov  6 11:11 exp_soe.dmp
+-rw-r--r--. 1 oracle oinstall      3810 Nov  6 11:35 imp_soe_061123.log
+-rw-r-----. 1 oracle oinstall 120750080 Nov  6 11:45 orders2_061123.dmp
+-rw-r--r--. 1 oracle oinstall      3840 Nov  6 11:48 imp_orders_061123.log
+-rw-r--r--. 1 oracle oinstall      4183 Nov  6 12:05 imp_soe_loans_061123.log
+-rw-r-----. 1 oracle oinstall  84033536 Nov  6 12:12 exp_full_oradb_061123.dmp
+[oracle@oraclelab2 import]$ vi impdp_full_demats.par
+[oracle@oraclelab2 import]$
+[oracle@oraclelab2 import]$
+[oracle@oraclelab2 import]$
+[oracle@oraclelab2 import]$
+[oracle@oraclelab2 import]$ ls -lrt
+total 900080
+-rw-r-----. 1 oracle oinstall 338419712 Nov  6 11:11 exp_soe.dmp
+-rw-r--r--. 1 oracle oinstall      3810 Nov  6 11:35 imp_soe_061123.log
+-rw-r-----. 1 oracle oinstall 120750080 Nov  6 11:45 orders2_061123.dmp
+-rw-r--r--. 1 oracle oinstall      3840 Nov  6 11:48 imp_orders_061123.log
+-rw-r--r--. 1 oracle oinstall      4183 Nov  6 12:05 imp_soe_loans_061123.log
+-rw-r-----. 1 oracle oinstall 462491648 Nov  6 12:13 exp_full_oradb_061123.dmp
+-rw-r--r--. 1 oracle oinstall       164 Nov  6 12:15 impdp_full_demats.par
+[oracle@oraclelab2 import]$
+[oracle@oraclelab2 import]$
+[oracle@oraclelab2 import]$
+[oracle@oraclelab2 import]$ impdp parfile=impdp_full_demats.par
+
+Import: Release 19.0.0.0.0 - Production on Mon Nov 6 12:15:54 2023
+Version 19.3.0.0.0
+
+Copyright (c) 1982, 2019, Oracle and/or its affiliates.  All rights reserved.
+
+Connected to: Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+ORA-39002: invalid operation
+ORA-39070: Unable to open the log file.
+ORA-39087: directory name IMPORT_DIR is invalid
+
+
+[oracle@oraclelab2 import]$ sqlplus sys/scott#123@to_demats as sysdba
+
+SQL*Plus: Release 19.0.0.0.0 - Production on Mon Nov 6 12:16:04 2023
+Version 19.3.0.0.0
+
+Copyright (c) 1982, 2019, Oracle.  All rights reserved.
+
+Last Successful login time: Mon Nov 06 2023 12:15:54 +05:30
+
+Connected to:
+Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Version 19.3.0.0.0
+
+SQL> create or replace directory import_dir as '/u01/import';
+
+Directory created.
+
+SQL>
+SQL>
+SQL> exit
+Disconnected from Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Version 19.3.0.0.0
+[oracle@oraclelab2 import]$
+[oracle@oraclelab2 import]$
+[oracle@oraclelab2 import]$
+[oracle@oraclelab2 import]$ impdp parfile=impdp_full_demats.par
+
+Import: Release 19.0.0.0.0 - Production on Mon Nov 6 12:16:28 2023
+Version 19.3.0.0.0
+
+Copyright (c) 1982, 2019, Oracle and/or its affiliates.  All rights reserved.
+
+Connected to: Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Master table "SYS"."SYS_IMPORT_FULL_01" successfully loaded/unloaded
+Starting "SYS"."SYS_IMPORT_FULL_01":  sys/********@to_demats AS SYSDBA parfile=impdp_full_demats.par
+Processing object type DATABASE_EXPORT/PRE_SYSTEM_IMPCALLOUT/MARKER
+Processing object type DATABASE_EXPORT/PRE_INSTANCE_IMPCALLOUT/MARKER
+Processing object type DATABASE_EXPORT/TABLESPACE
+ORA-31684: Object type TABLESPACE:"UNDOTBS1" already exists
+
+ORA-31684: Object type TABLESPACE:"TEMP" already exists
+
+ORA-31684: Object type TABLESPACE:"USERS" already exists
+
+Processing object type DATABASE_EXPORT/PROFILE
+Processing object type DATABASE_EXPORT/SCHEMA/USER
+Processing object type DATABASE_EXPORT/ROLE
+Processing object type DATABASE_EXPORT/RADM_FPTM
+Processing object type DATABASE_EXPORT/GRANT/SYSTEM_GRANT/PROC_SYSTEM_GRANT
+Processing object type DATABASE_EXPORT/SCHEMA/GRANT/SYSTEM_GRANT
+Processing object type DATABASE_EXPORT/SCHEMA/ROLE_GRANT
+ORA-39083: Object type ROLE_GRANT failed to create with error:
+ORA-01917: user or role 'GSMROOTUSER' does not exist
+
+Failing sql is:
+ GRANT "GSMROOTUSER_ROLE" TO "GSMROOTUSER"
+
+Processing object type DATABASE_EXPORT/SCHEMA/DEFAULT_ROLE
+ORA-39083: Object type DEFAULT_ROLE:"GSMROOTUSER" failed to create with error:
+ORA-01918: user 'GSMROOTUSER' does not exist
+
+Failing sql is:
+ ALTER USER "GSMROOTUSER" DEFAULT ROLE ALL
+
+Processing object type DATABASE_EXPORT/SCHEMA/ON_USER_GRANT
+ORA-39083: Object type ON_USER_GRANT failed to create with error:
+ORA-31625: Schema GSMROOTUSER is needed to import this object, but is unaccessible
+ORA-01435: user does not exist
+
+Failing sql is:
+ GRANT INHERIT PRIVILEGES ON USER "GSMROOTUSER" TO "PUBLIC"
+
+Processing object type DATABASE_EXPORT/SCHEMA/TABLESPACE_QUOTA
+Processing object type DATABASE_EXPORT/RESOURCE_COST
+Processing object type DATABASE_EXPORT/TRUSTED_DB_LINK
+Processing object type DATABASE_EXPORT/SCHEMA/SEQUENCE/SEQUENCE
+Processing object type DATABASE_EXPORT/DIRECTORY/DIRECTORY
+Processing object type DATABASE_EXPORT/SYSTEM_PROCOBJACT/PRE_SYSTEM_ACTIONS/PROCACT_SYSTEM
+Processing object type DATABASE_EXPORT/SYSTEM_PROCOBJACT/PROCOBJ
+Processing object type DATABASE_EXPORT/SYSTEM_PROCOBJACT/POST_SYSTEM_ACTIONS/PROCACT_SYSTEM
+Processing object type DATABASE_EXPORT/SCHEMA/PROCACT_SCHEMA
+ORA-39083: Object type PROCACT_SCHEMA failed to create with error:
+ORA-31625: Schema GSMROOTUSER is needed to import this object, but is unaccessible
+ORA-01435: user does not exist
+
+Failing sql is:
+BEGIN
+sys.dbms_logrep_imp.instantiate_schema(schema_name=>SYS_CONTEXT('USERENV','CURRENT_SCHEMA'), export_db_name=>'ORADB.LOCALDOMAIN', inst_scn=>'2372297');COMMIT; END;
+
+Processing object type DATABASE_EXPORT/EARLY_OPTIONS/VIEWS_AS_TABLES/TABLE
+Processing object type DATABASE_EXPORT/EARLY_OPTIONS/VIEWS_AS_TABLES/TABLE_DATA
+. . imported "SYS"."KU$_EXPORT_USER_MAP"                 6.070 KB      37 rows
+Processing object type DATABASE_EXPORT/EARLY_POST_INSTANCE_IMPCALLOUT/MARKER
+Processing object type DATABASE_EXPORT/NORMAL_OPTIONS/TABLE
+Processing object type DATABASE_EXPORT/NORMAL_OPTIONS/TABLE_DATA
+. . imported "SYSTEM"."REDO_DB_TMP"                      25.59 KB       1 rows
+. . imported "WMSYS"."E$WORKSPACES_TABLE$"               12.10 KB       1 rows
+. . imported "WMSYS"."E$HINT_TABLE$"                     9.984 KB      97 rows
+. . imported "WMSYS"."E$WORKSPACE_PRIV_TABLE$"           7.078 KB      11 rows
+. . imported "SYS"."AMGT$DP$DAM_CONFIG_PARAM$"           6.531 KB      14 rows
+. . imported "SYS"."DP$TSDP_SUBPOL$"                     6.328 KB       1 rows
+. . imported "WMSYS"."E$NEXTVER_TABLE$"                  6.375 KB       1 rows
+. . imported "WMSYS"."E$ENV_VARS$"                       6.015 KB       3 rows
+. . imported "SYS"."DP$TSDP_PARAMETER$"                  5.953 KB       1 rows
+. . imported "SYS"."DP$TSDP_POLICY$"                     5.921 KB       1 rows
+. . imported "WMSYS"."E$VERSION_HIERARCHY_TABLE$"        5.984 KB       1 rows
+. . imported "WMSYS"."E$EVENTS_INFO$"                    5.812 KB      12 rows
+. . imported "AUDSYS"."AMGT$DP$AUD$UNIFIED":"AUD_UNIFIED_P0"      0 KB       0 rows
+. . imported "AUDSYS"."AMGT$DP$AUD$UNIFIED":"SYS_P181"   147.5 KB     189 rows
+. . imported "AUDSYS"."AMGT$DP$AUD$UNIFIED":"SYS_P241"   51.39 KB       1 rows
+. . imported "LBACSYS"."OLS_DP$OLS$AUDIT"                    0 KB       0 rows
+. . imported "LBACSYS"."OLS_DP$OLS$COMPARTMENTS"             0 KB       0 rows
+. . imported "LBACSYS"."OLS_DP$OLS$GROUPS"                   0 KB       0 rows
+. . imported "LBACSYS"."OLS_DP$OLS$LAB"                      0 KB       0 rows
+. . imported "LBACSYS"."OLS_DP$OLS$LEVELS"                   0 KB       0 rows
+. . imported "LBACSYS"."OLS_DP$OLS$POL"                      0 KB       0 rows
+. . imported "LBACSYS"."OLS_DP$OLS$POLS"                     0 KB       0 rows
+. . imported "LBACSYS"."OLS_DP$OLS$POLT"                     0 KB       0 rows
+. . imported "LBACSYS"."OLS_DP$OLS$PROFILE"                  0 KB       0 rows
+. . imported "LBACSYS"."OLS_DP$OLS$PROG"                     0 KB       0 rows
+. . imported "LBACSYS"."OLS_DP$OLS$USER"                     0 KB       0 rows
+. . imported "SYS"."AMGT$DP$AUD$"                            0 KB       0 rows
+. . imported "SYS"."AMGT$DP$DAM_CLEANUP_EVENTS$"             0 KB       0 rows
+. . imported "SYS"."AMGT$DP$DAM_CLEANUP_JOBS$"               0 KB       0 rows
+. . imported "SYS"."DP$TSDP_ASSOCIATION$"                    0 KB       0 rows
+. . imported "SYS"."DP$TSDP_CONDITION$"                      0 KB       0 rows
+. . imported "SYS"."DP$TSDP_FEATURE_POLICY$"                 0 KB       0 rows
+. . imported "SYS"."DP$TSDP_PROTECTION$"                     0 KB       0 rows
+. . imported "SYS"."DP$TSDP_SENSITIVE_DATA$"                 0 KB       0 rows
+. . imported "SYS"."DP$TSDP_SENSITIVE_TYPE$"                 0 KB       0 rows
+. . imported "SYS"."DP$TSDP_SOURCE$"                         0 KB       0 rows
+. . imported "SYSTEM"."REDO_LOG_TMP"                         0 KB       0 rows
+. . imported "WMSYS"."E$BATCH_COMPRESSIBLE_TABLES$"          0 KB       0 rows
+. . imported "WMSYS"."E$CONSTRAINTS_TABLE$"                  0 KB       0 rows
+. . imported "WMSYS"."E$CONS_COLUMNS$"                       0 KB       0 rows
+. . imported "WMSYS"."E$LOCKROWS_INFO$"                      0 KB       0 rows
+. . imported "WMSYS"."E$MODIFIED_TABLES$"                    0 KB       0 rows
+. . imported "WMSYS"."E$MP_GRAPH_WORKSPACES_TABLE$"          0 KB       0 rows
+. . imported "WMSYS"."E$MP_PARENT_WORKSPACES_TABLE$"         0 KB       0 rows
+. . imported "WMSYS"."E$NESTED_COLUMNS_TABLE$"               0 KB       0 rows
+. . imported "WMSYS"."E$RESOLVE_WORKSPACES_TABLE$"           0 KB       0 rows
+. . imported "WMSYS"."E$RIC_LOCKING_TABLE$"                  0 KB       0 rows
+. . imported "WMSYS"."E$RIC_TABLE$"                          0 KB       0 rows
+. . imported "WMSYS"."E$RIC_TRIGGERS_TABLE$"                 0 KB       0 rows
+. . imported "WMSYS"."E$UDTRIG_DISPATCH_PROCS$"              0 KB       0 rows
+. . imported "WMSYS"."E$UDTRIG_INFO$"                        0 KB       0 rows
+. . imported "WMSYS"."E$VERSION_TABLE$"                      0 KB       0 rows
+. . imported "WMSYS"."E$VT_ERRORS_TABLE$"                    0 KB       0 rows
+. . imported "WMSYS"."E$WORKSPACE_SAVEPOINTS_TABLE$"         0 KB       0 rows
+Processing object type DATABASE_EXPORT/NORMAL_OPTIONS/VIEWS_AS_TABLES/TABLE
+Processing object type DATABASE_EXPORT/NORMAL_OPTIONS/VIEWS_AS_TABLES/TABLE_DATA
+. . imported "MDSYS"."RDF_PARAM$TBL"                     6.515 KB       3 rows
+. . imported "SYS"."AMGT$DP$AUDTAB$TBS$FOR_EXPORT"       5.953 KB       2 rows
+. . imported "SYS"."DP$DBA_SENSITIVE_DATA"                   0 KB       0 rows
+. . imported "SYS"."DP$DBA_TSDP_POLICY_PROTECTION"           0 KB       0 rows
+. . imported "SYS"."AMGT$DP$FGA_LOG$FOR_EXPORT"              0 KB       0 rows
+. . imported "SYS"."NACL$_ACE_IMP"                           0 KB       0 rows
+. . imported "SYS"."NACL$_HOST_IMP"                      6.976 KB       2 rows
+. . imported "SYS"."NACL$_WALLET_IMP"                        0 KB       0 rows
+. . imported "SYS"."DATAPUMP$SQL$TEXT"                       0 KB       0 rows
+. . imported "SYS"."DATAPUMP$SQL$"                           0 KB       0 rows
+. . imported "SYS"."DATAPUMP$SQLOBJ$AUXDATA"                 0 KB       0 rows
+. . imported "SYS"."DATAPUMP$SQLOBJ$DATA"                    0 KB       0 rows
+. . imported "SYS"."DATAPUMP$SQLOBJ$PLAN"                    0 KB       0 rows
+. . imported "SYS"."DATAPUMP$SQLOBJ$"                        0 KB       0 rows
+. . imported "SYSTEM"."SCHEDULER_JOB_ARGS_TMP"           8.648 KB       4 rows
+. . imported "SYSTEM"."SCHEDULER_PROGRAM_ARGS_TMP"       9.726 KB      13 rows
+. . imported "WMSYS"."E$EXP_MAP"                         7.718 KB       3 rows
+. . imported "WMSYS"."E$METADATA_MAP"                        0 KB       0 rows
+Processing object type DATABASE_EXPORT/NORMAL_POST_INSTANCE_IMPCALLOUT/MARKER
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/TABLE
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/TABLE_DATA
+. . imported "SOE"."ORDER_ITEMS"                         170.4 MB 3735896 rows
+. . imported "SOE"."ORDERS"                              114.9 MB 1352070 rows
+. . imported "SOE"."ORDERS2"                             114.9 MB 1352070 rows
+. . imported "SOE"."INVENTORIES"                         15.27 MB  902171 rows
+. . imported "SOE"."LOGON"                               9.065 MB  442208 rows
+. . imported "SOE"."CUSTOMERS"                           4.983 MB   45703 rows
+. . imported "SOE"."ADDRESSES"                           4.084 MB   55703 rows
+. . imported "SOE"."CARD_DETAILS"                        2.402 MB   55703 rows
+. . imported "SOE"."PRODUCT_DESCRIPTIONS"                224.1 KB    1000 rows
+. . imported "SOE"."PRODUCT_INFORMATION"                 186.4 KB    1000 rows
+. . imported "SOE"."EMP"                                 51.39 KB     879 rows
+. . imported "SOE"."WAREHOUSES"                          36.03 KB    1000 rows
+. . imported "SOE"."JOB_HISTORY"                         14.60 KB     246 rows
+. . imported "SOE"."JOBS"                                5.976 KB      23 rows
+. . imported "SOE"."ORDERENTRY_METADATA"                 5.609 KB       4 rows
+. . imported "SOE"."DEPT"                                5.632 KB       7 rows
+. . imported "SOE"."V"                                       0 KB       0 rows
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/IDENTITY_COLUMN
+Processing object type DATABASE_EXPORT/SCHEMA/PACKAGE/PACKAGE_SPEC
+Processing object type DATABASE_EXPORT/SCHEMA/PACKAGE/CODE_BASE_GRANT
+Processing object type DATABASE_EXPORT/SCHEMA/FUNCTION/FUNCTION
+Processing object type DATABASE_EXPORT/SCHEMA/PROCEDURE/PROCEDURE
+Processing object type DATABASE_EXPORT/SCHEMA/PACKAGE/COMPILE_PACKAGE/PACKAGE_SPEC/ALTER_PACKAGE_SPEC
+Processing object type DATABASE_EXPORT/SCHEMA/FUNCTION/ALTER_FUNCTION
+Processing object type DATABASE_EXPORT/SCHEMA/PROCEDURE/ALTER_PROCEDURE
+Processing object type DATABASE_EXPORT/SCHEMA/VIEW/VIEW
+Processing object type DATABASE_EXPORT/SCHEMA/PACKAGE_BODIES/PACKAGE/PACKAGE_BODY
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/INDEX/INDEX
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/INDEX/FUNCTIONAL_INDEX/INDEX
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/CONSTRAINT/CONSTRAINT
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/INDEX/STATISTICS/INDEX_STATISTICS
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/INDEX/STATISTICS/FUNCTIONAL_INDEX/INDEX_STATISTICS
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/CONSTRAINT/REF_CONSTRAINT
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/INDEX/BITMAP_INDEX/INDEX
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/INDEX/STATISTICS/BITMAP_INDEX/INDEX_STATISTICS
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/STATISTICS/TABLE_STATISTICS
+Processing object type DATABASE_EXPORT/STATISTICS/MARKER
+Processing object type DATABASE_EXPORT/FINAL_POST_INSTANCE_IMPCALLOUT/MARKER
+Processing object type DATABASE_EXPORT/SCHEMA/POST_SCHEMA/PROCACT_SCHEMA
+Processing object type DATABASE_EXPORT/AUDIT_UNIFIED/AUDIT_POLICY_ENABLE
+Processing object type DATABASE_EXPORT/POST_SYSTEM_IMPCALLOUT/MARKER
+ORA-39082: Object type PACKAGE BODY:"SOE"."ORDERENTRY" created with compilation warnings
+
+Job "SYS"."SYS_IMPORT_FULL_01" completed with 8 error(s) at Mon Nov 6 12:18:44 2023 elapsed 0 00:02:16
+
+[oracle@oraclelab2 import]$
+[oracle@oraclelab2 import]$
+[oracle@oraclelab2 import]$
+[oracle@oraclelab2 import]$ sqlplus sys/scott#123@to_demats as sysdba
+
+SQL*Plus: Release 19.0.0.0.0 - Production on Mon Nov 6 12:22:38 2023
+Version 19.3.0.0.0
+
+Copyright (c) 1982, 2019, Oracle.  All rights reserved.
+
+Last Successful login time: Mon Nov 06 2023 12:16:28 +05:30
+
+Connected to:
+Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Version 19.3.0.0.0
+
+SQL>
+SQL>
+SQL>
+SQL>
+SQL> select username from dba_users;
+
+USERNAME
+--------------------------------------------------------------------------------
+SYS
+SYSTEM
+XS$NULL
+GSMCATUSER
+MDDATA
+SYSBACKUP
+REMOTE_SCHEDULER_AGENT
+GSMUSER
+SYSRAC
+CLONE_USER
+C##NAGARAJU
+
+USERNAME
+--------------------------------------------------------------------------------
+OJVMSYS
+SI_INFORMTN_SCHEMA
+DEMAT_ADMIN
+AUDSYS
+DIP
+ORDPLUGINS
+ARUN
+LBACSYS
+SYSKM
+ORDDATA
+OUTLN
+
+USERNAME
+--------------------------------------------------------------------------------
+ORACLE_OCM
+SYS$UMF
+BIKE
+SCOTT
+SYSDG
+ORDSYS
+DBSNMP
+APPQOSSYS
+DBSFWUSER
+GGSYS
+ANONYMOUS
+
+USERNAME
+--------------------------------------------------------------------------------
+CTXSYS
+DVSYS
+DVF
+GSMADMIN_INTERNAL
+MDSYS
+OLAPSYS
+XDB
+WMSYS
+SOE
+
+42 rows selected.
+
+SQL> 1
+  1* select username from dba_users
+SQL>  select username from dba_users order by 1;
+
+USERNAME
+--------------------------------------------------------------------------------
+ANONYMOUS
+APPQOSSYS
+ARUN
+AUDSYS
+BIKE
+C##NAGARAJU
+CLONE_USER
+CTXSYS
+DBSFWUSER
+DBSNMP
+DEMAT_ADMIN
+
+USERNAME
+--------------------------------------------------------------------------------
+DIP
+DVF
+DVSYS
+GGSYS
+GSMADMIN_INTERNAL
+GSMCATUSER
+GSMUSER
+LBACSYS
+MDDATA
+MDSYS
+OJVMSYS
+
+USERNAME
+--------------------------------------------------------------------------------
+OLAPSYS
+ORACLE_OCM
+ORDDATA
+ORDPLUGINS
+ORDSYS
+OUTLN
+REMOTE_SCHEDULER_AGENT
+SCOTT
+SI_INFORMTN_SCHEMA
+SOE
+SYS
+
+USERNAME
+--------------------------------------------------------------------------------
+SYS$UMF
+SYSBACKUP
+SYSDG
+SYSKM
+SYSRAC
+SYSTEM
+WMSYS
+XDB
+XS$NULL
+
+42 rows selected.
+
+SQL>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[oracle@srv1 ~]$ ps -ef|grep smon
+oracle    2688     1  0 10:54 ?        00:00:00 ora_smon_ORADB
+oracle    4081  4004  0 10:56 pts/0    00:00:00 grep --color=auto smon
+[oracle@srv1 ~]$ 
+[oracle@srv1 ~]$ . oraenv
+ORACLE_SID = [ORADB] ? 
+The Oracle base remains unchanged with value /u01/app/oracle
+[oracle@srv1 ~]$ 
+[oracle@srv1 ~]$ sqlplus / as sysdba
+
+SQL*Plus: Release 19.0.0.0.0 - Production on Mon Nov 6 10:56:37 2023
+Version 19.3.0.0.0
+
+Copyright (c) 1982, 2019, Oracle.  All rights reserved.
+
+
+Connected to:
+Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Version 19.3.0.0.0
+
+SQL> 
+SQL> 
+SQL> select username from dba_users order by 1;
+
+USERNAME
+--------------------------------------------------------------------------------
+ANONYMOUS
+APPQOSSYS
+AUDSYS
+CTXSYS
+DBSFWUSER
+DBSNMP
+DIP
+DVF
+DVSYS
+GGSYS
+GSMADMIN_INTERNAL
+
+USERNAME
+--------------------------------------------------------------------------------
+GSMCATUSER
+GSMROOTUSER
+GSMUSER
+LBACSYS
+MDDATA
+MDSYS
+OJVMSYS
+OLAPSYS
+ORACLE_OCM
+ORDDATA
+ORDPLUGINS
+
+USERNAME
+--------------------------------------------------------------------------------
+ORDSYS
+OUTLN
+REMOTE_SCHEDULER_AGENT
+SI_INFORMTN_SCHEMA
+SOE
+SYS
+SYS$UMF
+SYSBACKUP
+SYSDG
+SYSKM
+SYSRAC
+
+USERNAME
+--------------------------------------------------------------------------------
+SYSTEM
+WMSYS
+XDB
+XS$NULL
+
+37 rows selected.
+
+SQL> 
+SQL> 
+SQL> desc dba_tables   
+ Name					   Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ OWNER					   NOT NULL VARCHAR2(128)
+ TABLE_NAME				   NOT NULL VARCHAR2(128)
+ TABLESPACE_NAME				    VARCHAR2(30)
+ CLUSTER_NAME					    VARCHAR2(128)
+ IOT_NAME					    VARCHAR2(128)
+ STATUS 					    VARCHAR2(8)
+ PCT_FREE					    NUMBER
+ PCT_USED					    NUMBER
+ INI_TRANS					    NUMBER
+ MAX_TRANS					    NUMBER
+ INITIAL_EXTENT 				    NUMBER
+ NEXT_EXTENT					    NUMBER
+ MIN_EXTENTS					    NUMBER
+ MAX_EXTENTS					    NUMBER
+ PCT_INCREASE					    NUMBER
+ FREELISTS					    NUMBER
+ FREELIST_GROUPS				    NUMBER
+ LOGGING					    VARCHAR2(3)
+ BACKED_UP					    VARCHAR2(1)
+ NUM_ROWS					    NUMBER
+ BLOCKS 					    NUMBER
+ EMPTY_BLOCKS					    NUMBER
+ AVG_SPACE					    NUMBER
+ CHAIN_CNT					    NUMBER
+ AVG_ROW_LEN					    NUMBER
+ AVG_SPACE_FREELIST_BLOCKS			    NUMBER
+ NUM_FREELIST_BLOCKS				    NUMBER
+ DEGREE 					    VARCHAR2(10)
+ INSTANCES					    VARCHAR2(10)
+ CACHE						    VARCHAR2(5)
+ TABLE_LOCK					    VARCHAR2(8)
+ SAMPLE_SIZE					    NUMBER
+ LAST_ANALYZED					    DATE
+ PARTITIONED					    VARCHAR2(3)
+ IOT_TYPE					    VARCHAR2(12)
+ TEMPORARY					    VARCHAR2(1)
+ SECONDARY					    VARCHAR2(1)
+ NESTED 					    VARCHAR2(3)
+ BUFFER_POOL					    VARCHAR2(7)
+ FLASH_CACHE					    VARCHAR2(7)
+ CELL_FLASH_CACHE				    VARCHAR2(7)
+ ROW_MOVEMENT					    VARCHAR2(8)
+ GLOBAL_STATS					    VARCHAR2(3)
+ USER_STATS					    VARCHAR2(3)
+ DURATION					    VARCHAR2(15)
+ SKIP_CORRUPT					    VARCHAR2(8)
+ MONITORING					    VARCHAR2(3)
+ CLUSTER_OWNER					    VARCHAR2(128)
+ DEPENDENCIES					    VARCHAR2(8)
+ COMPRESSION					    VARCHAR2(8)
+ COMPRESS_FOR					    VARCHAR2(30)
+ DROPPED					    VARCHAR2(3)
+ READ_ONLY					    VARCHAR2(3)
+ SEGMENT_CREATED				    VARCHAR2(3)
+ RESULT_CACHE					    VARCHAR2(7)
+ CLUSTERING					    VARCHAR2(3)
+ ACTIVITY_TRACKING				    VARCHAR2(23)
+ DML_TIMESTAMP					    VARCHAR2(25)
+ HAS_IDENTITY					    VARCHAR2(3)
+ CONTAINER_DATA 				    VARCHAR2(3)
+ INMEMORY					    VARCHAR2(8)
+ INMEMORY_PRIORITY				    VARCHAR2(8)
+ INMEMORY_DISTRIBUTE				    VARCHAR2(15)
+ INMEMORY_COMPRESSION				    VARCHAR2(17)
+ INMEMORY_DUPLICATE				    VARCHAR2(13)
+ DEFAULT_COLLATION				    VARCHAR2(100)
+ DUPLICATED					    VARCHAR2(1)
+ SHARDED					    VARCHAR2(1)
+ EXTERNAL					    VARCHAR2(3)
+ HYBRID 					    VARCHAR2(3)
+ CELLMEMORY					    VARCHAR2(24)
+ CONTAINERS_DEFAULT				    VARCHAR2(3)
+ CONTAINER_MAP					    VARCHAR2(3)
+ EXTENDED_DATA_LINK				    VARCHAR2(3)
+ EXTENDED_DATA_LINK_MAP 			    VARCHAR2(3)
+ INMEMORY_SERVICE				    VARCHAR2(12)
+ INMEMORY_SERVICE_NAME				    VARCHAR2(1000)
+ CONTAINER_MAP_OBJECT				    VARCHAR2(3)
+ MEMOPTIMIZE_READ				    VARCHAR2(8)
+ MEMOPTIMIZE_WRITE				    VARCHAR2(8)
+ HAS_SENSITIVE_COLUMN				    VARCHAR2(3)
+ ADMIT_NULL					    VARCHAR2(3)
+ DATA_LINK_DML_ENABLED				    VARCHAR2(3)
+ LOGICAL_REPLICATION				    VARCHAR2(8)
+
+SQL> select owner,table_name,tablespace_name from dba_tables where owner='SOE';
+
+OWNER
+--------------------------------------------------------------------------------
+TABLE_NAME
+--------------------------------------------------------------------------------
+TABLESPACE_NAME
+------------------------------
+SOE
+CUSTOMERS
+SOETBS
+
+SOE
+ADDRESSES
+SOETBS
+
+OWNER
+--------------------------------------------------------------------------------
+TABLE_NAME
+--------------------------------------------------------------------------------
+TABLESPACE_NAME
+------------------------------
+
+SOE
+CARD_DETAILS
+SOETBS
+
+SOE
+WAREHOUSES
+
+OWNER
+--------------------------------------------------------------------------------
+TABLE_NAME
+--------------------------------------------------------------------------------
+TABLESPACE_NAME
+------------------------------
+SOETBS
+
+SOE
+ORDER_ITEMS
+SOETBS
+
+SOE
+
+OWNER
+--------------------------------------------------------------------------------
+TABLE_NAME
+--------------------------------------------------------------------------------
+TABLESPACE_NAME
+------------------------------
+ORDERS
+SOETBS
+
+SOE
+INVENTORIES
+SOETBS
+
+
+OWNER
+--------------------------------------------------------------------------------
+TABLE_NAME
+--------------------------------------------------------------------------------
+TABLESPACE_NAME
+------------------------------
+SOE
+PRODUCT_INFORMATION
+SOETBS
+
+SOE
+LOGON
+SOETBS
+
+OWNER
+--------------------------------------------------------------------------------
+TABLE_NAME
+--------------------------------------------------------------------------------
+TABLESPACE_NAME
+------------------------------
+
+SOE
+PRODUCT_DESCRIPTIONS
+SOETBS
+
+SOE
+ORDERENTRY_METADATA
+
+OWNER
+--------------------------------------------------------------------------------
+TABLE_NAME
+--------------------------------------------------------------------------------
+TABLESPACE_NAME
+------------------------------
+SOETBS
+
+SOE
+DEPT
+SOETBS
+
+SOE
+
+OWNER
+--------------------------------------------------------------------------------
+TABLE_NAME
+--------------------------------------------------------------------------------
+TABLESPACE_NAME
+------------------------------
+JOBS
+SOETBS
+
+SOE
+JOB_HISTORY
+SOETBS
+
+
+OWNER
+--------------------------------------------------------------------------------
+TABLE_NAME
+--------------------------------------------------------------------------------
+TABLESPACE_NAME
+------------------------------
+SOE
+EMP
+SOETBS
+
+SOE
+V
+SOETBS
+
+OWNER
+--------------------------------------------------------------------------------
+TABLE_NAME
+--------------------------------------------------------------------------------
+TABLESPACE_NAME
+------------------------------
+
+
+16 rows selected.
+
+SQL> col owner for a20
+SQL> /
+
+OWNER
+--------------------
+TABLE_NAME
+--------------------------------------------------------------------------------
+TABLESPACE_NAME
+------------------------------
+SOE
+CUSTOMERS
+SOETBS
+
+SOE
+ADDRESSES
+SOETBS
+
+OWNER
+--------------------
+TABLE_NAME
+--------------------------------------------------------------------------------
+TABLESPACE_NAME
+------------------------------
+
+SOE
+CARD_DETAILS
+SOETBS
+
+SOE
+WAREHOUSES
+
+OWNER
+--------------------
+TABLE_NAME
+--------------------------------------------------------------------------------
+TABLESPACE_NAME
+------------------------------
+SOETBS
+
+SOE
+ORDER_ITEMS
+SOETBS
+
+SOE
+
+OWNER
+--------------------
+TABLE_NAME
+--------------------------------------------------------------------------------
+TABLESPACE_NAME
+------------------------------
+ORDERS
+SOETBS
+
+SOE
+INVENTORIES
+SOETBS
+
+
+OWNER
+--------------------
+TABLE_NAME
+--------------------------------------------------------------------------------
+TABLESPACE_NAME
+------------------------------
+SOE
+PRODUCT_INFORMATION
+SOETBS
+
+SOE
+LOGON
+SOETBS
+
+OWNER
+--------------------
+TABLE_NAME
+--------------------------------------------------------------------------------
+TABLESPACE_NAME
+------------------------------
+
+SOE
+PRODUCT_DESCRIPTIONS
+SOETBS
+
+SOE
+ORDERENTRY_METADATA
+
+OWNER
+--------------------
+TABLE_NAME
+--------------------------------------------------------------------------------
+TABLESPACE_NAME
+------------------------------
+SOETBS
+
+SOE
+DEPT
+SOETBS
+
+SOE
+
+OWNER
+--------------------
+TABLE_NAME
+--------------------------------------------------------------------------------
+TABLESPACE_NAME
+------------------------------
+JOBS
+SOETBS
+
+SOE
+JOB_HISTORY
+SOETBS
+
+
+OWNER
+--------------------
+TABLE_NAME
+--------------------------------------------------------------------------------
+TABLESPACE_NAME
+------------------------------
+SOE
+EMP
+SOETBS
+
+SOE
+V
+SOETBS
+
+OWNER
+--------------------
+TABLE_NAME
+--------------------------------------------------------------------------------
+TABLESPACE_NAME
+------------------------------
+
+
+16 rows selected.
+
+SQL> col table_name for a30
+SQL> /
+
+OWNER		     TABLE_NAME
+-------------------- ------------------------------
+TABLESPACE_NAME
+------------------------------
+SOE		     CUSTOMERS
+SOETBS
+
+SOE		     ADDRESSES
+SOETBS
+
+SOE		     CARD_DETAILS
+SOETBS
+
+
+OWNER		     TABLE_NAME
+-------------------- ------------------------------
+TABLESPACE_NAME
+------------------------------
+SOE		     WAREHOUSES
+SOETBS
+
+SOE		     ORDER_ITEMS
+SOETBS
+
+SOE		     ORDERS
+SOETBS
+
+
+OWNER		     TABLE_NAME
+-------------------- ------------------------------
+TABLESPACE_NAME
+------------------------------
+SOE		     INVENTORIES
+SOETBS
+
+SOE		     PRODUCT_INFORMATION
+SOETBS
+
+SOE		     LOGON
+SOETBS
+
+
+OWNER		     TABLE_NAME
+-------------------- ------------------------------
+TABLESPACE_NAME
+------------------------------
+SOE		     PRODUCT_DESCRIPTIONS
+SOETBS
+
+SOE		     ORDERENTRY_METADATA
+SOETBS
+
+SOE		     DEPT
+SOETBS
+
+
+OWNER		     TABLE_NAME
+-------------------- ------------------------------
+TABLESPACE_NAME
+------------------------------
+SOE		     JOBS
+SOETBS
+
+SOE		     JOB_HISTORY
+SOETBS
+
+SOE		     EMP
+SOETBS
+
+
+OWNER		     TABLE_NAME
+-------------------- ------------------------------
+TABLESPACE_NAME
+------------------------------
+SOE		     V
+SOETBS
+
+
+16 rows selected.
+
+SQL> set lines 150
+SQL> /
+
+OWNER		     TABLE_NAME 		    TABLESPACE_NAME
+-------------------- ------------------------------ ------------------------------
+SOE		     CUSTOMERS			    SOETBS
+SOE		     ADDRESSES			    SOETBS
+SOE		     CARD_DETAILS		    SOETBS
+SOE		     WAREHOUSES 		    SOETBS
+SOE		     ORDER_ITEMS		    SOETBS
+SOE		     ORDERS			    SOETBS
+SOE		     INVENTORIES		    SOETBS
+SOE		     PRODUCT_INFORMATION	    SOETBS
+SOE		     LOGON			    SOETBS
+SOE		     PRODUCT_DESCRIPTIONS	    SOETBS
+SOE		     ORDERENTRY_METADATA	    SOETBS
+
+OWNER		     TABLE_NAME 		    TABLESPACE_NAME
+-------------------- ------------------------------ ------------------------------
+SOE		     DEPT			    SOETBS
+SOE		     JOBS			    SOETBS
+SOE		     JOB_HISTORY		    SOETBS
+SOE		     EMP			    SOETBS
+SOE		     V				    SOETBS
+
+16 rows selected.
+
+SQL> set pages 300
+SQL> /
+
+OWNER		     TABLE_NAME 		    TABLESPACE_NAME
+-------------------- ------------------------------ ------------------------------
+SOE		     CUSTOMERS			    SOETBS
+SOE		     ADDRESSES			    SOETBS
+SOE		     CARD_DETAILS		    SOETBS
+SOE		     WAREHOUSES 		    SOETBS
+SOE		     ORDER_ITEMS		    SOETBS
+SOE		     ORDERS			    SOETBS
+SOE		     INVENTORIES		    SOETBS
+SOE		     PRODUCT_INFORMATION	    SOETBS
+SOE		     LOGON			    SOETBS
+SOE		     PRODUCT_DESCRIPTIONS	    SOETBS
+SOE		     ORDERENTRY_METADATA	    SOETBS
+SOE		     DEPT			    SOETBS
+SOE		     JOBS			    SOETBS
+SOE		     JOB_HISTORY		    SOETBS
+SOE		     EMP			    SOETBS
+SOE		     V				    SOETBS
+
+16 rows selected.
+
+SQL> 
+SQL> 
+SQL> exit
+Disconnected from Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Version 19.3.0.0.0
+[oracle@srv1 ~]$ 
+[oracle@srv1 ~]$ 
+[oracle@srv1 ~]$ mkdir -p /u01/datapump
+[oracle@srv1 ~]$ 
+[oracle@srv1 ~]$ 
+[oracle@srv1 ~]$ sqlplus / as sysdba
+
+SQL*Plus: Release 19.0.0.0.0 - Production on Mon Nov 6 11:00:42 2023
+Version 19.3.0.0.0
+
+Copyright (c) 1982, 2019, Oracle.  All rights reserved.
+
+
+Connected to:
+Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Version 19.3.0.0.0
+
+SQL> 
+SQL> create or replace directory datapump_dir as '/u01/datapump';
+
+Directory created.
+
+SQL> 
+SQL> 
+SQL> desc dba_directories
+ Name					   Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ OWNER					   NOT NULL VARCHAR2(128)
+ DIRECTORY_NAME 			   NOT NULL VARCHAR2(128)
+ DIRECTORY_PATH 				    VARCHAR2(4000)
+ ORIGIN_CON_ID					    NUMBER
+
+SQL> select directory_name,directory_path from dba_directories;
+
+DIRECTORY_NAME
+--------------------------------------------------------------------------------
+DIRECTORY_PATH
+--------------------------------------------------------------------------------
+DATAPUMP_DIR
+/u01/datapump
+
+SDO_DIR_WORK
+
+
+SDO_DIR_ADMIN
+/u01/app/oracle/product/19.0.0.0/dbhome_1/md/admin
+
+
+DIRECTORY_NAME
+--------------------------------------------------------------------------------
+DIRECTORY_PATH
+--------------------------------------------------------------------------------
+XMLDIR
+/u01/app/oracle/product/19.0.0.0/dbhome_1/rdbms/xml
+
+XSDDIR
+/u01/app/oracle/product/19.0.0.0/dbhome_1/rdbms/xml/schema
+
+OPATCH_INST_DIR
+/u01/app/oracle/product/19.0.0.0/dbhome_1/OPatch
+
+
+DIRECTORY_NAME
+--------------------------------------------------------------------------------
+DIRECTORY_PATH
+--------------------------------------------------------------------------------
+ORACLE_OCM_CONFIG_DIR2
+/u01/app/oracle/product/19.0.0.0/dbhome_1/ccr/state
+
+ORACLE_BASE
+/u01/app/oracle
+
+ORACLE_HOME
+/u01/app/oracle/product/19.0.0.0/dbhome_1
+
+
+DIRECTORY_NAME
+--------------------------------------------------------------------------------
+DIRECTORY_PATH
+--------------------------------------------------------------------------------
+ORACLE_OCM_CONFIG_DIR
+/u01/app/oracle/product/19.0.0.0/dbhome_1/ccr/state
+
+DATA_PUMP_DIR
+/u01/app/oracle/admin/ORADB/dpdump/
+
+OPATCH_SCRIPT_DIR
+/u01/app/oracle/product/19.0.0.0/dbhome_1/QOpatch
+
+
+DIRECTORY_NAME
+--------------------------------------------------------------------------------
+DIRECTORY_PATH
+--------------------------------------------------------------------------------
+OPATCH_LOG_DIR
+/u01/app/oracle/product/19.0.0.0/dbhome_1/rdbms/log
+
+JAVA$JOX$CUJS$DIRECTORY$
+/u01/app/oracle/product/19.0.0.0/dbhome_1/javavm/admin/
+
+
+14 rows selected.
+
+SQL> exit
+Disconnected from Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Version 19.3.0.0.0
+[oracle@srv1 ~]$ 
+[oracle@srv1 ~]$ 
+[oracle@srv1 ~]$ df -h /u01
+Filesystem               Size  Used Avail Use% Mounted on
+/dev/mapper/ol_srv1-u01   74G   12G   63G  16% /u01
+[oracle@srv1 ~]$ 
+[oracle@srv1 ~]$ 
+[oracle@srv1 ~]$ sqlplus / as sysdba
+
+SQL*Plus: Release 19.0.0.0.0 - Production on Mon Nov 6 11:02:56 2023
+Version 19.3.0.0.0
+
+Copyright (c) 1982, 2019, Oracle.  All rights reserved.
+
+
+Connected to:
+Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Version 19.3.0.0.0
+
+SQL> select OWNER,sum(bytes)/1024/1024/1000 "SIZE_IN_GB" from dba_segments where owner ='SOE' group by owner order by owner;
+
+OWNER
+--------------------------------------------------------------------------------
+SIZE_IN_GB
+----------
+SOE
+      .958
+
+
+SQL> 
+SQL> 
+SQL> exit
+Disconnected from Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Version 19.3.0.0.0
+[oracle@srv1 ~]$ 
+[oracle@srv1 ~]$ 
+[oracle@srv1 ~]$ 
+[oracle@srv1 ~]$ 
+[oracle@srv1 ~]$ expdp directory=datapump_dir logfile=estimate_soe_exp.log schemas=soe estimate_only=yes
+
+Export: Release 19.0.0.0.0 - Production on Mon Nov 6 11:05:18 2023
+Version 19.3.0.0.0
+
+Copyright (c) 1982, 2019, Oracle and/or its affiliates.  All rights reserved.
+
+Username: / as sysdba
+Password: 
+
+Connected to: Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Starting "SYS"."SYS_EXPORT_SCHEMA_01":  /******** AS SYSDBA directory=datapump_dir logfile=estimate_soe_exp.log schemas=soe estimate_only=yes 
+Estimate in progress using BLOCKS method...
+Processing object type SCHEMA_EXPORT/TABLE/TABLE_DATA
+.  estimated "SOE"."ORDER_ITEMS"                           208 MB
+.  estimated "SOE"."INVENTORIES"                           176 MB
+.  estimated "SOE"."ORDERS"                                140 MB
+.  estimated "SOE"."LOGON"                                  12 MB
+.  estimated "SOE"."ADDRESSES"                               8 MB
+.  estimated "SOE"."CARD_DETAILS"                            8 MB
+.  estimated "SOE"."CUSTOMERS"                               8 MB
+.  estimated "SOE"."DEPT"                                 1024 KB
+.  estimated "SOE"."EMP"                                  1024 KB
+.  estimated "SOE"."JOBS"                                 1024 KB
+.  estimated "SOE"."JOB_HISTORY"                          1024 KB
+.  estimated "SOE"."ORDERENTRY_METADATA"                  1024 KB
+.  estimated "SOE"."PRODUCT_DESCRIPTIONS"                 1024 KB
+.  estimated "SOE"."PRODUCT_INFORMATION"                  1024 KB
+.  estimated "SOE"."V"                                    1024 KB
+.  estimated "SOE"."WAREHOUSES"                           1024 KB
+Total estimation using BLOCKS method: 569 MB
+Job "SYS"."SYS_EXPORT_SCHEMA_01" successfully completed at Mon Nov 6 11:05:36 2023 elapsed 0 00:00:03
+
+[oracle@srv1 ~]$ 
+[oracle@srv1 ~]$ 
+[oracle@srv1 ~]$ expdp directory=datapump_dir dumpfile=exp_soe.dmp logfile=estimate_soe_exp.log schemas=soe
+
+Export: Release 19.0.0.0.0 - Production on Mon Nov 6 11:06:50 2023
+Version 19.3.0.0.0
+
+Copyright (c) 1982, 2019, Oracle and/or its affiliates.  All rights reserved.
+
+Username: / as sysdba
+Password: 
+
+Connected to: Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Starting "SYS"."SYS_EXPORT_SCHEMA_01":  /******** AS SYSDBA directory=datapump_dir dumpfile=exp_soe.dmp logfile=estimate_soe_exp.log schemas=soe 
+Processing object type SCHEMA_EXPORT/TABLE/TABLE_DATA
+Processing object type SCHEMA_EXPORT/PACKAGE/PACKAGE_BODY
+Processing object type SCHEMA_EXPORT/TABLE/INDEX/STATISTICS/INDEX_STATISTICS
+Processing object type SCHEMA_EXPORT/TABLE/INDEX/STATISTICS/FUNCTIONAL_INDEX/INDEX_STATISTICS
+Processing object type SCHEMA_EXPORT/TABLE/INDEX/STATISTICS/BITMAP_INDEX/INDEX_STATISTICS
+Processing object type SCHEMA_EXPORT/TABLE/STATISTICS/TABLE_STATISTICS
+Processing object type SCHEMA_EXPORT/STATISTICS/MARKER
+Processing object type SCHEMA_EXPORT/USER
+Processing object type SCHEMA_EXPORT/SYSTEM_GRANT
+Processing object type SCHEMA_EXPORT/ROLE_GRANT
+Processing object type SCHEMA_EXPORT/DEFAULT_ROLE
+Processing object type SCHEMA_EXPORT/TABLESPACE_QUOTA
+Processing object type SCHEMA_EXPORT/PRE_SCHEMA/PROCACT_SCHEMA
+Processing object type SCHEMA_EXPORT/SEQUENCE/SEQUENCE
+Processing object type SCHEMA_EXPORT/TABLE/TABLE
+Processing object type SCHEMA_EXPORT/TABLE/IDENTITY_COLUMN
+Processing object type SCHEMA_EXPORT/PACKAGE/PACKAGE_SPEC
+Processing object type SCHEMA_EXPORT/FUNCTION/FUNCTION
+Processing object type SCHEMA_EXPORT/PROCEDURE/PROCEDURE
+Processing object type SCHEMA_EXPORT/PACKAGE/COMPILE_PACKAGE/PACKAGE_SPEC/ALTER_PACKAGE_SPEC
+Processing object type SCHEMA_EXPORT/FUNCTION/ALTER_FUNCTION
+Processing object type SCHEMA_EXPORT/PROCEDURE/ALTER_PROCEDURE
+Processing object type SCHEMA_EXPORT/VIEW/VIEW
+Processing object type SCHEMA_EXPORT/TABLE/INDEX/INDEX
+Processing object type SCHEMA_EXPORT/TABLE/INDEX/FUNCTIONAL_INDEX/INDEX
+Processing object type SCHEMA_EXPORT/TABLE/CONSTRAINT/CONSTRAINT
+Processing object type SCHEMA_EXPORT/TABLE/CONSTRAINT/REF_CONSTRAINT
+Processing object type SCHEMA_EXPORT/TABLE/INDEX/BITMAP_INDEX/INDEX
+. . exported "SOE"."ORDER_ITEMS"                         170.4 MB 3735896 rows
+. . exported "SOE"."ORDERS"                              114.9 MB 1352070 rows
+. . exported "SOE"."INVENTORIES"                         15.27 MB  902171 rows
+. . exported "SOE"."LOGON"                               9.065 MB  442208 rows
+. . exported "SOE"."CUSTOMERS"                           4.983 MB   45703 rows
+. . exported "SOE"."ADDRESSES"                           4.084 MB   55703 rows
+. . exported "SOE"."CARD_DETAILS"                        2.402 MB   55703 rows
+. . exported "SOE"."PRODUCT_DESCRIPTIONS"                224.1 KB    1000 rows
+. . exported "SOE"."PRODUCT_INFORMATION"                 186.4 KB    1000 rows
+. . exported "SOE"."EMP"                                 51.39 KB     879 rows
+. . exported "SOE"."WAREHOUSES"                          36.03 KB    1000 rows
+. . exported "SOE"."JOB_HISTORY"                         14.60 KB     246 rows
+. . exported "SOE"."JOBS"                                5.976 KB      23 rows
+. . exported "SOE"."ORDERENTRY_METADATA"                 5.609 KB       4 rows
+. . exported "SOE"."DEPT"                                5.632 KB       7 rows
+. . exported "SOE"."V"                                       0 KB       0 rows
+Master table "SYS"."SYS_EXPORT_SCHEMA_01" successfully loaded/unloaded
+******************************************************************************
+Dump file set for SYS.SYS_EXPORT_SCHEMA_01 is:
+  /u01/datapump/exp_soe.dmp
+Job "SYS"."SYS_EXPORT_SCHEMA_01" successfully completed at Mon Nov 6 11:07:20 2023 elapsed 0 00:00:25
+
+[oracle@srv1 ~]$ 
+[oracle@srv1 ~]$ 
+[oracle@srv1 ~]$ cd /u01/datapump
+[oracle@srv1 datapump]$ ls -lrt
+total 330492
+-rw-r-----. 1 oracle oinstall 338419712 Nov  6 11:07 exp_soe.dmp
+-rw-r--r--. 1 oracle oinstall      3729 Nov  6 11:07 estimate_soe_exp.log
+[oracle@srv1 datapump]$ 
+[oracle@srv1 datapump]$ 
+[oracle@srv1 datapump]$ 
+[oracle@srv1 datapump]$ scp exp_soe.dmp oracle@192.168.0.174:/u01/import
+The authenticity of host '192.168.0.174 (192.168.0.174)' can't be established.
+ECDSA key fingerprint is SHA256:FBVelHV5y7QlBm7X1YvxyhmdtycPwbEpWMY/QbkPtiA.
+ECDSA key fingerprint is MD5:f5:88:32:32:8e:d6:91:e3:c7:9c:86:2d:ac:de:97:b3.
+Are you sure you want to continue connecting (yes/no)? yes
+Warning: Permanently added '192.168.0.174' (ECDSA) to the list of known hosts.
+oracle@192.168.0.174's password: 
+exp_soe.dmp                                                        100%  323MB   6.1MB/s   00:52    
+[oracle@srv1 datapump]$ 
+[oracle@srv1 datapump]$ 
+[oracle@srv1 datapump]$ 
+[oracle@srv1 datapump]$ 
+[oracle@srv1 datapump]$ sqlplus / as sysdba
+
+SQL*Plus: Release 19.0.0.0.0 - Production on Mon Nov 6 11:42:51 2023
+Version 19.3.0.0.0
+
+Copyright (c) 1982, 2019, Oracle.  All rights reserved.
+
+
+Connected to:
+Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Version 19.3.0.0.0
+
+SQL> create soe.orders2 as select * from orders;
+create soe.orders2 as select * from orders
+       *
+ERROR at line 1:
+ORA-00901: invalid CREATE command
+
+
+SQL> create table soe.orders2 as select * from soe.orders;
+
+Table created.
+
+SQL> exit
+Disconnected from Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Version 19.3.0.0.0
+[oracle@srv1 datapump]$ 
+[oracle@srv1 datapump]$ 
+[oracle@srv1 datapump]$ expdp directory=datapump_dir dumpfile=orders2_061123.dmp logfile=orders2_061123.log tables=soe.orders2
+
+Export: Release 19.0.0.0.0 - Production on Mon Nov 6 11:44:23 2023
+Version 19.3.0.0.0
+
+Copyright (c) 1982, 2019, Oracle and/or its affiliates.  All rights reserved.
+
+Username: / as sysdba
+Password: 
+
+Connected to: Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Starting "SYS"."SYS_EXPORT_TABLE_01":  /******** AS SYSDBA directory=datapump_dir dumpfile=orders2_061123.dmp logfile=orders2_061123.log tables=soe.orders2 
+Processing object type TABLE_EXPORT/TABLE/TABLE_DATA
+Processing object type TABLE_EXPORT/TABLE/STATISTICS/TABLE_STATISTICS
+Processing object type TABLE_EXPORT/TABLE/STATISTICS/MARKER
+Processing object type TABLE_EXPORT/TABLE/TABLE
+. . exported "SOE"."ORDERS2"                             114.9 MB 1352070 rows
+Master table "SYS"."SYS_EXPORT_TABLE_01" successfully loaded/unloaded
+******************************************************************************
+Dump file set for SYS.SYS_EXPORT_TABLE_01 is:
+  /u01/datapump/orders2_061123.dmp
+Job "SYS"."SYS_EXPORT_TABLE_01" successfully completed at Mon Nov 6 11:44:37 2023 elapsed 0 00:00:09
+
+[oracle@srv1 datapump]$ 
+[oracle@srv1 datapump]$ 
+[oracle@srv1 datapump]$ 
+[oracle@srv1 datapump]$ ls -lrt
+total 448416
+-rw-r-----. 1 oracle oinstall 338419712 Nov  6 11:07 exp_soe.dmp
+-rw-r--r--. 1 oracle oinstall      3729 Nov  6 11:07 estimate_soe_exp.log
+-rw-r-----. 1 oracle oinstall 120750080 Nov  6 11:44 orders2_061123.dmp
+-rw-r--r--. 1 oracle oinstall      1058 Nov  6 11:44 orders2_061123.log
+[oracle@srv1 datapump]$ scp orders2_061123.dmp oracle@192.168.0.174:/u01/import
+oracle@192.168.0.174's password: 
+orders2_061123.dmp                                                 100%  115MB   4.9MB/s   00:23    
+[oracle@srv1 datapump]$ 
+[oracle@srv1 datapump]$ 
+[oracle@srv1 datapump]$ sqlplus sys/scott#123@to_loans as sysdba
+
+SQL*Plus: Release 19.0.0.0.0 - Production on Mon Nov 6 11:51:08 2023
+Version 19.3.0.0.0
+
+Copyright (c) 1982, 2019, Oracle.  All rights reserved.
+
+ERROR:
+ORA-12154: TNS:could not resolve the connect identifier specified
+
+
+Enter user-name: ^C 
+[oracle@srv1 datapump]$ 
+[oracle@srv1 datapump]$ 
+[oracle@srv1 datapump]$ 
+[oracle@srv1 datapump]$ cd $ORACLE_HOME
+[oracle@srv1 dbhome_1]$ 
+[oracle@srv1 dbhome_1]$ 
+[oracle@srv1 dbhome_1]$ 
+[oracle@srv1 dbhome_1]$ 
+[oracle@srv1 dbhome_1]$ 
+[oracle@srv1 dbhome_1]$ 
+[oracle@srv1 dbhome_1]$ expdp directory=datapump_dir dumpfile=exp_full_oradb_061123.dmp logfile=exp_full_oradb_061123.log full=y
+
+Export: Release 19.0.0.0.0 - Production on Mon Nov 6 12:08:47 2023
+Version 19.3.0.0.0
+
+Copyright (c) 1982, 2019, Oracle and/or its affiliates.  All rights reserved.
+
+Username: / as sysdba
+Password: 
+
+Connected to: Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Starting "SYS"."SYS_EXPORT_FULL_01":  /******** AS SYSDBA directory=datapump_dir dumpfile=exp_full_oradb_061123.dmp logfile=exp_full_oradb_061123.log full=y 
+Processing object type DATABASE_EXPORT/EARLY_OPTIONS/VIEWS_AS_TABLES/TABLE_DATA
+^C
+Export> 
+
+Export> 
+
+Export> status;
+UDE-00053: unrecognized client command 'status;'
+
+Export> status
+
+Job: SYS_EXPORT_FULL_01
+  Operation: EXPORT                         
+  Mode: FULL                           
+  State: EXECUTING                      
+  Bytes Processed: 0
+  Current Parallelism: 1
+  Job Error Count: 0
+  Job heartbeat: 3
+  Dump File: /u01/datapump/exp_full_oradb_061123.dmp
+    bytes written: 200,704
+  
+Worker 1 Status:
+  Instance ID: 1
+  Instance name: ORADB
+  Host name: srv1.com
+  Object start time: Monday, 06 November, 2023 12:09:26
+  Object status at: Monday, 06 November, 2023 12:09:33
+  Process Name: DW00
+  State: EXECUTING                      
+
+Export> exit
+
+
+
+
+[oracle@srv1 dbhome_1]$ 
+[oracle@srv1 dbhome_1]$ 
+[oracle@srv1 dbhome_1]$ 
+[oracle@srv1 dbhome_1]$ cd /u01/datapump/
+[oracle@srv1 datapump]$ ls -lrt
+total 448676
+-rw-r-----. 1 oracle oinstall 338419712 Nov  6 11:07 exp_soe.dmp
+-rw-r--r--. 1 oracle oinstall      3729 Nov  6 11:07 estimate_soe_exp.log
+-rw-r-----. 1 oracle oinstall 120750080 Nov  6 11:44 orders2_061123.dmp
+-rw-r--r--. 1 oracle oinstall      1058 Nov  6 11:44 orders2_061123.log
+-rw-r-----. 1 oracle oinstall    208896 Nov  6 12:09 exp_full_oradb_061123.dmp
+-rw-r--r--. 1 oracle oinstall      2774 Nov  6 12:09 exp_full_oradb_061123.log
+[oracle@srv1 datapump]$ tail -f exp_full_oradb_061123.log
+Processing object type DATABASE_EXPORT/SYSTEM_PROCOBJACT/PRE_SYSTEM_ACTIONS/PROCACT_SYSTEM
+Processing object type DATABASE_EXPORT/SYSTEM_PROCOBJACT/PROCOBJ
+;;; Export> status;
+;;; UDE-00053: unrecognized client command 'status;'
+;;; Export> status
+Processing object type DATABASE_EXPORT/SYSTEM_PROCOBJACT/POST_SYSTEM_ACTIONS/PROCACT_SYSTEM
+Processing object type DATABASE_EXPORT/SCHEMA/PROCACT_SCHEMA
+Processing object type DATABASE_EXPORT/EARLY_OPTIONS/VIEWS_AS_TABLES/TABLE
+Processing object type DATABASE_EXPORT/EARLY_POST_INSTANCE_IMPCALLOUT/MARKER
+;;; Export> exit
+
+
+
+^C
+[oracle@srv1 datapump]$ vi exp_full_oradb_061123.log
+[oracle@srv1 datapump]$ tail -f exp_full_oradb_061123.log
+;;; Export> status;
+;;; UDE-00053: unrecognized client command 'status;'
+;;; Export> status
+Processing object type DATABASE_EXPORT/SYSTEM_PROCOBJACT/POST_SYSTEM_ACTIONS/PROCACT_SYSTEM
+Processing object type DATABASE_EXPORT/SCHEMA/PROCACT_SCHEMA
+Processing object type DATABASE_EXPORT/EARLY_OPTIONS/VIEWS_AS_TABLES/TABLE
+Processing object type DATABASE_EXPORT/EARLY_POST_INSTANCE_IMPCALLOUT/MARKER
+;;; Export> exit
+Processing object type DATABASE_EXPORT/NORMAL_OPTIONS/TABLE
+Processing object type DATABASE_EXPORT/NORMAL_OPTIONS/VIEWS_AS_TABLES/TABLE
+Processing object type DATABASE_EXPORT/NORMAL_POST_INSTANCE_IMPCALLOUT/MARKER
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/TABLE
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/IDENTITY_COLUMN
+Processing object type DATABASE_EXPORT/SCHEMA/PACKAGE/PACKAGE_SPEC
+Processing object type DATABASE_EXPORT/SCHEMA/PACKAGE/CODE_BASE_GRANT
+Processing object type DATABASE_EXPORT/SCHEMA/FUNCTION/FUNCTION
+Processing object type DATABASE_EXPORT/SCHEMA/PROCEDURE/PROCEDURE
+Processing object type DATABASE_EXPORT/SCHEMA/PACKAGE/COMPILE_PACKAGE/PACKAGE_SPEC/ALTER_PACKAGE_SPEC
+Processing object type DATABASE_EXPORT/SCHEMA/FUNCTION/ALTER_FUNCTION
+Processing object type DATABASE_EXPORT/SCHEMA/PROCEDURE/ALTER_PROCEDURE
+Processing object type DATABASE_EXPORT/SCHEMA/VIEW/VIEW
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/INDEX/INDEX
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/INDEX/FUNCTIONAL_INDEX/INDEX
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/CONSTRAINT/CONSTRAINT
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/CONSTRAINT/REF_CONSTRAINT
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/INDEX/BITMAP_INDEX/INDEX
+Processing object type DATABASE_EXPORT/FINAL_POST_INSTANCE_IMPCALLOUT/MARKER
+Processing object type DATABASE_EXPORT/SCHEMA/POST_SCHEMA/PROCACT_SCHEMA
+Processing object type DATABASE_EXPORT/AUDIT_UNIFIED/AUDIT_POLICY_ENABLE
+Processing object type DATABASE_EXPORT/POST_SYSTEM_IMPCALLOUT/MARKER
+. . exported "SYS"."KU$_USER_MAPPING_VIEW"               6.070 KB      37 rows
+. . exported "SYSTEM"."REDO_DB"                          25.59 KB       1 rows
+. . exported "WMSYS"."WM$WORKSPACES_TABLE$"              12.10 KB       1 rows
+. . exported "WMSYS"."WM$HINT_TABLE$"                    9.984 KB      97 rows
+. . exported "LBACSYS"."OLS$INSTALLATIONS"               6.960 KB       2 rows
+. . exported "WMSYS"."WM$WORKSPACE_PRIV_TABLE$"          7.078 KB      11 rows
+. . exported "SYS"."DAM_CONFIG_PARAM$"                   6.531 KB      14 rows
+. . exported "SYS"."TSDP_SUBPOL$"                        6.328 KB       1 rows
+. . exported "WMSYS"."WM$NEXTVER_TABLE$"                 6.375 KB       1 rows
+. . exported "LBACSYS"."OLS$PROPS"                       6.234 KB       5 rows
+. . exported "WMSYS"."WM$ENV_VARS$"                      6.015 KB       3 rows
+. . exported "SYS"."TSDP_PARAMETER$"                     5.953 KB       1 rows
+. . exported "SYS"."TSDP_POLICY$"                        5.921 KB       1 rows
+. . exported "WMSYS"."WM$VERSION_HIERARCHY_TABLE$"       5.984 KB       1 rows
+. . exported "WMSYS"."WM$EVENTS_INFO$"                   5.812 KB      12 rows
+. . exported "LBACSYS"."OLS$AUDIT_ACTIONS"               5.757 KB       8 rows
+. . exported "LBACSYS"."OLS$DIP_EVENTS"                  5.539 KB       2 rows
+. . exported "AUDSYS"."AUD$UNIFIED":"AUD_UNIFIED_P0"         0 KB       0 rows
+. . exported "AUDSYS"."AUD$UNIFIED":"SYS_P181"           147.5 KB     189 rows
+. . exported "AUDSYS"."AUD$UNIFIED":"SYS_P241"           51.39 KB       1 rows
+. . exported "LBACSYS"."OLS$AUDIT"                           0 KB       0 rows
+. . exported "LBACSYS"."OLS$COMPARTMENTS"                    0 KB       0 rows
+. . exported "LBACSYS"."OLS$DIP_DEBUG"                       0 KB       0 rows
+. . exported "LBACSYS"."OLS$GROUPS"                          0 KB       0 rows
+. . exported "LBACSYS"."OLS$LAB"                             0 KB       0 rows
+. . exported "LBACSYS"."OLS$LEVELS"                          0 KB       0 rows
+. . exported "LBACSYS"."OLS$POL"                             0 KB       0 rows
+. . exported "LBACSYS"."OLS$POLICY_ADMIN"                    0 KB       0 rows
+. . exported "LBACSYS"."OLS$POLS"                            0 KB       0 rows
+. . exported "LBACSYS"."OLS$POLT"                            0 KB       0 rows
+. . exported "LBACSYS"."OLS$PROFILE"                         0 KB       0 rows
+. . exported "LBACSYS"."OLS$PROFILES"                        0 KB       0 rows
+. . exported "LBACSYS"."OLS$PROG"                            0 KB       0 rows
+. . exported "LBACSYS"."OLS$SESSINFO"                        0 KB       0 rows
+. . exported "LBACSYS"."OLS$USER"                            0 KB       0 rows
+. . exported "LBACSYS"."OLS$USER_COMPARTMENTS"               0 KB       0 rows
+. . exported "LBACSYS"."OLS$USER_GROUPS"                     0 KB       0 rows
+. . exported "LBACSYS"."OLS$USER_LEVELS"                     0 KB       0 rows
+. . exported "SYS"."AUD$"                                    0 KB       0 rows
+. . exported "SYS"."DAM_CLEANUP_EVENTS$"                     0 KB       0 rows
+. . exported "SYS"."DAM_CLEANUP_JOBS$"                       0 KB       0 rows
+. . exported "SYS"."TSDP_ASSOCIATION$"                       0 KB       0 rows
+. . exported "SYS"."TSDP_CONDITION$"                         0 KB       0 rows
+. . exported "SYS"."TSDP_FEATURE_POLICY$"                    0 KB       0 rows
+. . exported "SYS"."TSDP_PROTECTION$"                        0 KB       0 rows
+. . exported "SYS"."TSDP_SENSITIVE_DATA$"                    0 KB       0 rows
+. . exported "SYS"."TSDP_SENSITIVE_TYPE$"                    0 KB       0 rows
+. . exported "SYS"."TSDP_SOURCE$"                            0 KB       0 rows
+. . exported "SYSTEM"."REDO_LOG"                             0 KB       0 rows
+. . exported "WMSYS"."WM$BATCH_COMPRESSIBLE_TABLES$"         0 KB       0 rows
+. . exported "WMSYS"."WM$CONSTRAINTS_TABLE$"                 0 KB       0 rows
+. . exported "WMSYS"."WM$CONS_COLUMNS$"                      0 KB       0 rows
+. . exported "WMSYS"."WM$LOCKROWS_INFO$"                     0 KB       0 rows
+. . exported "WMSYS"."WM$MODIFIED_TABLES$"                   0 KB       0 rows
+. . exported "WMSYS"."WM$MP_GRAPH_WORKSPACES_TABLE$"         0 KB       0 rows
+. . exported "WMSYS"."WM$MP_PARENT_WORKSPACES_TABLE$"        0 KB       0 rows
+. . exported "WMSYS"."WM$NESTED_COLUMNS_TABLE$"              0 KB       0 rows
+. . exported "WMSYS"."WM$RESOLVE_WORKSPACES_TABLE$"          0 KB       0 rows
+. . exported "WMSYS"."WM$RIC_LOCKING_TABLE$"                 0 KB       0 rows
+. . exported "WMSYS"."WM$RIC_TABLE$"                         0 KB       0 rows
+. . exported "WMSYS"."WM$RIC_TRIGGERS_TABLE$"                0 KB       0 rows
+. . exported "WMSYS"."WM$UDTRIG_DISPATCH_PROCS$"             0 KB       0 rows
+. . exported "WMSYS"."WM$UDTRIG_INFO$"                       0 KB       0 rows
+. . exported "WMSYS"."WM$VERSION_TABLE$"                     0 KB       0 rows
+. . exported "WMSYS"."WM$VT_ERRORS_TABLE$"                   0 KB       0 rows
+. . exported "WMSYS"."WM$WORKSPACE_SAVEPOINTS_TABLE$"        0 KB       0 rows
+. . exported "MDSYS"."RDF_PARAM$"                        6.515 KB       3 rows
+. . exported "SYS"."AUDTAB$TBS$FOR_EXPORT"               5.953 KB       2 rows
+. . exported "SYS"."DBA_SENSITIVE_DATA"                      0 KB       0 rows
+. . exported "SYS"."DBA_TSDP_POLICY_PROTECTION"              0 KB       0 rows
+. . exported "SYS"."FGA_LOG$FOR_EXPORT"                      0 KB       0 rows
+. . exported "SYS"."NACL$_ACE_EXP"                           0 KB       0 rows
+. . exported "SYS"."NACL$_HOST_EXP"                      6.976 KB       2 rows
+. . exported "SYS"."NACL$_WALLET_EXP"                        0 KB       0 rows
+. . exported "SYS"."SQL$TEXT_DATAPUMP"                       0 KB       0 rows
+. . exported "SYS"."SQL$_DATAPUMP"                           0 KB       0 rows
+. . exported "SYS"."SQLOBJ$AUXDATA_DATAPUMP"                 0 KB       0 rows
+. . exported "SYS"."SQLOBJ$DATA_DATAPUMP"                    0 KB       0 rows
+. . exported "SYS"."SQLOBJ$PLAN_DATAPUMP"                    0 KB       0 rows
+. . exported "SYS"."SQLOBJ$_DATAPUMP"                        0 KB       0 rows
+. . exported "SYSTEM"."SCHEDULER_JOB_ARGS"               8.648 KB       4 rows
+. . exported "SYSTEM"."SCHEDULER_PROGRAM_ARGS"           9.726 KB      13 rows
+. . exported "WMSYS"."WM$EXP_MAP"                        7.718 KB       3 rows
+. . exported "WMSYS"."WM$METADATA_MAP"                       0 KB       0 rows
+. . exported "SOE"."ORDER_ITEMS"                         170.4 MB 3735896 rows
+. . exported "SOE"."ORDERS"                              114.9 MB 1352070 rows
+. . exported "SOE"."ORDERS2"                             114.9 MB 1352070 rows
+. . exported "SOE"."INVENTORIES"                         15.27 MB  902171 rows
+. . exported "SOE"."LOGON"                               9.065 MB  442208 rows
+. . exported "SOE"."CUSTOMERS"                           4.983 MB   45703 rows
+. . exported "SOE"."ADDRESSES"                           4.084 MB   55703 rows
+. . exported "SOE"."CARD_DETAILS"                        2.402 MB   55703 rows
+. . exported "SOE"."PRODUCT_DESCRIPTIONS"                224.1 KB    1000 rows
+. . exported "SOE"."PRODUCT_INFORMATION"                 186.4 KB    1000 rows
+. . exported "SOE"."EMP"                                 51.39 KB     879 rows
+. . exported "SOE"."WAREHOUSES"                          36.03 KB    1000 rows
+. . exported "SOE"."JOB_HISTORY"                         14.60 KB     246 rows
+. . exported "SOE"."JOBS"                                5.976 KB      23 rows
+. . exported "SOE"."ORDERENTRY_METADATA"                 5.609 KB       4 rows
+. . exported "SOE"."DEPT"                                5.632 KB       7 rows
+. . exported "SOE"."V"                                       0 KB       0 rows
+Master table "SYS"."SYS_EXPORT_FULL_01" successfully loaded/unloaded
+******************************************************************************
+Dump file set for SYS.SYS_EXPORT_FULL_01 is:
+  /u01/datapump/exp_full_oradb_061123.dmp
+Job "SYS"."SYS_EXPORT_FULL_01" successfully completed at Mon Nov 6 12:11:02 2023 elapsed 0 00:02:10
+^C
+[oracle@srv1 datapump]$ scp exp_full_oradb_061123.dmp oracle@192.168.0.174:/u01/import
+oracle@192.168.0.174's password: 
+exp_full_oradb_061123.dmp                                          100%  441MB   6.2MB/s   01:11    
+[oracle@srv1 datapump]$ 
