@@ -1,0 +1,2362 @@
+[oracle@srv1 ~]$ ps -ef|grep smon
+oracle    3534     1  0 09:33 ?        00:00:00 ora_smon_ORADB
+oracle    4009  3937  0 09:34 pts/0    00:00:00 grep --color=auto smon
+[oracle@srv1 ~]$ 
+[oracle@srv1 ~]$ 
+[oracle@srv1 ~]$ sqlplus / as sysdba
+
+SQL*Plus: Release 19.0.0.0.0 - Production on Tue Nov 7 09:39:06 2023
+Version 19.3.0.0.0
+
+Copyright (c) 1982, 2019, Oracle.  All rights reserved.
+
+
+Connected to:
+Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Version 19.3.0.0.0
+
+SQL> 
+SQL> exit
+Disconnected from Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Version 19.3.0.0.0
+[oracle@srv1 ~]$ 
+[oracle@srv1 ~]$ 
+[oracle@srv1 ~]$ expdp directory=datapump_dir dumpfile=soe_orders_071123.dmp logfile=soe_orders_071123.log tables=soe.orders
+
+Export: Release 19.0.0.0.0 - Production on Tue Nov 7 09:41:01 2023
+Version 19.3.0.0.0
+
+Copyright (c) 1982, 2019, Oracle and/or its affiliates.  All rights reserved.
+
+Username: / as sysdba
+Password: 
+
+Connected to: Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Starting "SYS"."SYS_EXPORT_TABLE_01":  /******** AS SYSDBA directory=datapump_dir dumpfile=soe_orders_071123.dmp logfile=soe_orders_071123.log tables=soe.orders 
+Processing object type TABLE_EXPORT/TABLE/TABLE_DATA
+Processing object type TABLE_EXPORT/TABLE/INDEX/STATISTICS/INDEX_STATISTICS
+Processing object type TABLE_EXPORT/TABLE/STATISTICS/TABLE_STATISTICS
+Processing object type TABLE_EXPORT/TABLE/STATISTICS/MARKER
+Processing object type TABLE_EXPORT/TABLE/TABLE
+Processing object type TABLE_EXPORT/TABLE/INDEX/INDEX
+Processing object type TABLE_EXPORT/TABLE/CONSTRAINT/CONSTRAINT
+Processing object type TABLE_EXPORT/TABLE/CONSTRAINT/REF_CONSTRAINT
+. . exported "SOE"."ORDERS"                              114.9 MB 1352070 rows
+Master table "SYS"."SYS_EXPORT_TABLE_01" successfully loaded/unloaded
+******************************************************************************
+Dump file set for SYS.SYS_EXPORT_TABLE_01 is:
+  /u01/datapump/soe_orders_071123.dmp
+Job "SYS"."SYS_EXPORT_TABLE_01" successfully completed at Tue Nov 7 09:41:20 2023 elapsed 0 00:00:12
+
+[oracle@srv1 ~]$ scp /u01/datapump/soe_orders_071123.dmp oracle@192.168.0.174:/u01/import
+oracle@192.168.0.174's password: 
+soe_orders_071123.dmp                           100%  115MB   2.6MB/s   00:45    
+[oracle@srv1 ~]$ 
+[oracle@srv1 ~]$ 
+[oracle@srv1 ~]$ 
+[oracle@srv1 ~]$ scp /u01/datapump/soe_orders_071123.dmp oracle@192.168.0.174:/u01/dp_import
+oracle@192.168.0.174's password: 
+soe_orders_071123.dmp                           100%  115MB   2.3MB/s   00:51    
+[oracle@srv1 ~]$ 
+[oracle@srv1 ~]$ 
+[oracle@srv1 ~]$ 
+[oracle@srv1 ~]$ 
+[oracle@srv1 ~]$ 
+[oracle@srv1 ~]$ 
+[oracle@srv1 ~]$ expdp directory=datapump_dir dumpfile=full_oradb_071123.dmp logfile=full_oradb_071123.log
+
+Export: Release 19.0.0.0.0 - Production on Tue Nov 7 10:02:04 2023
+Version 19.3.0.0.0
+
+Copyright (c) 1982, 2019, Oracle and/or its affiliates.  All rights reserved.
+
+Username: 
+UDE-00005: unexpected End-Of-File encountered while reading input
+
+
+[oracle@srv1 ~]$ expdp directory=datapump_dir dumpfile=full_oradb_071123.dmp logfile=full_oradb_071123.log
+
+Export: Release 19.0.0.0.0 - Production on Tue Nov 7 10:02:06 2023
+Version 19.3.0.0.0
+
+Copyright (c) 1982, 2019, Oracle and/or its affiliates.  All rights reserved.
+
+Username: / as sysdba
+Password: 
+
+Connected to: Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Starting "SYS"."SYS_EXPORT_SCHEMA_01":  /******** AS SYSDBA directory=datapump_dir dumpfile=full_oradb_071123.dmp logfile=full_oradb_071123.log 
+ORA-31655: no data or metadata objects selected for job
+Job "SYS"."SYS_EXPORT_SCHEMA_01" completed with 1 error(s) at Tue Nov 7 10:02:34 2023 elapsed 0 00:00:14
+
+[oracle@srv1 ~]$ expdp directory=datapump_dir dumpfile=full_oradb_071123.dmp logfile=full_oradb_071123.log full=y
+
+Export: Release 19.0.0.0.0 - Production on Tue Nov 7 10:03:31 2023
+Version 19.3.0.0.0
+
+Copyright (c) 1982, 2019, Oracle and/or its affiliates.  All rights reserved.
+
+Username: / as sysdba
+Password: 
+
+Connected to: Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Starting "SYS"."SYS_EXPORT_FULL_01":  /******** AS SYSDBA directory=datapump_dir dumpfile=full_oradb_071123.dmp logfile=full_oradb_071123.log full=y 
+Processing object type DATABASE_EXPORT/EARLY_OPTIONS/VIEWS_AS_TABLES/TABLE_DATA
+Processing object type DATABASE_EXPORT/NORMAL_OPTIONS/TABLE_DATA
+Processing object type DATABASE_EXPORT/NORMAL_OPTIONS/VIEWS_AS_TABLES/TABLE_DATA
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/TABLE_DATA
+Processing object type DATABASE_EXPORT/SCHEMA/PACKAGE_BODIES/PACKAGE/PACKAGE_BODY
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/INDEX/STATISTICS/INDEX_STATISTICS
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/INDEX/STATISTICS/FUNCTIONAL_INDEX/INDEX_STATISTICS
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/INDEX/STATISTICS/BITMAP_INDEX/INDEX_STATISTICS
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/STATISTICS/TABLE_STATISTICS
+Processing object type DATABASE_EXPORT/STATISTICS/MARKER
+Processing object type DATABASE_EXPORT/PRE_SYSTEM_IMPCALLOUT/MARKER
+Processing object type DATABASE_EXPORT/PRE_INSTANCE_IMPCALLOUT/MARKER
+Processing object type DATABASE_EXPORT/TABLESPACE
+Processing object type DATABASE_EXPORT/PROFILE
+Processing object type DATABASE_EXPORT/SCHEMA/USER
+Processing object type DATABASE_EXPORT/ROLE
+Processing object type DATABASE_EXPORT/RADM_FPTM
+Processing object type DATABASE_EXPORT/GRANT/SYSTEM_GRANT/PROC_SYSTEM_GRANT
+Processing object type DATABASE_EXPORT/SCHEMA/GRANT/SYSTEM_GRANT
+Processing object type DATABASE_EXPORT/SCHEMA/ROLE_GRANT
+Processing object type DATABASE_EXPORT/SCHEMA/DEFAULT_ROLE
+Processing object type DATABASE_EXPORT/SCHEMA/ON_USER_GRANT
+Processing object type DATABASE_EXPORT/SCHEMA/TABLESPACE_QUOTA
+Processing object type DATABASE_EXPORT/RESOURCE_COST
+Processing object type DATABASE_EXPORT/TRUSTED_DB_LINK
+Processing object type DATABASE_EXPORT/SCHEMA/SEQUENCE/SEQUENCE
+Processing object type DATABASE_EXPORT/DIRECTORY/DIRECTORY
+Processing object type DATABASE_EXPORT/SYSTEM_PROCOBJACT/PRE_SYSTEM_ACTIONS/PROCACT_SYSTEM
+Processing object type DATABASE_EXPORT/SYSTEM_PROCOBJACT/PROCOBJ
+Processing object type DATABASE_EXPORT/SYSTEM_PROCOBJACT/POST_SYSTEM_ACTIONS/PROCACT_SYSTEM
+Processing object type DATABASE_EXPORT/SCHEMA/PROCACT_SCHEMA
+Processing object type DATABASE_EXPORT/EARLY_OPTIONS/VIEWS_AS_TABLES/TABLE
+Processing object type DATABASE_EXPORT/EARLY_POST_INSTANCE_IMPCALLOUT/MARKER
+Processing object type DATABASE_EXPORT/NORMAL_OPTIONS/TABLE
+Job "SYS"."SYS_EXPORT_FULL_01" stopped by user request at Tue Nov 7 10:04:37 2023 elapsed 0 00:01:00
+
+[oracle@srv1 ~]$ 
+[oracle@srv1 ~]$ 
+[oracle@srv1 ~]$ 
+[oracle@srv1 ~]$ 
+[oracle@srv1 ~]$ cd /u01/datapump/
+[oracle@srv1 datapump]$ ls -lrt
+total 1018260
+-rw-r-----. 1 oracle oinstall 338419712 Nov  6 11:07 exp_soe.dmp
+-rw-r--r--. 1 oracle oinstall      3729 Nov  6 11:07 estimate_soe_exp.log
+-rw-r-----. 1 oracle oinstall 120750080 Nov  6 11:44 orders2_061123.dmp
+-rw-r--r--. 1 oracle oinstall      1058 Nov  6 11:44 orders2_061123.log
+-rw-r-----. 1 oracle oinstall 462491648 Nov  6 12:11 exp_full_oradb_061123.dmp
+-rw-r--r--. 1 oracle oinstall     12661 Nov  6 12:11 exp_full_oradb_061123.log
+-rw-r-----. 1 oracle oinstall 120795136 Nov  7 09:41 soe_orders_071123.dmp
+-rw-r--r--. 1 oracle oinstall      1328 Nov  7 09:41 soe_orders_071123.log
+-rw-r-----. 1 oracle oinstall    208896 Nov  7 10:04 full_oradb_071123.dmp
+-rw-r--r--. 1 oracle oinstall      2818 Nov  7 10:04 full_oradb_071123.log
+[oracle@srv1 datapump]$ tail -f full_oradb_071123.log
+Processing object type DATABASE_EXPORT/SYSTEM_PROCOBJACT/PROCOBJ
+Processing object type DATABASE_EXPORT/SYSTEM_PROCOBJACT/POST_SYSTEM_ACTIONS/PROCACT_SYSTEM
+Processing object type DATABASE_EXPORT/SCHEMA/PROCACT_SCHEMA
+Processing object type DATABASE_EXPORT/EARLY_OPTIONS/VIEWS_AS_TABLES/TABLE
+Processing object type DATABASE_EXPORT/EARLY_POST_INSTANCE_IMPCALLOUT/MARKER
+Processing object type DATABASE_EXPORT/NORMAL_OPTIONS/TABLE
+Job "SYS"."SYS_EXPORT_FULL_01" stopped by user request at Tue Nov 7 10:04:37 2023 elapsed 0 00:01:00
+Job SYS_EXPORT_FULL_01 has been reopened at Tue Nov 7 10:05:11 2023 
+Restarting "SYS"."SYS_EXPORT_FULL_01":  /******** AS SYSDBA directory=datapump_dir dumpfile=full_oradb_071123.dmp logfile=full_oradb_071123.log full=y 
+Processing object type DATABASE_EXPORT/NORMAL_OPTIONS/TABLE
+Processing object type DATABASE_EXPORT/NORMAL_OPTIONS/VIEWS_AS_TABLES/TABLE
+Job "SYS"."SYS_EXPORT_FULL_01" stopped due to fatal error at Tue Nov 7 10:05:57 2023 elapsed 0 00:00:46
+^C
+[oracle@srv1 datapump]$ 
+[oracle@srv1 datapump]$ 
+[oracle@srv1 datapump]$ 
+[oracle@srv1 datapump]$ ls -lrt
+total 1018056
+-rw-r-----. 1 oracle oinstall 338419712 Nov  6 11:07 exp_soe.dmp
+-rw-r--r--. 1 oracle oinstall      3729 Nov  6 11:07 estimate_soe_exp.log
+-rw-r-----. 1 oracle oinstall 120750080 Nov  6 11:44 orders2_061123.dmp
+-rw-r--r--. 1 oracle oinstall      1058 Nov  6 11:44 orders2_061123.log
+-rw-r-----. 1 oracle oinstall 462491648 Nov  6 12:11 exp_full_oradb_061123.dmp
+-rw-r--r--. 1 oracle oinstall     12661 Nov  6 12:11 exp_full_oradb_061123.log
+-rw-r-----. 1 oracle oinstall 120795136 Nov  7 09:41 soe_orders_071123.dmp
+-rw-r--r--. 1 oracle oinstall      1328 Nov  7 09:41 soe_orders_071123.log
+-rw-r--r--. 1 oracle oinstall      3279 Nov  7 10:05 full_oradb_071123.log
+[oracle@srv1 datapump]$ expdp directory=datapump_dir dumpfile=full_oradb_071123.dmp logfile=full_oradb_071123.log full=y
+
+Export: Release 19.0.0.0.0 - Production on Tue Nov 7 10:08:25 2023
+Version 19.3.0.0.0
+
+Copyright (c) 1982, 2019, Oracle and/or its affiliates.  All rights reserved.
+
+Username: / as sysdba
+Password: 
+
+Connected to: Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Starting "SYS"."SYS_EXPORT_FULL_01":  /******** AS SYSDBA directory=datapump_dir dumpfile=full_oradb_071123.dmp logfile=full_oradb_071123.log full=y 
+Processing object type DATABASE_EXPORT/EARLY_OPTIONS/VIEWS_AS_TABLES/TABLE_DATA
+Processing object type DATABASE_EXPORT/NORMAL_OPTIONS/TABLE_DATA
+Processing object type DATABASE_EXPORT/NORMAL_OPTIONS/VIEWS_AS_TABLES/TABLE_DATA
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/TABLE_DATA
+Processing object type DATABASE_EXPORT/SCHEMA/PACKAGE_BODIES/PACKAGE/PACKAGE_BODY
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/INDEX/STATISTICS/INDEX_STATISTICS
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/INDEX/STATISTICS/FUNCTIONAL_INDEX/INDEX_STATISTICS
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/INDEX/STATISTICS/BITMAP_INDEX/INDEX_STATISTICS
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/STATISTICS/TABLE_STATISTICS
+Processing object type DATABASE_EXPORT/STATISTICS/MARKER
+Processing object type DATABASE_EXPORT/PRE_SYSTEM_IMPCALLOUT/MARKER
+Processing object type DATABASE_EXPORT/PRE_INSTANCE_IMPCALLOUT/MARKER
+Processing object type DATABASE_EXPORT/TABLESPACE
+Processing object type DATABASE_EXPORT/PROFILE
+Processing object type DATABASE_EXPORT/SCHEMA/USER
+Processing object type DATABASE_EXPORT/ROLE
+Processing object type DATABASE_EXPORT/RADM_FPTM
+Processing object type DATABASE_EXPORT/GRANT/SYSTEM_GRANT/PROC_SYSTEM_GRANT
+Processing object type DATABASE_EXPORT/SCHEMA/GRANT/SYSTEM_GRANT
+Processing object type DATABASE_EXPORT/SCHEMA/ROLE_GRANT
+Processing object type DATABASE_EXPORT/SCHEMA/DEFAULT_ROLE
+Processing object type DATABASE_EXPORT/SCHEMA/ON_USER_GRANT
+Processing object type DATABASE_EXPORT/SCHEMA/TABLESPACE_QUOTA
+Processing object type DATABASE_EXPORT/RESOURCE_COST
+Processing object type DATABASE_EXPORT/TRUSTED_DB_LINK
+Processing object type DATABASE_EXPORT/SCHEMA/SEQUENCE/SEQUENCE
+Processing object type DATABASE_EXPORT/DIRECTORY/DIRECTORY
+Processing object type DATABASE_EXPORT/SYSTEM_PROCOBJACT/PRE_SYSTEM_ACTIONS/PROCACT_SYSTEM
+Processing object type DATABASE_EXPORT/SYSTEM_PROCOBJACT/PROCOBJ
+Processing object type DATABASE_EXPORT/SYSTEM_PROCOBJACT/POST_SYSTEM_ACTIONS/PROCACT_SYSTEM
+Processing object type DATABASE_EXPORT/SCHEMA/PROCACT_SCHEMA
+Processing object type DATABASE_EXPORT/EARLY_OPTIONS/VIEWS_AS_TABLES/TABLE
+Processing object type DATABASE_EXPORT/EARLY_POST_INSTANCE_IMPCALLOUT/MARKER
+Processing object type DATABASE_EXPORT/NORMAL_OPTIONS/TABLE
+Processing object type DATABASE_EXPORT/NORMAL_OPTIONS/VIEWS_AS_TABLES/TABLE
+Processing object type DATABASE_EXPORT/NORMAL_POST_INSTANCE_IMPCALLOUT/MARKER
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/TABLE
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/IDENTITY_COLUMN
+Processing object type DATABASE_EXPORT/SCHEMA/PACKAGE/PACKAGE_SPEC
+Processing object type DATABASE_EXPORT/SCHEMA/PACKAGE/CODE_BASE_GRANT
+Processing object type DATABASE_EXPORT/SCHEMA/FUNCTION/FUNCTION
+Processing object type DATABASE_EXPORT/SCHEMA/PROCEDURE/PROCEDURE
+Processing object type DATABASE_EXPORT/SCHEMA/PACKAGE/COMPILE_PACKAGE/PACKAGE_SPEC/ALTER_PACKAGE_SPEC
+Processing object type DATABASE_EXPORT/SCHEMA/FUNCTION/ALTER_FUNCTION
+Processing object type DATABASE_EXPORT/SCHEMA/PROCEDURE/ALTER_PROCEDURE
+Processing object type DATABASE_EXPORT/SCHEMA/VIEW/VIEW
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/INDEX/INDEX
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/INDEX/FUNCTIONAL_INDEX/INDEX
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/CONSTRAINT/CONSTRAINT
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/CONSTRAINT/REF_CONSTRAINT
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/INDEX/BITMAP_INDEX/INDEX
+Processing object type DATABASE_EXPORT/FINAL_POST_INSTANCE_IMPCALLOUT/MARKER
+Processing object type DATABASE_EXPORT/SCHEMA/POST_SCHEMA/PROCACT_SCHEMA
+Processing object type DATABASE_EXPORT/AUDIT_UNIFIED/AUDIT_POLICY_ENABLE
+Processing object type DATABASE_EXPORT/POST_SYSTEM_IMPCALLOUT/MARKER
+. . exported "SYS"."KU$_USER_MAPPING_VIEW"               6.070 KB      37 rows
+. . exported "SYSTEM"."REDO_DB"                          25.59 KB       1 rows
+. . exported "WMSYS"."WM$WORKSPACES_TABLE$"              12.10 KB       1 rows
+. . exported "WMSYS"."WM$HINT_TABLE$"                    9.984 KB      97 rows
+. . exported "LBACSYS"."OLS$INSTALLATIONS"               6.960 KB       2 rows
+. . exported "WMSYS"."WM$WORKSPACE_PRIV_TABLE$"          7.078 KB      11 rows
+. . exported "SYS"."DAM_CONFIG_PARAM$"                   6.531 KB      14 rows
+. . exported "SYS"."TSDP_SUBPOL$"                        6.328 KB       1 rows
+. . exported "WMSYS"."WM$NEXTVER_TABLE$"                 6.375 KB       1 rows
+. . exported "LBACSYS"."OLS$PROPS"                       6.234 KB       5 rows
+. . exported "WMSYS"."WM$ENV_VARS$"                      6.015 KB       3 rows
+. . exported "SYS"."TSDP_PARAMETER$"                     5.953 KB       1 rows
+. . exported "SYS"."TSDP_POLICY$"                        5.921 KB       1 rows
+. . exported "WMSYS"."WM$VERSION_HIERARCHY_TABLE$"       5.984 KB       1 rows
+. . exported "WMSYS"."WM$EVENTS_INFO$"                   5.812 KB      12 rows
+. . exported "LBACSYS"."OLS$AUDIT_ACTIONS"               5.757 KB       8 rows
+. . exported "LBACSYS"."OLS$DIP_EVENTS"                  5.539 KB       2 rows
+. . exported "AUDSYS"."AUD$UNIFIED":"AUD_UNIFIED_P0"         0 KB       0 rows
+. . exported "AUDSYS"."AUD$UNIFIED":"SYS_P181"           147.5 KB     189 rows
+. . exported "AUDSYS"."AUD$UNIFIED":"SYS_P241"           51.39 KB       1 rows
+. . exported "LBACSYS"."OLS$AUDIT"                           0 KB       0 rows
+. . exported "LBACSYS"."OLS$COMPARTMENTS"                    0 KB       0 rows
+. . exported "LBACSYS"."OLS$DIP_DEBUG"                       0 KB       0 rows
+. . exported "LBACSYS"."OLS$GROUPS"                          0 KB       0 rows
+. . exported "LBACSYS"."OLS$LAB"                             0 KB       0 rows
+. . exported "LBACSYS"."OLS$LEVELS"                          0 KB       0 rows
+. . exported "LBACSYS"."OLS$POL"                             0 KB       0 rows
+. . exported "LBACSYS"."OLS$POLICY_ADMIN"                    0 KB       0 rows
+. . exported "LBACSYS"."OLS$POLS"                            0 KB       0 rows
+. . exported "LBACSYS"."OLS$POLT"                            0 KB       0 rows
+. . exported "LBACSYS"."OLS$PROFILE"                         0 KB       0 rows
+. . exported "LBACSYS"."OLS$PROFILES"                        0 KB       0 rows
+. . exported "LBACSYS"."OLS$PROG"                            0 KB       0 rows
+. . exported "LBACSYS"."OLS$SESSINFO"                        0 KB       0 rows
+. . exported "LBACSYS"."OLS$USER"                            0 KB       0 rows
+. . exported "LBACSYS"."OLS$USER_COMPARTMENTS"               0 KB       0 rows
+. . exported "LBACSYS"."OLS$USER_GROUPS"                     0 KB       0 rows
+. . exported "LBACSYS"."OLS$USER_LEVELS"                     0 KB       0 rows
+. . exported "SYS"."AUD$"                                    0 KB       0 rows
+. . exported "SYS"."DAM_CLEANUP_EVENTS$"                     0 KB       0 rows
+. . exported "SYS"."DAM_CLEANUP_JOBS$"                       0 KB       0 rows
+. . exported "SYS"."TSDP_ASSOCIATION$"                       0 KB       0 rows
+. . exported "SYS"."TSDP_CONDITION$"                         0 KB       0 rows
+. . exported "SYS"."TSDP_FEATURE_POLICY$"                    0 KB       0 rows
+. . exported "SYS"."TSDP_PROTECTION$"                        0 KB       0 rows
+. . exported "SYS"."TSDP_SENSITIVE_DATA$"                    0 KB       0 rows
+. . exported "SYS"."TSDP_SENSITIVE_TYPE$"                    0 KB       0 rows
+. . exported "SYS"."TSDP_SOURCE$"                            0 KB       0 rows
+. . exported "SYSTEM"."REDO_LOG"                             0 KB       0 rows
+. . exported "WMSYS"."WM$BATCH_COMPRESSIBLE_TABLES$"         0 KB       0 rows
+. . exported "WMSYS"."WM$CONSTRAINTS_TABLE$"                 0 KB       0 rows
+. . exported "WMSYS"."WM$CONS_COLUMNS$"                      0 KB       0 rows
+. . exported "WMSYS"."WM$LOCKROWS_INFO$"                     0 KB       0 rows
+. . exported "WMSYS"."WM$MODIFIED_TABLES$"                   0 KB       0 rows
+. . exported "WMSYS"."WM$MP_GRAPH_WORKSPACES_TABLE$"         0 KB       0 rows
+. . exported "WMSYS"."WM$MP_PARENT_WORKSPACES_TABLE$"        0 KB       0 rows
+. . exported "WMSYS"."WM$NESTED_COLUMNS_TABLE$"              0 KB       0 rows
+. . exported "WMSYS"."WM$RESOLVE_WORKSPACES_TABLE$"          0 KB       0 rows
+. . exported "WMSYS"."WM$RIC_LOCKING_TABLE$"                 0 KB       0 rows
+. . exported "WMSYS"."WM$RIC_TABLE$"                         0 KB       0 rows
+. . exported "WMSYS"."WM$RIC_TRIGGERS_TABLE$"                0 KB       0 rows
+. . exported "WMSYS"."WM$UDTRIG_DISPATCH_PROCS$"             0 KB       0 rows
+. . exported "WMSYS"."WM$UDTRIG_INFO$"                       0 KB       0 rows
+. . exported "WMSYS"."WM$VERSION_TABLE$"                     0 KB       0 rows
+. . exported "WMSYS"."WM$VT_ERRORS_TABLE$"                   0 KB       0 rows
+. . exported "WMSYS"."WM$WORKSPACE_SAVEPOINTS_TABLE$"        0 KB       0 rows
+. . exported "MDSYS"."RDF_PARAM$"                        6.515 KB       3 rows
+. . exported "SYS"."AUDTAB$TBS$FOR_EXPORT"               5.953 KB       2 rows
+. . exported "SYS"."DBA_SENSITIVE_DATA"                      0 KB       0 rows
+. . exported "SYS"."DBA_TSDP_POLICY_PROTECTION"              0 KB       0 rows
+. . exported "SYS"."FGA_LOG$FOR_EXPORT"                      0 KB       0 rows
+. . exported "SYS"."NACL$_ACE_EXP"                           0 KB       0 rows
+. . exported "SYS"."NACL$_HOST_EXP"                      6.976 KB       2 rows
+. . exported "SYS"."NACL$_WALLET_EXP"                        0 KB       0 rows
+. . exported "SYS"."SQL$TEXT_DATAPUMP"                       0 KB       0 rows
+. . exported "SYS"."SQL$_DATAPUMP"                           0 KB       0 rows
+. . exported "SYS"."SQLOBJ$AUXDATA_DATAPUMP"                 0 KB       0 rows
+. . exported "SYS"."SQLOBJ$DATA_DATAPUMP"                    0 KB       0 rows
+. . exported "SYS"."SQLOBJ$PLAN_DATAPUMP"                    0 KB       0 rows
+. . exported "SYS"."SQLOBJ$_DATAPUMP"                        0 KB       0 rows
+. . exported "SYSTEM"."SCHEDULER_JOB_ARGS"               8.648 KB       4 rows
+. . exported "SYSTEM"."SCHEDULER_PROGRAM_ARGS"           9.726 KB      13 rows
+. . exported "WMSYS"."WM$EXP_MAP"                        7.718 KB       3 rows
+. . exported "WMSYS"."WM$METADATA_MAP"                       0 KB       0 rows
+. . exported "SOE"."ORDER_ITEMS"                         170.4 MB 3735896 rows
+. . exported "SOE"."ORDERS"                              114.9 MB 1352070 rows
+. . exported "SOE"."ORDERS2"                             114.9 MB 1352070 rows
+. . exported "SOE"."INVENTORIES"                         15.27 MB  902171 rows
+. . exported "SOE"."LOGON"                               9.065 MB  442208 rows
+. . exported "SOE"."CUSTOMERS"                           4.983 MB   45703 rows
+. . exported "SOE"."ADDRESSES"                           4.084 MB   55703 rows
+. . exported "SOE"."CARD_DETAILS"                        2.402 MB   55703 rows
+. . exported "SOE"."PRODUCT_DESCRIPTIONS"                224.1 KB    1000 rows
+. . exported "SOE"."PRODUCT_INFORMATION"                 186.4 KB    1000 rows
+. . exported "SOE"."EMP"                                 51.39 KB     879 rows
+. . exported "SOE"."WAREHOUSES"                          36.03 KB    1000 rows
+. . exported "SOE"."JOB_HISTORY"                         14.60 KB     246 rows
+. . exported "SOE"."JOBS"                                5.976 KB      23 rows
+. . exported "SOE"."ORDERENTRY_METADATA"                 5.609 KB       4 rows
+. . exported "SOE"."DEPT"                                5.632 KB       7 rows
+. . exported "SOE"."V"                                       0 KB       0 rows
+Master table "SYS"."SYS_EXPORT_FULL_01" successfully loaded/unloaded
+******************************************************************************
+Dump file set for SYS.SYS_EXPORT_FULL_01 is:
+  /u01/datapump/full_oradb_071123.dmp
+Job "SYS"."SYS_EXPORT_FULL_01" successfully completed at Tue Nov 7 10:10:30 2023 elapsed 0 00:01:58
+
+[oracle@srv1 datapump]$ 
+[oracle@srv1 datapump]$ 
+[oracle@srv1 datapump]$ ls -lrt
+total 1469720
+-rw-r-----. 1 oracle oinstall 338419712 Nov  6 11:07 exp_soe.dmp
+-rw-r--r--. 1 oracle oinstall      3729 Nov  6 11:07 estimate_soe_exp.log
+-rw-r-----. 1 oracle oinstall 120750080 Nov  6 11:44 orders2_061123.dmp
+-rw-r--r--. 1 oracle oinstall      1058 Nov  6 11:44 orders2_061123.log
+-rw-r-----. 1 oracle oinstall 462491648 Nov  6 12:11 exp_full_oradb_061123.dmp
+-rw-r--r--. 1 oracle oinstall     12661 Nov  6 12:11 exp_full_oradb_061123.log
+-rw-r-----. 1 oracle oinstall 120795136 Nov  7 09:41 soe_orders_071123.dmp
+-rw-r--r--. 1 oracle oinstall      1328 Nov  7 09:41 soe_orders_071123.log
+-rw-r-----. 1 oracle oinstall 462491648 Nov  7 10:10 full_oradb_071123.dmp
+-rw-r--r--. 1 oracle oinstall     12540 Nov  7 10:10 full_oradb_071123.log
+[oracle@srv1 datapump]$ 
+[oracle@srv1 datapump]$ 
+[oracle@srv1 datapump]$ du -sh full_oradb_071123.dmp
+442M	full_oradb_071123.dmp
+[oracle@srv1 datapump]$ 
+[oracle@srv1 datapump]$ 
+[oracle@srv1 datapump]$ expdp directory=datapump_dir dumpfile=full_oradb_071123_%U.dmp logfile=full_oradb_071123.log full=y file_size=100M
+LRM-00101: unknown parameter name 'file_size'
+
+[oracle@srv1 datapump]$ 
+[oracle@srv1 datapump]$ 
+[oracle@srv1 datapump]$ expdp directory=datapump_dir dumpfile=full_oradb_071123_%U.dmp logfile=full_oradb_071123.log full=y filesize=100M
+
+Export: Release 19.0.0.0.0 - Production on Tue Nov 7 10:11:24 2023
+Version 19.3.0.0.0
+
+Copyright (c) 1982, 2019, Oracle and/or its affiliates.  All rights reserved.
+
+Username: / as sysdba
+Password: 
+
+Connected to: Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Starting "SYS"."SYS_EXPORT_FULL_01":  /******** AS SYSDBA directory=datapump_dir dumpfile=full_oradb_071123_%U.dmp logfile=full_oradb_071123.log full=y filesize=100M 
+Processing object type DATABASE_EXPORT/EARLY_OPTIONS/VIEWS_AS_TABLES/TABLE_DATA
+Processing object type DATABASE_EXPORT/NORMAL_OPTIONS/TABLE_DATA
+Processing object type DATABASE_EXPORT/NORMAL_OPTIONS/VIEWS_AS_TABLES/TABLE_DATA
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/TABLE_DATA
+Processing object type DATABASE_EXPORT/SCHEMA/PACKAGE_BODIES/PACKAGE/PACKAGE_BODY
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/INDEX/STATISTICS/INDEX_STATISTICS
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/INDEX/STATISTICS/FUNCTIONAL_INDEX/INDEX_STATISTICS
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/INDEX/STATISTICS/BITMAP_INDEX/INDEX_STATISTICS
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/STATISTICS/TABLE_STATISTICS
+Processing object type DATABASE_EXPORT/STATISTICS/MARKER
+Processing object type DATABASE_EXPORT/PRE_SYSTEM_IMPCALLOUT/MARKER
+Processing object type DATABASE_EXPORT/PRE_INSTANCE_IMPCALLOUT/MARKER
+Processing object type DATABASE_EXPORT/TABLESPACE
+Processing object type DATABASE_EXPORT/PROFILE
+Processing object type DATABASE_EXPORT/SCHEMA/USER
+Processing object type DATABASE_EXPORT/ROLE
+Processing object type DATABASE_EXPORT/RADM_FPTM
+Processing object type DATABASE_EXPORT/GRANT/SYSTEM_GRANT/PROC_SYSTEM_GRANT
+Processing object type DATABASE_EXPORT/SCHEMA/GRANT/SYSTEM_GRANT
+Processing object type DATABASE_EXPORT/SCHEMA/ROLE_GRANT
+Processing object type DATABASE_EXPORT/SCHEMA/DEFAULT_ROLE
+Processing object type DATABASE_EXPORT/SCHEMA/ON_USER_GRANT
+Processing object type DATABASE_EXPORT/SCHEMA/TABLESPACE_QUOTA
+Processing object type DATABASE_EXPORT/RESOURCE_COST
+Processing object type DATABASE_EXPORT/TRUSTED_DB_LINK
+Processing object type DATABASE_EXPORT/SCHEMA/SEQUENCE/SEQUENCE
+Processing object type DATABASE_EXPORT/DIRECTORY/DIRECTORY
+Processing object type DATABASE_EXPORT/SYSTEM_PROCOBJACT/PRE_SYSTEM_ACTIONS/PROCACT_SYSTEM
+Processing object type DATABASE_EXPORT/SYSTEM_PROCOBJACT/PROCOBJ
+Processing object type DATABASE_EXPORT/SYSTEM_PROCOBJACT/POST_SYSTEM_ACTIONS/PROCACT_SYSTEM
+Processing object type DATABASE_EXPORT/SCHEMA/PROCACT_SCHEMA
+Processing object type DATABASE_EXPORT/EARLY_OPTIONS/VIEWS_AS_TABLES/TABLE
+Processing object type DATABASE_EXPORT/EARLY_POST_INSTANCE_IMPCALLOUT/MARKER
+Processing object type DATABASE_EXPORT/NORMAL_OPTIONS/TABLE
+Processing object type DATABASE_EXPORT/NORMAL_OPTIONS/VIEWS_AS_TABLES/TABLE
+Processing object type DATABASE_EXPORT/NORMAL_POST_INSTANCE_IMPCALLOUT/MARKER
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/TABLE
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/IDENTITY_COLUMN
+Processing object type DATABASE_EXPORT/SCHEMA/PACKAGE/PACKAGE_SPEC
+Processing object type DATABASE_EXPORT/SCHEMA/PACKAGE/CODE_BASE_GRANT
+Processing object type DATABASE_EXPORT/SCHEMA/FUNCTION/FUNCTION
+Processing object type DATABASE_EXPORT/SCHEMA/PROCEDURE/PROCEDURE
+Processing object type DATABASE_EXPORT/SCHEMA/PACKAGE/COMPILE_PACKAGE/PACKAGE_SPEC/ALTER_PACKAGE_SPEC
+Processing object type DATABASE_EXPORT/SCHEMA/FUNCTION/ALTER_FUNCTION
+Processing object type DATABASE_EXPORT/SCHEMA/PROCEDURE/ALTER_PROCEDURE
+Processing object type DATABASE_EXPORT/SCHEMA/VIEW/VIEW
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/INDEX/INDEX
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/INDEX/FUNCTIONAL_INDEX/INDEX
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/CONSTRAINT/CONSTRAINT
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/CONSTRAINT/REF_CONSTRAINT
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/INDEX/BITMAP_INDEX/INDEX
+Processing object type DATABASE_EXPORT/FINAL_POST_INSTANCE_IMPCALLOUT/MARKER
+Processing object type DATABASE_EXPORT/SCHEMA/POST_SCHEMA/PROCACT_SCHEMA
+Processing object type DATABASE_EXPORT/AUDIT_UNIFIED/AUDIT_POLICY_ENABLE
+Processing object type DATABASE_EXPORT/POST_SYSTEM_IMPCALLOUT/MARKER
+. . exported "SYS"."KU$_USER_MAPPING_VIEW"               6.070 KB      37 rows
+. . exported "SYSTEM"."REDO_DB"                          25.59 KB       1 rows
+. . exported "WMSYS"."WM$WORKSPACES_TABLE$"              12.10 KB       1 rows
+. . exported "WMSYS"."WM$HINT_TABLE$"                    9.984 KB      97 rows
+. . exported "LBACSYS"."OLS$INSTALLATIONS"               6.960 KB       2 rows
+. . exported "WMSYS"."WM$WORKSPACE_PRIV_TABLE$"          7.078 KB      11 rows
+. . exported "SYS"."DAM_CONFIG_PARAM$"                   6.531 KB      14 rows
+. . exported "SYS"."TSDP_SUBPOL$"                        6.328 KB       1 rows
+. . exported "WMSYS"."WM$NEXTVER_TABLE$"                 6.375 KB       1 rows
+. . exported "LBACSYS"."OLS$PROPS"                       6.234 KB       5 rows
+. . exported "WMSYS"."WM$ENV_VARS$"                      6.015 KB       3 rows
+. . exported "SYS"."TSDP_PARAMETER$"                     5.953 KB       1 rows
+. . exported "SYS"."TSDP_POLICY$"                        5.921 KB       1 rows
+. . exported "WMSYS"."WM$VERSION_HIERARCHY_TABLE$"       5.984 KB       1 rows
+. . exported "WMSYS"."WM$EVENTS_INFO$"                   5.812 KB      12 rows
+. . exported "LBACSYS"."OLS$AUDIT_ACTIONS"               5.757 KB       8 rows
+. . exported "LBACSYS"."OLS$DIP_EVENTS"                  5.539 KB       2 rows
+. . exported "AUDSYS"."AUD$UNIFIED":"AUD_UNIFIED_P0"         0 KB       0 rows
+. . exported "AUDSYS"."AUD$UNIFIED":"SYS_P181"           147.5 KB     189 rows
+. . exported "AUDSYS"."AUD$UNIFIED":"SYS_P241"           51.39 KB       1 rows
+. . exported "LBACSYS"."OLS$AUDIT"                           0 KB       0 rows
+. . exported "LBACSYS"."OLS$COMPARTMENTS"                    0 KB       0 rows
+. . exported "LBACSYS"."OLS$DIP_DEBUG"                       0 KB       0 rows
+. . exported "LBACSYS"."OLS$GROUPS"                          0 KB       0 rows
+. . exported "LBACSYS"."OLS$LAB"                             0 KB       0 rows
+. . exported "LBACSYS"."OLS$LEVELS"                          0 KB       0 rows
+. . exported "LBACSYS"."OLS$POL"                             0 KB       0 rows
+. . exported "LBACSYS"."OLS$POLICY_ADMIN"                    0 KB       0 rows
+. . exported "LBACSYS"."OLS$POLS"                            0 KB       0 rows
+. . exported "LBACSYS"."OLS$POLT"                            0 KB       0 rows
+. . exported "LBACSYS"."OLS$PROFILE"                         0 KB       0 rows
+. . exported "LBACSYS"."OLS$PROFILES"                        0 KB       0 rows
+. . exported "LBACSYS"."OLS$PROG"                            0 KB       0 rows
+. . exported "LBACSYS"."OLS$SESSINFO"                        0 KB       0 rows
+. . exported "LBACSYS"."OLS$USER"                            0 KB       0 rows
+. . exported "LBACSYS"."OLS$USER_COMPARTMENTS"               0 KB       0 rows
+. . exported "LBACSYS"."OLS$USER_GROUPS"                     0 KB       0 rows
+. . exported "LBACSYS"."OLS$USER_LEVELS"                     0 KB       0 rows
+. . exported "SYS"."AUD$"                                    0 KB       0 rows
+. . exported "SYS"."DAM_CLEANUP_EVENTS$"                     0 KB       0 rows
+. . exported "SYS"."DAM_CLEANUP_JOBS$"                       0 KB       0 rows
+. . exported "SYS"."TSDP_ASSOCIATION$"                       0 KB       0 rows
+. . exported "SYS"."TSDP_CONDITION$"                         0 KB       0 rows
+. . exported "SYS"."TSDP_FEATURE_POLICY$"                    0 KB       0 rows
+. . exported "SYS"."TSDP_PROTECTION$"                        0 KB       0 rows
+. . exported "SYS"."TSDP_SENSITIVE_DATA$"                    0 KB       0 rows
+. . exported "SYS"."TSDP_SENSITIVE_TYPE$"                    0 KB       0 rows
+. . exported "SYS"."TSDP_SOURCE$"                            0 KB       0 rows
+. . exported "SYSTEM"."REDO_LOG"                             0 KB       0 rows
+. . exported "WMSYS"."WM$BATCH_COMPRESSIBLE_TABLES$"         0 KB       0 rows
+. . exported "WMSYS"."WM$CONSTRAINTS_TABLE$"                 0 KB       0 rows
+. . exported "WMSYS"."WM$CONS_COLUMNS$"                      0 KB       0 rows
+. . exported "WMSYS"."WM$LOCKROWS_INFO$"                     0 KB       0 rows
+. . exported "WMSYS"."WM$MODIFIED_TABLES$"                   0 KB       0 rows
+. . exported "WMSYS"."WM$MP_GRAPH_WORKSPACES_TABLE$"         0 KB       0 rows
+. . exported "WMSYS"."WM$MP_PARENT_WORKSPACES_TABLE$"        0 KB       0 rows
+. . exported "WMSYS"."WM$NESTED_COLUMNS_TABLE$"              0 KB       0 rows
+. . exported "WMSYS"."WM$RESOLVE_WORKSPACES_TABLE$"          0 KB       0 rows
+. . exported "WMSYS"."WM$RIC_LOCKING_TABLE$"                 0 KB       0 rows
+. . exported "WMSYS"."WM$RIC_TABLE$"                         0 KB       0 rows
+. . exported "WMSYS"."WM$RIC_TRIGGERS_TABLE$"                0 KB       0 rows
+. . exported "WMSYS"."WM$UDTRIG_DISPATCH_PROCS$"             0 KB       0 rows
+. . exported "WMSYS"."WM$UDTRIG_INFO$"                       0 KB       0 rows
+. . exported "WMSYS"."WM$VERSION_TABLE$"                     0 KB       0 rows
+. . exported "WMSYS"."WM$VT_ERRORS_TABLE$"                   0 KB       0 rows
+. . exported "WMSYS"."WM$WORKSPACE_SAVEPOINTS_TABLE$"        0 KB       0 rows
+. . exported "MDSYS"."RDF_PARAM$"                        6.515 KB       3 rows
+. . exported "SYS"."AUDTAB$TBS$FOR_EXPORT"               5.953 KB       2 rows
+. . exported "SYS"."DBA_SENSITIVE_DATA"                      0 KB       0 rows
+. . exported "SYS"."DBA_TSDP_POLICY_PROTECTION"              0 KB       0 rows
+. . exported "SYS"."FGA_LOG$FOR_EXPORT"                      0 KB       0 rows
+. . exported "SYS"."NACL$_ACE_EXP"                           0 KB       0 rows
+. . exported "SYS"."NACL$_HOST_EXP"                      6.976 KB       2 rows
+. . exported "SYS"."NACL$_WALLET_EXP"                        0 KB       0 rows
+. . exported "SYS"."SQL$TEXT_DATAPUMP"                       0 KB       0 rows
+. . exported "SYS"."SQL$_DATAPUMP"                           0 KB       0 rows
+. . exported "SYS"."SQLOBJ$AUXDATA_DATAPUMP"                 0 KB       0 rows
+. . exported "SYS"."SQLOBJ$DATA_DATAPUMP"                    0 KB       0 rows
+. . exported "SYS"."SQLOBJ$PLAN_DATAPUMP"                    0 KB       0 rows
+. . exported "SYS"."SQLOBJ$_DATAPUMP"                        0 KB       0 rows
+. . exported "SYSTEM"."SCHEDULER_JOB_ARGS"               8.648 KB       4 rows
+. . exported "SYSTEM"."SCHEDULER_PROGRAM_ARGS"           9.726 KB      13 rows
+. . exported "WMSYS"."WM$EXP_MAP"                        7.718 KB       3 rows
+. . exported "WMSYS"."WM$METADATA_MAP"                       0 KB       0 rows
+. . exported "SOE"."ORDER_ITEMS"                         170.4 MB 3735896 rows
+. . exported "SOE"."ORDERS"                              114.9 MB 1352070 rows
+. . exported "SOE"."ORDERS2"                             114.9 MB 1352070 rows
+. . exported "SOE"."INVENTORIES"                         15.27 MB  902171 rows
+. . exported "SOE"."LOGON"                               9.065 MB  442208 rows
+. . exported "SOE"."CUSTOMERS"                           4.983 MB   45703 rows
+. . exported "SOE"."ADDRESSES"                           4.084 MB   55703 rows
+. . exported "SOE"."CARD_DETAILS"                        2.402 MB   55703 rows
+. . exported "SOE"."PRODUCT_DESCRIPTIONS"                224.1 KB    1000 rows
+. . exported "SOE"."PRODUCT_INFORMATION"                 186.4 KB    1000 rows
+. . exported "SOE"."EMP"                                 51.39 KB     879 rows
+. . exported "SOE"."WAREHOUSES"                          36.03 KB    1000 rows
+. . exported "SOE"."JOB_HISTORY"                         14.60 KB     246 rows
+. . exported "SOE"."JOBS"                                5.976 KB      23 rows
+. . exported "SOE"."ORDERENTRY_METADATA"                 5.609 KB       4 rows
+. . exported "SOE"."DEPT"                                5.632 KB       7 rows
+. . exported "SOE"."V"                                       0 KB       0 rows
+Master table "SYS"."SYS_EXPORT_FULL_01" successfully loaded/unloaded
+******************************************************************************
+Dump file set for SYS.SYS_EXPORT_FULL_01 is:
+  /u01/datapump/full_oradb_071123_01.dmp
+  /u01/datapump/full_oradb_071123_02.dmp
+  /u01/datapump/full_oradb_071123_03.dmp
+  /u01/datapump/full_oradb_071123_04.dmp
+  /u01/datapump/full_oradb_071123_05.dmp
+Job "SYS"."SYS_EXPORT_FULL_01" successfully completed at Tue Nov 7 10:13:26 2023 elapsed 0 00:01:56
+
+[oracle@srv1 datapump]$ ls -lrt
+total 1921388
+-rw-r-----. 1 oracle oinstall 338419712 Nov  6 11:07 exp_soe.dmp
+-rw-r--r--. 1 oracle oinstall      3729 Nov  6 11:07 estimate_soe_exp.log
+-rw-r-----. 1 oracle oinstall 120750080 Nov  6 11:44 orders2_061123.dmp
+-rw-r--r--. 1 oracle oinstall      1058 Nov  6 11:44 orders2_061123.log
+-rw-r-----. 1 oracle oinstall 462491648 Nov  6 12:11 exp_full_oradb_061123.dmp
+-rw-r--r--. 1 oracle oinstall     12661 Nov  6 12:11 exp_full_oradb_061123.log
+-rw-r-----. 1 oracle oinstall 120795136 Nov  7 09:41 soe_orders_071123.dmp
+-rw-r--r--. 1 oracle oinstall      1328 Nov  7 09:41 soe_orders_071123.log
+-rw-r-----. 1 oracle oinstall 462491648 Nov  7 10:10 full_oradb_071123.dmp
+-rw-r-----. 1 oracle oinstall 104857600 Nov  7 10:13 full_oradb_071123_01.dmp
+-rw-r-----. 1 oracle oinstall 104857600 Nov  7 10:13 full_oradb_071123_02.dmp
+-rw-r-----. 1 oracle oinstall 104857600 Nov  7 10:13 full_oradb_071123_04.dmp
+-rw-r-----. 1 oracle oinstall 104857600 Nov  7 10:13 full_oradb_071123_03.dmp
+-rw-r-----. 1 oracle oinstall  43077632 Nov  7 10:13 full_oradb_071123_05.dmp
+-rw-r--r--. 1 oracle oinstall     12724 Nov  7 10:13 full_oradb_071123.log
+[oracle@srv1 datapump]$ 
+[oracle@srv1 datapump]$ df -h
+Filesystem                Size  Used Avail Use% Mounted on
+devtmpfs                  2.7G     0  2.7G   0% /dev
+tmpfs                     2.7G     0  2.7G   0% /dev/shm
+tmpfs                     2.7G  9.6M  2.7G   1% /run
+tmpfs                     2.7G     0  2.7G   0% /sys/fs/cgroup
+/dev/mapper/ol_srv1-root   10G  4.3G  5.8G  43% /
+/dev/mapper/ol_srv1-u01    74G   14G   61G  19% /u01
+/dev/mapper/ol_srv1-home   10G   38M   10G   1% /home
+/dev/mapper/ol_srv1-var    12G  3.3G  8.8G  28% /var
+/dev/sda2                  12G  233M   12G   2% /boot
+tmpfs                     552M   36K  552M   1% /run/user/54321
+tmpfs                     552M     0  552M   0% /run/user/0
+[oracle@srv1 datapump]$ cd /u01
+[oracle@srv1 u01]$ 
+[oracle@srv1 u01]$ du -sh *
+12G	app
+1.9G	datapump
+[oracle@srv1 u01]$ cd datapump/
+[oracle@srv1 datapump]$ du -sh *
+4.0K	estimate_soe_exp.log
+442M	exp_full_oradb_061123.dmp
+16K	exp_full_oradb_061123.log
+323M	exp_soe.dmp
+100M	full_oradb_071123_01.dmp
+100M	full_oradb_071123_02.dmp
+100M	full_oradb_071123_03.dmp
+100M	full_oradb_071123_04.dmp
+42M	full_oradb_071123_05.dmp
+442M	full_oradb_071123.dmp
+16K	full_oradb_071123.log
+116M	orders2_061123.dmp
+4.0K	orders2_061123.log
+116M	soe_orders_071123.dmp
+4.0K	soe_orders_071123.log
+[oracle@srv1 datapump]$ 
+[oracle@srv1 datapump]$ 
+[oracle@srv1 datapump]$ du -sh full_oradb_071123_0
+du: cannot access ‘full_oradb_071123_0’: No such file or directory
+*[oracle@srv1 datapump]$ *
+bash: ./estimate_soe_exp.log: Permission denied
+[oracle@srv1 datapump]$ 
+[oracle@srv1 datapump]$ du -sh full_oradb_071123_0*.dmp
+100M	full_oradb_071123_01.dmp
+100M	full_oradb_071123_02.dmp
+100M	full_oradb_071123_03.dmp
+100M	full_oradb_071123_04.dmp
+42M	full_oradb_071123_05.dmp
+[oracle@srv1 datapump]$ 
+[oracle@srv1 datapump]$ 
+[oracle@srv1 datapump]$ 
+[oracle@srv1 datapump]$ 
+[oracle@srv1 datapump]$ 
+[oracle@srv1 datapump]$ expdp directory=datapump_dir dumpfile=full_oradb_07112301_%U.dmp logfile=full_oradb_071123.log full=y filesize=100M parallel=3
+
+Export: Release 19.0.0.0.0 - Production on Tue Nov 7 10:16:10 2023
+Version 19.3.0.0.0
+
+Copyright (c) 1982, 2019, Oracle and/or its affiliates.  All rights reserved.
+
+Username: / as sysdba
+Password: 
+
+Connected to: Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Starting "SYS"."SYS_EXPORT_FULL_01":  /******** AS SYSDBA directory=datapump_dir dumpfile=full_oradb_07112301_%U.dmp logfile=full_oradb_071123.log full=y filesize=100M parallel=3 
+Processing object type DATABASE_EXPORT/EARLY_OPTIONS/VIEWS_AS_TABLES/TABLE_DATA
+Processing object type DATABASE_EXPORT/NORMAL_OPTIONS/VIEWS_AS_TABLES/TABLE_DATA
+Processing object type DATABASE_EXPORT/NORMAL_OPTIONS/TABLE_DATA
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/INDEX/STATISTICS/INDEX_STATISTICS
+Processing object type DATABASE_EXPORT/SCHEMA/PACKAGE_BODIES/PACKAGE/PACKAGE_BODY
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/INDEX/STATISTICS/FUNCTIONAL_INDEX/INDEX_STATISTICS
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/STATISTICS/TABLE_STATISTICS
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/INDEX/STATISTICS/BITMAP_INDEX/INDEX_STATISTICS
+Processing object type DATABASE_EXPORT/PRE_SYSTEM_IMPCALLOUT/MARKER
+Processing object type DATABASE_EXPORT/PRE_INSTANCE_IMPCALLOUT/MARKER
+Processing object type DATABASE_EXPORT/TABLESPACE
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/TABLE_DATA
+Processing object type DATABASE_EXPORT/PROFILE
+Processing object type DATABASE_EXPORT/SCHEMA/USER
+Processing object type DATABASE_EXPORT/ROLE
+Processing object type DATABASE_EXPORT/RADM_FPTM
+Processing object type DATABASE_EXPORT/SCHEMA/GRANT/SYSTEM_GRANT
+Processing object type DATABASE_EXPORT/SCHEMA/ROLE_GRANT
+Processing object type DATABASE_EXPORT/SCHEMA/DEFAULT_ROLE
+Processing object type DATABASE_EXPORT/GRANT/SYSTEM_GRANT/PROC_SYSTEM_GRANT
+Processing object type DATABASE_EXPORT/SCHEMA/ON_USER_GRANT
+Processing object type DATABASE_EXPORT/SCHEMA/TABLESPACE_QUOTA
+Processing object type DATABASE_EXPORT/RESOURCE_COST
+Processing object type DATABASE_EXPORT/TRUSTED_DB_LINK
+Processing object type DATABASE_EXPORT/SCHEMA/SEQUENCE/SEQUENCE
+Processing object type DATABASE_EXPORT/DIRECTORY/DIRECTORY
+Processing object type DATABASE_EXPORT/SYSTEM_PROCOBJACT/PRE_SYSTEM_ACTIONS/PROCACT_SYSTEM
+Processing object type DATABASE_EXPORT/SYSTEM_PROCOBJACT/PROCOBJ
+Processing object type DATABASE_EXPORT/STATISTICS/MARKER
+Processing object type DATABASE_EXPORT/SYSTEM_PROCOBJACT/POST_SYSTEM_ACTIONS/PROCACT_SYSTEM
+Processing object type DATABASE_EXPORT/SCHEMA/PROCACT_SCHEMA
+Processing object type DATABASE_EXPORT/EARLY_POST_INSTANCE_IMPCALLOUT/MARKER
+Processing object type DATABASE_EXPORT/EARLY_OPTIONS/VIEWS_AS_TABLES/TABLE
+Processing object type DATABASE_EXPORT/NORMAL_POST_INSTANCE_IMPCALLOUT/MARKER
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/TABLE
+Processing object type DATABASE_EXPORT/NORMAL_OPTIONS/VIEWS_AS_TABLES/TABLE
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/IDENTITY_COLUMN
+Processing object type DATABASE_EXPORT/SCHEMA/PACKAGE/PACKAGE_SPEC
+Processing object type DATABASE_EXPORT/SCHEMA/PACKAGE/CODE_BASE_GRANT
+Processing object type DATABASE_EXPORT/SCHEMA/FUNCTION/FUNCTION
+Processing object type DATABASE_EXPORT/SCHEMA/PROCEDURE/PROCEDURE
+Processing object type DATABASE_EXPORT/SCHEMA/PACKAGE/COMPILE_PACKAGE/PACKAGE_SPEC/ALTER_PACKAGE_SPEC
+Processing object type DATABASE_EXPORT/SCHEMA/FUNCTION/ALTER_FUNCTION
+Processing object type DATABASE_EXPORT/SCHEMA/PROCEDURE/ALTER_PROCEDURE
+Processing object type DATABASE_EXPORT/SCHEMA/VIEW/VIEW
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/INDEX/INDEX
+Processing object type DATABASE_EXPORT/NORMAL_OPTIONS/TABLE
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/INDEX/FUNCTIONAL_INDEX/INDEX
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/CONSTRAINT/CONSTRAINT
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/CONSTRAINT/REF_CONSTRAINT
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/INDEX/BITMAP_INDEX/INDEX
+Processing object type DATABASE_EXPORT/FINAL_POST_INSTANCE_IMPCALLOUT/MARKER
+Processing object type DATABASE_EXPORT/SCHEMA/POST_SCHEMA/PROCACT_SCHEMA
+Processing object type DATABASE_EXPORT/AUDIT_UNIFIED/AUDIT_POLICY_ENABLE
+Processing object type DATABASE_EXPORT/POST_SYSTEM_IMPCALLOUT/MARKER
+. . exported "SYS"."KU$_USER_MAPPING_VIEW"               6.070 KB      37 rows
+. . exported "MDSYS"."RDF_PARAM$"                        6.515 KB       3 rows
+. . exported "SYSTEM"."REDO_DB"                          25.59 KB       1 rows
+. . exported "WMSYS"."WM$WORKSPACES_TABLE$"              12.10 KB       1 rows
+. . exported "WMSYS"."WM$HINT_TABLE$"                    9.984 KB      97 rows
+. . exported "LBACSYS"."OLS$INSTALLATIONS"               6.960 KB       2 rows
+. . exported "WMSYS"."WM$WORKSPACE_PRIV_TABLE$"          7.078 KB      11 rows
+. . exported "SYS"."AUDTAB$TBS$FOR_EXPORT"               5.953 KB       2 rows
+. . exported "SYS"."DAM_CONFIG_PARAM$"                   6.531 KB      14 rows
+. . exported "SYS"."DBA_SENSITIVE_DATA"                      0 KB       0 rows
+. . exported "SYS"."DBA_TSDP_POLICY_PROTECTION"              0 KB       0 rows
+. . exported "SYS"."TSDP_SUBPOL$"                        6.328 KB       1 rows
+. . exported "SYS"."FGA_LOG$FOR_EXPORT"                      0 KB       0 rows
+. . exported "SYS"."NACL$_ACE_EXP"                           0 KB       0 rows
+. . exported "WMSYS"."WM$NEXTVER_TABLE$"                 6.375 KB       1 rows
+. . exported "LBACSYS"."OLS$PROPS"                       6.234 KB       5 rows
+. . exported "WMSYS"."WM$ENV_VARS$"                      6.015 KB       3 rows
+. . exported "SYS"."TSDP_PARAMETER$"                     5.953 KB       1 rows
+. . exported "SYS"."NACL$_HOST_EXP"                      6.976 KB       2 rows
+. . exported "SYS"."NACL$_WALLET_EXP"                        0 KB       0 rows
+. . exported "SYS"."SQL$TEXT_DATAPUMP"                       0 KB       0 rows
+. . exported "SYS"."SQL$_DATAPUMP"                           0 KB       0 rows
+. . exported "SYS"."TSDP_POLICY$"                        5.921 KB       1 rows
+. . exported "SYS"."SQLOBJ$AUXDATA_DATAPUMP"                 0 KB       0 rows
+. . exported "SYS"."SQLOBJ$DATA_DATAPUMP"                    0 KB       0 rows
+. . exported "SYS"."SQLOBJ$PLAN_DATAPUMP"                    0 KB       0 rows
+. . exported "SYS"."SQLOBJ$_DATAPUMP"                        0 KB       0 rows
+. . exported "WMSYS"."WM$VERSION_HIERARCHY_TABLE$"       5.984 KB       1 rows
+. . exported "WMSYS"."WM$EVENTS_INFO$"                   5.812 KB      12 rows
+. . exported "LBACSYS"."OLS$AUDIT_ACTIONS"               5.757 KB       8 rows
+. . exported "LBACSYS"."OLS$DIP_EVENTS"                  5.539 KB       2 rows
+. . exported "AUDSYS"."AUD$UNIFIED":"AUD_UNIFIED_P0"         0 KB       0 rows
+. . exported "AUDSYS"."AUD$UNIFIED":"SYS_P181"           147.5 KB     189 rows
+. . exported "AUDSYS"."AUD$UNIFIED":"SYS_P241"           51.39 KB       1 rows
+. . exported "LBACSYS"."OLS$AUDIT"                           0 KB       0 rows
+. . exported "LBACSYS"."OLS$COMPARTMENTS"                    0 KB       0 rows
+. . exported "LBACSYS"."OLS$DIP_DEBUG"                       0 KB       0 rows
+. . exported "LBACSYS"."OLS$GROUPS"                          0 KB       0 rows
+. . exported "LBACSYS"."OLS$LAB"                             0 KB       0 rows
+. . exported "LBACSYS"."OLS$LEVELS"                          0 KB       0 rows
+. . exported "LBACSYS"."OLS$POL"                             0 KB       0 rows
+. . exported "LBACSYS"."OLS$POLICY_ADMIN"                    0 KB       0 rows
+. . exported "LBACSYS"."OLS$POLS"                            0 KB       0 rows
+. . exported "LBACSYS"."OLS$POLT"                            0 KB       0 rows
+. . exported "LBACSYS"."OLS$PROFILE"                         0 KB       0 rows
+. . exported "LBACSYS"."OLS$PROFILES"                        0 KB       0 rows
+. . exported "LBACSYS"."OLS$PROG"                            0 KB       0 rows
+. . exported "LBACSYS"."OLS$SESSINFO"                        0 KB       0 rows
+. . exported "LBACSYS"."OLS$USER"                            0 KB       0 rows
+. . exported "LBACSYS"."OLS$USER_COMPARTMENTS"               0 KB       0 rows
+. . exported "LBACSYS"."OLS$USER_GROUPS"                     0 KB       0 rows
+. . exported "LBACSYS"."OLS$USER_LEVELS"                     0 KB       0 rows
+. . exported "SYS"."AUD$"                                    0 KB       0 rows
+. . exported "SYS"."DAM_CLEANUP_EVENTS$"                     0 KB       0 rows
+. . exported "SYS"."DAM_CLEANUP_JOBS$"                       0 KB       0 rows
+. . exported "SYSTEM"."SCHEDULER_JOB_ARGS"               8.648 KB       4 rows
+. . exported "SYS"."TSDP_ASSOCIATION$"                       0 KB       0 rows
+. . exported "SYS"."TSDP_CONDITION$"                         0 KB       0 rows
+. . exported "SYS"."TSDP_FEATURE_POLICY$"                    0 KB       0 rows
+. . exported "SYS"."TSDP_PROTECTION$"                        0 KB       0 rows
+. . exported "SYS"."TSDP_SENSITIVE_DATA$"                    0 KB       0 rows
+. . exported "SYS"."TSDP_SENSITIVE_TYPE$"                    0 KB       0 rows
+. . exported "SYS"."TSDP_SOURCE$"                            0 KB       0 rows
+. . exported "SYSTEM"."REDO_LOG"                             0 KB       0 rows
+. . exported "WMSYS"."WM$BATCH_COMPRESSIBLE_TABLES$"         0 KB       0 rows
+. . exported "WMSYS"."WM$CONSTRAINTS_TABLE$"                 0 KB       0 rows
+. . exported "WMSYS"."WM$CONS_COLUMNS$"                      0 KB       0 rows
+. . exported "WMSYS"."WM$LOCKROWS_INFO$"                     0 KB       0 rows
+. . exported "WMSYS"."WM$MODIFIED_TABLES$"                   0 KB       0 rows
+. . exported "WMSYS"."WM$MP_GRAPH_WORKSPACES_TABLE$"         0 KB       0 rows
+. . exported "WMSYS"."WM$MP_PARENT_WORKSPACES_TABLE$"        0 KB       0 rows
+. . exported "WMSYS"."WM$NESTED_COLUMNS_TABLE$"              0 KB       0 rows
+. . exported "WMSYS"."WM$RESOLVE_WORKSPACES_TABLE$"          0 KB       0 rows
+. . exported "WMSYS"."WM$RIC_LOCKING_TABLE$"                 0 KB       0 rows
+. . exported "WMSYS"."WM$RIC_TABLE$"                         0 KB       0 rows
+. . exported "WMSYS"."WM$RIC_TRIGGERS_TABLE$"                0 KB       0 rows
+. . exported "WMSYS"."WM$UDTRIG_DISPATCH_PROCS$"             0 KB       0 rows
+. . exported "WMSYS"."WM$UDTRIG_INFO$"                       0 KB       0 rows
+. . exported "WMSYS"."WM$VERSION_TABLE$"                     0 KB       0 rows
+. . exported "WMSYS"."WM$VT_ERRORS_TABLE$"                   0 KB       0 rows
+. . exported "WMSYS"."WM$WORKSPACE_SAVEPOINTS_TABLE$"        0 KB       0 rows
+. . exported "SYSTEM"."SCHEDULER_PROGRAM_ARGS"           9.726 KB      13 rows
+. . exported "SOE"."ORDER_ITEMS"                         170.4 MB 3735896 rows
+. . exported "SOE"."ORDERS"                              114.9 MB 1352070 rows
+. . exported "WMSYS"."WM$EXP_MAP"                        7.718 KB       3 rows
+. . exported "SOE"."ORDERS2"                             114.9 MB 1352070 rows
+. . exported "SOE"."INVENTORIES"                         15.27 MB  902171 rows
+. . exported "SOE"."LOGON"                               9.065 MB  442208 rows
+. . exported "SOE"."CUSTOMERS"                           4.983 MB   45703 rows
+. . exported "SOE"."ADDRESSES"                           4.084 MB   55703 rows
+. . exported "WMSYS"."WM$METADATA_MAP"                       0 KB       0 rows
+. . exported "SOE"."CARD_DETAILS"                        2.402 MB   55703 rows
+. . exported "SOE"."PRODUCT_DESCRIPTIONS"                224.1 KB    1000 rows
+. . exported "SOE"."PRODUCT_INFORMATION"                 186.4 KB    1000 rows
+. . exported "SOE"."EMP"                                 51.39 KB     879 rows
+. . exported "SOE"."WAREHOUSES"                          36.03 KB    1000 rows
+. . exported "SOE"."JOB_HISTORY"                         14.60 KB     246 rows
+. . exported "SOE"."JOBS"                                5.976 KB      23 rows
+. . exported "SOE"."ORDERENTRY_METADATA"                 5.609 KB       4 rows
+. . exported "SOE"."DEPT"                                5.632 KB       7 rows
+. . exported "SOE"."V"                                       0 KB       0 rows
+Master table "SYS"."SYS_EXPORT_FULL_01" successfully loaded/unloaded
+******************************************************************************
+Dump file set for SYS.SYS_EXPORT_FULL_01 is:
+  /u01/datapump/full_oradb_07112301_01.dmp
+  /u01/datapump/full_oradb_07112301_02.dmp
+  /u01/datapump/full_oradb_07112301_03.dmp
+  /u01/datapump/full_oradb_07112301_04.dmp
+  /u01/datapump/full_oradb_07112301_05.dmp
+  /u01/datapump/full_oradb_07112301_06.dmp
+  /u01/datapump/full_oradb_07112301_07.dmp
+Job "SYS"."SYS_EXPORT_FULL_01" successfully completed at Tue Nov 7 10:17:07 2023 elapsed 0 00:00:51
+
+[oracle@srv1 datapump]$ du -sh /u01/datapump/full_oradb_07112301_*.dmp
+101M	/u01/datapump/full_oradb_07112301_01.dmp
+101M	/u01/datapump/full_oradb_07112301_02.dmp
+40K	/u01/datapump/full_oradb_07112301_03.dmp
+38M	/u01/datapump/full_oradb_07112301_04.dmp
+100M	/u01/datapump/full_oradb_07112301_05.dmp
+100M	/u01/datapump/full_oradb_07112301_06.dmp
+3.6M	/u01/datapump/full_oradb_07112301_07.dmp
+[oracle@srv1 datapump]$ 
+[oracle@srv1 datapump]$ 
+[oracle@srv1 datapump]$ 
+[oracle@srv1 datapump]$ ls -lrt
+total 2373072
+-rw-r-----. 1 oracle oinstall 338419712 Nov  6 11:07 exp_soe.dmp
+-rw-r--r--. 1 oracle oinstall      3729 Nov  6 11:07 estimate_soe_exp.log
+-rw-r-----. 1 oracle oinstall 120750080 Nov  6 11:44 orders2_061123.dmp
+-rw-r--r--. 1 oracle oinstall      1058 Nov  6 11:44 orders2_061123.log
+-rw-r-----. 1 oracle oinstall 462491648 Nov  6 12:11 exp_full_oradb_061123.dmp
+-rw-r--r--. 1 oracle oinstall     12661 Nov  6 12:11 exp_full_oradb_061123.log
+-rw-r-----. 1 oracle oinstall 120795136 Nov  7 09:41 soe_orders_071123.dmp
+-rw-r--r--. 1 oracle oinstall      1328 Nov  7 09:41 soe_orders_071123.log
+-rw-r-----. 1 oracle oinstall 462491648 Nov  7 10:10 full_oradb_071123.dmp
+-rw-r-----. 1 oracle oinstall 104857600 Nov  7 10:13 full_oradb_071123_01.dmp
+-rw-r-----. 1 oracle oinstall 104857600 Nov  7 10:13 full_oradb_071123_02.dmp
+-rw-r-----. 1 oracle oinstall 104857600 Nov  7 10:13 full_oradb_071123_04.dmp
+-rw-r-----. 1 oracle oinstall 104857600 Nov  7 10:13 full_oradb_071123_03.dmp
+-rw-r-----. 1 oracle oinstall  43077632 Nov  7 10:13 full_oradb_071123_05.dmp
+-rw-r-----. 1 oracle oinstall 104857600 Nov  7 10:16 full_oradb_07112301_01.dmp
+-rw-r-----. 1 oracle oinstall 104857600 Nov  7 10:16 full_oradb_07112301_02.dmp
+-rw-r-----. 1 oracle oinstall 104857600 Nov  7 10:17 full_oradb_07112301_06.dmp
+-rw-r-----. 1 oracle oinstall 104857600 Nov  7 10:17 full_oradb_07112301_05.dmp
+-rw-r-----. 1 oracle oinstall  39276544 Nov  7 10:17 full_oradb_07112301_04.dmp
+-rw-r-----. 1 oracle oinstall     40960 Nov  7 10:17 full_oradb_07112301_03.dmp
+-rw-r-----. 1 oracle oinstall   3768320 Nov  7 10:17 full_oradb_07112301_07.dmp
+-rw-r--r--. 1 oracle oinstall     12833 Nov  7 10:17 full_oradb_071123.log
+[oracle@srv1 datapump]$ rm -rf *
+[oracle@srv1 datapump]$ 
+[oracle@srv1 datapump]$ sqlplus / as sysdba
+
+SQL*Plus: Release 19.0.0.0.0 - Production on Tue Nov 7 10:18:59 2023
+Version 19.3.0.0.0
+
+Copyright (c) 1982, 2019, Oracle.  All rights reserved.
+
+
+Connected to:
+Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Version 19.3.0.0.0
+
+SQL> 
+SQL> 
+SQL> exit
+Disconnected from Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Version 19.3.0.0.0
+[oracle@srv1 datapump]$ 
+[oracle@srv1 datapump]$ 
+[oracle@srv1 datapump]$ sqlplus soe/soe
+
+SQL*Plus: Release 19.0.0.0.0 - Production on Tue Nov 7 10:19:13 2023
+Version 19.3.0.0.0
+
+Copyright (c) 1982, 2019, Oracle.  All rights reserved.
+
+ERROR:
+ORA-28002: the password will expire within 7 days
+
+
+Last Successful login time: Fri Sep 16 2022 10:58:44 +05:30
+
+Connected to:
+Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Version 19.3.0.0.0
+
+SQL> 
+SQL> desc emp
+ Name					   Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ EMP_NO 				   NOT NULL NUMBER(4)
+ ENAME						    VARCHAR2(20)
+ HIRE_DATE					    DATE
+ DEPT_NO					    NUMBER(2)
+ JOB_CODE					    CHAR(4)
+ SALARY 					    NUMBER(8,2)
+ MGR_ID 					    NUMBER(4)
+ TERMINATED					    CHAR(1)
+ NOTES						    VARCHAR2(1000)
+
+SQL> desc dept
+ Name					   Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ DEPT_NO				   NOT NULL NUMBER(2)
+ DNAME						    VARCHAR2(22)
+
+SQL> select * from emp e, dept d where e.dept_no=d.dept_no;^[[D^[[D^[[D^[[D^[[D^[[^C                       
+
+SQL> select count(*) from emp e, dept d where e.dept_no=d.dept_no;
+
+  COUNT(*)
+----------
+       879
+
+SQL> exit
+Disconnected from Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Version 19.3.0.0.0
+[oracle@srv1 datapump]$ 
+[oracle@srv1 datapump]$ 
+[oracle@srv1 datapump]$ expdp directory=datapump_dir dumpfile=Full_oradb_0711_QUERY%U.dmp logfile=Full_oradb_0711QUERY.log tables=soe.emp,SOE.DEPT  QUERY=SOE.EMP,SOE.DEPT:\"WHERE EMP.DEPT_NO=DEPT.DEPT_NO\"
+
+Export: Release 19.0.0.0.0 - Production on Tue Nov 7 10:22:12 2023
+Version 19.3.0.0.0
+
+Copyright (c) 1982, 2019, Oracle and/or its affiliates.  All rights reserved.
+
+Username: / as sysdba
+Password: 
+
+Connected to: Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Starting "SYS"."SYS_EXPORT_TABLE_01":  /******** AS SYSDBA directory=datapump_dir dumpfile=Full_oradb_0711_QUERY%U.dmp logfile=Full_oradb_0711QUERY.log tables=soe.emp,SOE.DEPT QUERY=SOE.EMP,SOE.DEPT:"WHERE EMP.DEPT_NO=DEPT.DEPT_NO" 
+Processing object type TABLE_EXPORT/TABLE/TABLE_DATA
+Processing object type TABLE_EXPORT/TABLE/INDEX/STATISTICS/INDEX_STATISTICS
+Processing object type TABLE_EXPORT/TABLE/INDEX/STATISTICS/BITMAP_INDEX/INDEX_STATISTICS
+Processing object type TABLE_EXPORT/TABLE/STATISTICS/TABLE_STATISTICS
+Processing object type TABLE_EXPORT/TABLE/STATISTICS/MARKER
+Processing object type TABLE_EXPORT/TABLE/TABLE
+Processing object type TABLE_EXPORT/TABLE/INDEX/INDEX
+Processing object type TABLE_EXPORT/TABLE/CONSTRAINT/CONSTRAINT
+Processing object type TABLE_EXPORT/TABLE/CONSTRAINT/REF_CONSTRAINT
+Processing object type TABLE_EXPORT/TABLE/INDEX/BITMAP_INDEX/INDEX
+ORA-31693: Table data object "SOE"."EMP" failed to load/unload and is being skipped due to error:
+ORA-00933: SQL command not properly ended
+
+ORA-31693: Table data object "SOE"."DEPT" failed to load/unload and is being skipped due to error:
+ORA-00904: "DEPT"."DEPT_NO": invalid identifier
+
+Master table "SYS"."SYS_EXPORT_TABLE_01" successfully loaded/unloaded
+******************************************************************************
+Dump file set for SYS.SYS_EXPORT_TABLE_01 is:
+  /u01/datapump/Full_oradb_0711_QUERY01.dmp
+Job "SYS"."SYS_EXPORT_TABLE_01" completed with 2 error(s) at Tue Nov 7 10:22:28 2023 elapsed 0 00:00:11
+
+[oracle@srv1 datapump]$ sqlplus soe/soe
+
+SQL*Plus: Release 19.0.0.0.0 - Production on Tue Nov 7 10:23:30 2023
+Version 19.3.0.0.0
+
+Copyright (c) 1982, 2019, Oracle.  All rights reserved.
+
+ERROR:
+ORA-28002: the password will expire within 7 days
+
+
+Last Successful login time: Tue Nov 07 2023 10:19:13 +05:30
+
+Connected to:
+Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Version 19.3.0.0.0
+
+SQL> 
+SQL> select count(*) from emp WHERE DEPT_NO=10;
+
+  COUNT(*)
+----------
+       113
+
+SQL> exit
+Disconnected from Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Version 19.3.0.0.0
+[oracle@srv1 datapump]$ expdp directory=datapump_dir dumpfile=Full_oradb_0711_QUERY%U.dmp logfile=Full_oradb_0711QUERY.log tables=soe.emp  QUERY=SOE.EMP:\"WHERE DEPT_NO=10\"
+
+Export: Release 19.0.0.0.0 - Production on Tue Nov 7 10:23:56 2023
+Version 19.3.0.0.0
+
+Copyright (c) 1982, 2019, Oracle and/or its affiliates.  All rights reserved.
+
+Username: / as sysdba
+Password: 
+
+Connected to: Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+ORA-39001: invalid argument value
+ORA-39000: bad dump file specification
+ORA-31641: unable to create dump file "/u01/datapump/Full_oradb_0711_QUERY01.dmp"
+ORA-27038: created file already exists
+Additional information: 1
+
+
+[oracle@srv1 datapump]$ 
+[oracle@srv1 datapump]$ expdp directory=datapump_dir dumpfile=oradb_0711_QUERY%U.dmp logfile=Full_oradb_0711QUERY.log tables=soe.emp  QUERY=SOE.EMP:\"WHERE DEPT_NO=10\"
+
+Export: Release 19.0.0.0.0 - Production on Tue Nov 7 10:24:22 2023
+Version 19.3.0.0.0
+
+Copyright (c) 1982, 2019, Oracle and/or its affiliates.  All rights reserved.
+
+Username: / as sysdba
+Password: 
+
+Connected to: Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Starting "SYS"."SYS_EXPORT_TABLE_01":  /******** AS SYSDBA directory=datapump_dir dumpfile=oradb_0711_QUERY%U.dmp logfile=Full_oradb_0711QUERY.log tables=soe.emp QUERY=SOE.EMP:"WHERE DEPT_NO=10" 
+Processing object type TABLE_EXPORT/TABLE/TABLE_DATA
+Processing object type TABLE_EXPORT/TABLE/INDEX/STATISTICS/INDEX_STATISTICS
+Processing object type TABLE_EXPORT/TABLE/INDEX/STATISTICS/BITMAP_INDEX/INDEX_STATISTICS
+Processing object type TABLE_EXPORT/TABLE/STATISTICS/TABLE_STATISTICS
+Processing object type TABLE_EXPORT/TABLE/STATISTICS/MARKER
+Processing object type TABLE_EXPORT/TABLE/TABLE
+Processing object type TABLE_EXPORT/TABLE/INDEX/INDEX
+Processing object type TABLE_EXPORT/TABLE/CONSTRAINT/CONSTRAINT
+Processing object type TABLE_EXPORT/TABLE/CONSTRAINT/REF_CONSTRAINT
+Processing object type TABLE_EXPORT/TABLE/INDEX/BITMAP_INDEX/INDEX
+. . exported "SOE"."EMP"                                 14.39 KB     113 rows
+Master table "SYS"."SYS_EXPORT_TABLE_01" successfully loaded/unloaded
+******************************************************************************
+Dump file set for SYS.SYS_EXPORT_TABLE_01 is:
+  /u01/datapump/oradb_0711_QUERY01.dmp
+Job "SYS"."SYS_EXPORT_TABLE_01" successfully completed at Tue Nov 7 10:24:37 2023 elapsed 0 00:00:11
+
+[oracle@srv1 datapump]$ 
+[oracle@srv1 datapump]$ 
+[oracle@srv1 datapump]$ ls -lrt
+total 500
+-rw-r-----. 1 oracle oinstall 253952 Nov  7 10:22 Full_oradb_0711_QUERY01.dmp
+-rw-r-----. 1 oracle oinstall 253952 Nov  7 10:24 oradb_0711_QUERY01.dmp
+-rw-r--r--. 1 oracle oinstall   1519 Nov  7 10:24 Full_oradb_0711QUERY.log
+[oracle@srv1 datapump]$ 
+[oracle@srv1 datapump]$ 
+[oracle@srv1 datapump]$ impdp dumpfile=oradb_0711_QUERY01.dmp logfile=oradb_0711_QUERY01.log sqlfile=ddl_expdp.sql
+
+Import: Release 19.0.0.0.0 - Production on Tue Nov 7 10:26:12 2023
+Version 19.3.0.0.0
+
+Copyright (c) 1982, 2019, Oracle and/or its affiliates.  All rights reserved.
+
+Username: / as sysdba
+Password: 
+
+Connected to: Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+ORA-39001: invalid argument value
+ORA-39000: bad dump file specification
+ORA-31640: unable to open dump file "/u01/app/oracle/admin/ORADB/dpdump/oradb_0711_QUERY01.dmp" for read
+ORA-27037: unable to obtain file status
+Linux-x86_64 Error: 2: No such file or directory
+Additional information: 7
+
+
+[oracle@srv1 datapump]$ impdp directory=datapump_dir dumpfile=oradb_0711_QUERY01.dmp logfile=oradb_0711_QUERY01.log sqlfile=ddl_expdp.sql
+
+Import: Release 19.0.0.0.0 - Production on Tue Nov 7 10:27:15 2023
+Version 19.3.0.0.0
+
+Copyright (c) 1982, 2019, Oracle and/or its affiliates.  All rights reserved.
+
+Username: / as sysdba
+Password: 
+
+Connected to: Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+
+Master table "SYS"."SYS_SQL_FILE_FULL_01" successfully loaded/unloaded
+Starting "SYS"."SYS_SQL_FILE_FULL_01":  /******** AS SYSDBA directory=datapump_dir dumpfile=oradb_0711_QUERY01.dmp logfile=oradb_0711_QUERY01.log sqlfile=ddl_expdp.sql 
+Processing object type TABLE_EXPORT/TABLE/TABLE
+Processing object type TABLE_EXPORT/TABLE/INDEX/INDEX
+Processing object type TABLE_EXPORT/TABLE/CONSTRAINT/CONSTRAINT
+Processing object type TABLE_EXPORT/TABLE/INDEX/STATISTICS/INDEX_STATISTICS
+Processing object type TABLE_EXPORT/TABLE/CONSTRAINT/REF_CONSTRAINT
+Processing object type TABLE_EXPORT/TABLE/INDEX/BITMAP_INDEX/INDEX
+Processing object type TABLE_EXPORT/TABLE/INDEX/STATISTICS/BITMAP_INDEX/INDEX_STATISTICS
+Processing object type TABLE_EXPORT/TABLE/STATISTICS/TABLE_STATISTICS
+Processing object type TABLE_EXPORT/TABLE/STATISTICS/MARKER
+Job "SYS"."SYS_SQL_FILE_FULL_01" successfully completed at Tue Nov 7 10:27:21 2023 elapsed 0 00:00:01
+
+[oracle@srv1 datapump]$ 
+[oracle@srv1 datapump]$ ls -lrt
+total 508
+-rw-r-----. 1 oracle oinstall 253952 Nov  7 10:22 Full_oradb_0711_QUERY01.dmp
+-rw-r-----. 1 oracle oinstall 253952 Nov  7 10:24 oradb_0711_QUERY01.dmp
+-rw-r--r--. 1 oracle oinstall   1519 Nov  7 10:24 Full_oradb_0711QUERY.log
+-rw-r--r--. 1 oracle oinstall   3343 Nov  7 10:27 ddl_expdp.sql
+-rw-r--r--. 1 oracle oinstall   1198 Nov  7 10:27 oradb_0711_QUERY01.log
+[oracle@srv1 datapump]$ vi ddl_expdp.sql
+[oracle@srv1 datapump]$ 
+[oracle@srv1 datapump]$ 
+[oracle@srv1 datapump]$ 
+[oracle@srv1 datapump]$ 
+[oracle@srv1 datapump]$ sqlplus / as sysdba
+
+SQL*Plus: Release 19.0.0.0.0 - Production on Tue Nov 7 10:29:17 2023
+Version 19.3.0.0.0
+
+Copyright (c) 1982, 2019, Oracle.  All rights reserved.
+
+
+Connected to:
+Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Version 19.3.0.0.0
+
+SQL> 
+SQL> 
+SQL> select flashback_on from v$database;
+
+FLASHBACK_ON
+------------------
+NO
+
+SQL> 
+SQL> 
+SQL> alter database flashback on;
+alter database flashback on
+*
+ERROR at line 1:
+ORA-38706: Cannot turn on FLASHBACK DATABASE logging.
+ORA-38707: Media recovery is not enabled.
+
+
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> archive log list
+Database log mode	       No Archive Mode
+Automatic archival	       Disabled
+Archive destination	       USE_DB_RECOVERY_FILE_DEST
+Oldest online log sequence     7
+Current log sequence	       9
+SQL> 
+SQL> shut immediate;
+Database closed.
+Database dismounted.
+ORACLE instance shut down.
+SQL> 
+SQL> 
+SQL> 
+SQL> startup mount;
+ORACLE instance started.
+
+Total System Global Area 1744827312 bytes
+Fixed Size		    8897456 bytes
+Variable Size		  520093696 bytes
+Database Buffers	 1207959552 bytes
+Redo Buffers		    7876608 bytes
+Database mounted.
+SQL> 
+SQL> alter database archivelog;
+
+Database altered.
+
+SQL> 
+SQL> 
+SQL> alter database flashback on;
+
+Database altered.
+
+SQL> 
+SQL> 
+SQL> alter database open;
+
+Database altered.
+
+SQL> exit
+Disconnected from Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Version 19.3.0.0.0
+[oracle@srv1 datapump]$ 
+[oracle@srv1 datapump]$ 
+[oracle@srv1 datapump]$ date
+Tue Nov  7 10:31:22 IST 2023
+[oracle@srv1 datapump]$ 
+[oracle@srv1 datapump]$ sqlplus soe/soe
+
+SQL*Plus: Release 19.0.0.0.0 - Production on Tue Nov 7 10:31:30 2023
+Version 19.3.0.0.0
+
+Copyright (c) 1982, 2019, Oracle.  All rights reserved.
+
+ERROR:
+ORA-28002: the password will expire within 7 days
+
+
+Last Successful login time: Tue Nov 07 2023 10:23:30 +05:30
+
+Connected to:
+Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Version 19.3.0.0.0
+
+SQL> 
+SQL> 
+SQL> create orders_test as select * from orders;
+create orders_test as select * from orders
+       *
+ERROR at line 1:
+ORA-00901: invalid CREATE command
+
+
+SQL> create table orders_test as select * from orders;
+
+Table created.
+
+SQL> select count(*) from orders_test;
+
+  COUNT(*)
+----------
+   1352070
+
+SQL> exit
+Disconnected from Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Version 19.3.0.0.0
+[oracle@srv1 datapump]$ date
+Tue Nov  7 10:32:29 IST 2023
+[oracle@srv1 datapump]$ 
+[oracle@srv1 datapump]$ 
+[oracle@srv1 datapump]$ sqlplus soe/soe
+
+SQL*Plus: Release 19.0.0.0.0 - Production on Tue Nov 7 10:32:37 2023
+Version 19.3.0.0.0
+
+Copyright (c) 1982, 2019, Oracle.  All rights reserved.
+
+ERROR:
+ORA-28002: the password will expire within 7 days
+
+
+Last Successful login time: Tue Nov 07 2023 10:31:30 +05:30
+
+Connected to:
+Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Version 19.3.0.0.0
+
+SQL> select * from orders_test where rownum<=10
+  2  ;
+
+  ORDER_ID
+----------
+ORDER_DATE
+---------------------------------------------------------------------------
+ORDER_MO CUSTOMER_ID ORDER_STATUS ORDER_TOTAL SALES_REP_ID PROMOTION_ID
+-------- ----------- ------------ ----------- ------------ ------------
+WAREHOUSE_ID DELIVERY_TYPE   COST_OF_DELIVERY WAIT_TILL_ALL_A
+------------ --------------- ---------------- ---------------
+DELIVERY_ADDRESS_ID CUSTOMER_CLASS		      CARD_ID INVOICE_ADDRESS_ID
+------------------- ------------------------------ ---------- ------------------
+     42547
+24-APR-10 04.21.29.000000 AM
+online		8404		8	10770
+
+  ORDER_ID
+----------
+ORDER_DATE
+---------------------------------------------------------------------------
+ORDER_MO CUSTOMER_ID ORDER_STATUS ORDER_TOTAL SALES_REP_ID PROMOTION_ID
+-------- ----------- ------------ ----------- ------------ ------------
+WAREHOUSE_ID DELIVERY_TYPE   COST_OF_DELIVERY WAIT_TILL_ALL_A
+------------ --------------- ---------------- ---------------
+DELIVERY_ADDRESS_ID CUSTOMER_CLASS		      CARD_ID INVOICE_ADDRESS_ID
+------------------- ------------------------------ ---------- ------------------
+	 958 Standard			    3 ship_asap
+	      15735 Regular				19592		   15735
+
+
+  ORDER_ID
+----------
+ORDER_DATE
+---------------------------------------------------------------------------
+ORDER_MO CUSTOMER_ID ORDER_STATUS ORDER_TOTAL SALES_REP_ID PROMOTION_ID
+-------- ----------- ------------ ----------- ------------ ------------
+WAREHOUSE_ID DELIVERY_TYPE   COST_OF_DELIVERY WAIT_TILL_ALL_A
+------------ --------------- ---------------- ---------------
+DELIVERY_ADDRESS_ID CUSTOMER_CLASS		      CARD_ID INVOICE_ADDRESS_ID
+------------------- ------------------------------ ---------- ------------------
+     42548
+24-APR-10 04.25.48.000000 AM
+online	       11804		2	 3140
+
+  ORDER_ID
+----------
+ORDER_DATE
+---------------------------------------------------------------------------
+ORDER_MO CUSTOMER_ID ORDER_STATUS ORDER_TOTAL SALES_REP_ID PROMOTION_ID
+-------- ----------- ------------ ----------- ------------ ------------
+WAREHOUSE_ID DELIVERY_TYPE   COST_OF_DELIVERY WAIT_TILL_ALL_A
+------------ --------------- ---------------- ---------------
+DELIVERY_ADDRESS_ID CUSTOMER_CLASS		      CARD_ID INVOICE_ADDRESS_ID
+------------------- ------------------------------ ---------- ------------------
+	 134 Standard			    4 ship_asap
+	      14266 Occasional				12769		   14266
+
+
+  ORDER_ID
+----------
+ORDER_DATE
+---------------------------------------------------------------------------
+ORDER_MO CUSTOMER_ID ORDER_STATUS ORDER_TOTAL SALES_REP_ID PROMOTION_ID
+-------- ----------- ------------ ----------- ------------ ------------
+WAREHOUSE_ID DELIVERY_TYPE   COST_OF_DELIVERY WAIT_TILL_ALL_A
+------------ --------------- ---------------- ---------------
+DELIVERY_ADDRESS_ID CUSTOMER_CLASS		      CARD_ID INVOICE_ADDRESS_ID
+------------------- ------------------------------ ---------- ------------------
+     42549
+24-APR-10 04.29.25.000000 AM
+online	       12449		6	14101
+
+  ORDER_ID
+----------
+ORDER_DATE
+---------------------------------------------------------------------------
+ORDER_MO CUSTOMER_ID ORDER_STATUS ORDER_TOTAL SALES_REP_ID PROMOTION_ID
+-------- ----------- ------------ ----------- ------------ ------------
+WAREHOUSE_ID DELIVERY_TYPE   COST_OF_DELIVERY WAIT_TILL_ALL_A
+------------ --------------- ---------------- ---------------
+DELIVERY_ADDRESS_ID CUSTOMER_CLASS		      CARD_ID INVOICE_ADDRESS_ID
+------------------- ------------------------------ ---------- ------------------
+	   6 Standard			    4 ship_asap
+	       6831 Prime				23879		    6831
+
+
+  ORDER_ID
+----------
+ORDER_DATE
+---------------------------------------------------------------------------
+ORDER_MO CUSTOMER_ID ORDER_STATUS ORDER_TOTAL SALES_REP_ID PROMOTION_ID
+-------- ----------- ------------ ----------- ------------ ------------
+WAREHOUSE_ID DELIVERY_TYPE   COST_OF_DELIVERY WAIT_TILL_ALL_A
+------------ --------------- ---------------- ---------------
+DELIVERY_ADDRESS_ID CUSTOMER_CLASS		      CARD_ID INVOICE_ADDRESS_ID
+------------------- ------------------------------ ---------- ------------------
+     42550
+24-APR-10 04.32.43.000000 AM
+online		3562		3	14573
+
+  ORDER_ID
+----------
+ORDER_DATE
+---------------------------------------------------------------------------
+ORDER_MO CUSTOMER_ID ORDER_STATUS ORDER_TOTAL SALES_REP_ID PROMOTION_ID
+-------- ----------- ------------ ----------- ------------ ------------
+WAREHOUSE_ID DELIVERY_TYPE   COST_OF_DELIVERY WAIT_TILL_ALL_A
+------------ --------------- ---------------- ---------------
+DELIVERY_ADDRESS_ID CUSTOMER_CLASS		      CARD_ID INVOICE_ADDRESS_ID
+------------------- ------------------------------ ---------- ------------------
+	 244 Standard			    4 ship_asap
+		173 Prime				  486		     173
+
+
+  ORDER_ID
+----------
+ORDER_DATE
+---------------------------------------------------------------------------
+ORDER_MO CUSTOMER_ID ORDER_STATUS ORDER_TOTAL SALES_REP_ID PROMOTION_ID
+-------- ----------- ------------ ----------- ------------ ------------
+WAREHOUSE_ID DELIVERY_TYPE   COST_OF_DELIVERY WAIT_TILL_ALL_A
+------------ --------------- ---------------- ---------------
+DELIVERY_ADDRESS_ID CUSTOMER_CLASS		      CARD_ID INVOICE_ADDRESS_ID
+------------------- ------------------------------ ---------- ------------------
+     42551
+24-APR-10 04.36.48.000000 AM
+online		  18		3	12947
+
+  ORDER_ID
+----------
+ORDER_DATE
+---------------------------------------------------------------------------
+ORDER_MO CUSTOMER_ID ORDER_STATUS ORDER_TOTAL SALES_REP_ID PROMOTION_ID
+-------- ----------- ------------ ----------- ------------ ------------
+WAREHOUSE_ID DELIVERY_TYPE   COST_OF_DELIVERY WAIT_TILL_ALL_A
+------------ --------------- ---------------- ---------------
+DELIVERY_ADDRESS_ID CUSTOMER_CLASS		      CARD_ID INVOICE_ADDRESS_ID
+------------------- ------------------------------ ---------- ------------------
+	 162 Standard			    4 ship_asap
+	      18312 Occasional				21200		   18312
+
+
+  ORDER_ID
+----------
+ORDER_DATE
+---------------------------------------------------------------------------
+ORDER_MO CUSTOMER_ID ORDER_STATUS ORDER_TOTAL SALES_REP_ID PROMOTION_ID
+-------- ----------- ------------ ----------- ------------ ------------
+WAREHOUSE_ID DELIVERY_TYPE   COST_OF_DELIVERY WAIT_TILL_ALL_A
+------------ --------------- ---------------- ---------------
+DELIVERY_ADDRESS_ID CUSTOMER_CLASS		      CARD_ID INVOICE_ADDRESS_ID
+------------------- ------------------------------ ---------- ------------------
+     42552
+24-APR-10 04.41.08.000000 AM
+online		7341		2	 5812
+
+  ORDER_ID
+----------
+ORDER_DATE
+---------------------------------------------------------------------------
+ORDER_MO CUSTOMER_ID ORDER_STATUS ORDER_TOTAL SALES_REP_ID PROMOTION_ID
+-------- ----------- ------------ ----------- ------------ ------------
+WAREHOUSE_ID DELIVERY_TYPE   COST_OF_DELIVERY WAIT_TILL_ALL_A
+------------ --------------- ---------------- ---------------
+DELIVERY_ADDRESS_ID CUSTOMER_CLASS		      CARD_ID INVOICE_ADDRESS_ID
+------------------- ------------------------------ ---------- ------------------
+	 767 Standard			    3 ship_asap
+	       8094 Business				 9062		    8094
+
+
+  ORDER_ID
+----------
+ORDER_DATE
+---------------------------------------------------------------------------
+ORDER_MO CUSTOMER_ID ORDER_STATUS ORDER_TOTAL SALES_REP_ID PROMOTION_ID
+-------- ----------- ------------ ----------- ------------ ------------
+WAREHOUSE_ID DELIVERY_TYPE   COST_OF_DELIVERY WAIT_TILL_ALL_A
+------------ --------------- ---------------- ---------------
+DELIVERY_ADDRESS_ID CUSTOMER_CLASS		      CARD_ID INVOICE_ADDRESS_ID
+------------------- ------------------------------ ---------- ------------------
+     42553
+24-APR-10 04.44.25.000000 AM
+online		3187		3	 5108
+
+  ORDER_ID
+----------
+ORDER_DATE
+---------------------------------------------------------------------------
+ORDER_MO CUSTOMER_ID ORDER_STATUS ORDER_TOTAL SALES_REP_ID PROMOTION_ID
+-------- ----------- ------------ ----------- ------------ ------------
+WAREHOUSE_ID DELIVERY_TYPE   COST_OF_DELIVERY WAIT_TILL_ALL_A
+------------ --------------- ---------------- ---------------
+DELIVERY_ADDRESS_ID CUSTOMER_CLASS		      CARD_ID INVOICE_ADDRESS_ID
+------------------- ------------------------------ ---------- ------------------
+	 279 Standard			    1 ship_asap
+	      14414 Occasional				27803		   14414
+
+
+  ORDER_ID
+----------
+ORDER_DATE
+---------------------------------------------------------------------------
+ORDER_MO CUSTOMER_ID ORDER_STATUS ORDER_TOTAL SALES_REP_ID PROMOTION_ID
+-------- ----------- ------------ ----------- ------------ ------------
+WAREHOUSE_ID DELIVERY_TYPE   COST_OF_DELIVERY WAIT_TILL_ALL_A
+------------ --------------- ---------------- ---------------
+DELIVERY_ADDRESS_ID CUSTOMER_CLASS		      CARD_ID INVOICE_ADDRESS_ID
+------------------- ------------------------------ ---------- ------------------
+     42554
+24-APR-10 04.47.56.000000 AM
+online		8325		5	10062
+
+  ORDER_ID
+----------
+ORDER_DATE
+---------------------------------------------------------------------------
+ORDER_MO CUSTOMER_ID ORDER_STATUS ORDER_TOTAL SALES_REP_ID PROMOTION_ID
+-------- ----------- ------------ ----------- ------------ ------------
+WAREHOUSE_ID DELIVERY_TYPE   COST_OF_DELIVERY WAIT_TILL_ALL_A
+------------ --------------- ---------------- ---------------
+DELIVERY_ADDRESS_ID CUSTOMER_CLASS		      CARD_ID INVOICE_ADDRESS_ID
+------------------- ------------------------------ ---------- ------------------
+	 635 Standard			    4 ship_asap
+	      11001 Occasional				27651		   11001
+
+
+  ORDER_ID
+----------
+ORDER_DATE
+---------------------------------------------------------------------------
+ORDER_MO CUSTOMER_ID ORDER_STATUS ORDER_TOTAL SALES_REP_ID PROMOTION_ID
+-------- ----------- ------------ ----------- ------------ ------------
+WAREHOUSE_ID DELIVERY_TYPE   COST_OF_DELIVERY WAIT_TILL_ALL_A
+------------ --------------- ---------------- ---------------
+DELIVERY_ADDRESS_ID CUSTOMER_CLASS		      CARD_ID INVOICE_ADDRESS_ID
+------------------- ------------------------------ ---------- ------------------
+     42555
+24-APR-10 04.51.37.000000 AM
+online		5866		8	 5108
+
+  ORDER_ID
+----------
+ORDER_DATE
+---------------------------------------------------------------------------
+ORDER_MO CUSTOMER_ID ORDER_STATUS ORDER_TOTAL SALES_REP_ID PROMOTION_ID
+-------- ----------- ------------ ----------- ------------ ------------
+WAREHOUSE_ID DELIVERY_TYPE   COST_OF_DELIVERY WAIT_TILL_ALL_A
+------------ --------------- ---------------- ---------------
+DELIVERY_ADDRESS_ID CUSTOMER_CLASS		      CARD_ID INVOICE_ADDRESS_ID
+------------------- ------------------------------ ---------- ------------------
+	 602 Standard			    4 ship_asap
+	       1425 Regular				20068		    1425
+
+
+  ORDER_ID
+----------
+ORDER_DATE
+---------------------------------------------------------------------------
+ORDER_MO CUSTOMER_ID ORDER_STATUS ORDER_TOTAL SALES_REP_ID PROMOTION_ID
+-------- ----------- ------------ ----------- ------------ ------------
+WAREHOUSE_ID DELIVERY_TYPE   COST_OF_DELIVERY WAIT_TILL_ALL_A
+------------ --------------- ---------------- ---------------
+DELIVERY_ADDRESS_ID CUSTOMER_CLASS		      CARD_ID INVOICE_ADDRESS_ID
+------------------- ------------------------------ ---------- ------------------
+     42556
+24-APR-10 04.54.48.000000 AM
+online		7701		1	 7458
+
+  ORDER_ID
+----------
+ORDER_DATE
+---------------------------------------------------------------------------
+ORDER_MO CUSTOMER_ID ORDER_STATUS ORDER_TOTAL SALES_REP_ID PROMOTION_ID
+-------- ----------- ------------ ----------- ------------ ------------
+WAREHOUSE_ID DELIVERY_TYPE   COST_OF_DELIVERY WAIT_TILL_ALL_A
+------------ --------------- ---------------- ---------------
+DELIVERY_ADDRESS_ID CUSTOMER_CLASS		      CARD_ID INVOICE_ADDRESS_ID
+------------------- ------------------------------ ---------- ------------------
+	 276 Standard			    3 ship_asap
+	      20149 Business				21187		   20149
+
+
+10 rows selected.
+
+SQL> select distinct CUSTOMER_CLASS from orders_test;
+
+CUSTOMER_CLASS
+------------------------------
+Prime
+Regular
+Business
+Occasional
+
+SQL> 
+SQL> 
+SQL> delete from orders_test where CUSTOMER_CLASS='Prime';
+
+270295 rows deleted.
+
+SQL> commit;
+
+Commit complete.
+
+SQL> 
+SQL> select count(*) from orders_test;
+
+  COUNT(*)
+----------
+   1081775
+
+SQL> 
+SQL> exit
+Disconnected from Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Version 19.3.0.0.0
+[oracle@srv1 datapump]$ date
+Tue Nov  7 10:34:28 IST 2023
+[oracle@srv1 datapump]$ 
+[oracle@srv1 datapump]$ 
+[oracle@srv1 datapump]$ 
+[oracle@srv1 datapump]$ 
+[oracle@srv1 datapump]$ 
+[oracle@srv1 datapump]$ 
+[oracle@srv1 datapump]$ vi import.par
+[oracle@srv1 datapump]$ 
+[oracle@srv1 datapump]$ 
+[oracle@srv1 datapump]$ vi export.par
+[oracle@srv1 datapump]$ 
+[oracle@srv1 datapump]$ 
+[oracle@srv1 datapump]$ expdp parfile=export.par
+
+Export: Release 19.0.0.0.0 - Production on Tue Nov 7 10:37:47 2023
+Version 19.3.0.0.0
+
+Copyright (c) 1982, 2019, Oracle and/or its affiliates.  All rights reserved.
+
+Username: / as sysdba
+Password: 
+
+Connected to: Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Starting "SYS"."SYS_EXPORT_TABLE_01":  /******** AS SYSDBA parfile=export.par 
+Processing object type TABLE_EXPORT/TABLE/TABLE_DATA
+Processing object type TABLE_EXPORT/TABLE/STATISTICS/TABLE_STATISTICS
+Processing object type TABLE_EXPORT/TABLE/STATISTICS/MARKER
+Processing object type TABLE_EXPORT/TABLE/TABLE
+. . exported "SOE"."ORDERS_TEST"                         114.9 MB 1352070 rows
+Master table "SYS"."SYS_EXPORT_TABLE_01" successfully loaded/unloaded
+******************************************************************************
+Dump file set for SYS.SYS_EXPORT_TABLE_01 is:
+  /u01/datapump/soe_ORDERS_071123.dmp
+Job "SYS"."SYS_EXPORT_TABLE_01" successfully completed at Tue Nov 7 10:38:02 2023 elapsed 0 00:00:09
+
+[oracle@srv1 datapump]$ 
+[oracle@srv1 datapump]$ 
+[oracle@srv1 datapump]$ sqlplus / as sysdba
+
+SQL*Plus: Release 19.0.0.0.0 - Production on Tue Nov 7 10:38:26 2023
+Version 19.3.0.0.0
+
+Copyright (c) 1982, 2019, Oracle.  All rights reserved.
+
+
+Connected to:
+Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Version 19.3.0.0.0
+
+SQL> 
+SQL> 
+SQL> select current_Scn from v$database;
+
+CURRENT_SCN
+-----------
+    2531067
+
+SQL> exit
+Disconnected from Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Version 19.3.0.0.0
+[oracle@srv1 datapump]$ 
+[oracle@srv1 datapump]$ sqlplus soe/soe
+
+SQL*Plus: Release 19.0.0.0.0 - Production on Tue Nov 7 10:38:44 2023
+Version 19.3.0.0.0
+
+Copyright (c) 1982, 2019, Oracle.  All rights reserved.
+
+ERROR:
+ORA-28002: the password will expire within 7 days
+
+
+Last Successful login time: Tue Nov 07 2023 10:32:37 +05:30
+
+Connected to:
+Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Version 19.3.0.0.0
+
+SQL> 
+SQL> delete from orders_test where customer_class='BUSINESS';
+
+0 rows deleted.
+
+SQL> 
+SQL> 
+SQL> delete from orders_test where customer_class='Business';
+
+133825 rows deleted.
+
+SQL> commit;
+
+Commit complete.
+
+SQL> 
+SQL> select count(*) from orders_test;
+
+  COUNT(*)
+----------
+    947950
+
+SQL> exit
+Disconnected from Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Version 19.3.0.0.0
+[oracle@srv1 datapump]$ 
+[oracle@srv1 datapump]$ 
+[oracle@srv1 datapump]$ 
+[oracle@srv1 datapump]$ sqlplus / as sysdba
+
+SQL*Plus: Release 19.0.0.0.0 - Production on Tue Nov 7 10:41:17 2023
+Version 19.3.0.0.0
+
+Copyright (c) 1982, 2019, Oracle.  All rights reserved.
+
+
+Connected to:
+Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Version 19.3.0.0.0
+
+SQL> 
+SQL> select current_scn from v$database;
+
+CURRENT_SCN
+-----------
+    2531206
+
+SQL> exit
+Disconnected from Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Version 19.3.0.0.0
+[oracle@srv1 datapump]$ 
+[oracle@srv1 datapump]$ expdp directory=datapump_dir dumpfile=soe_ORDERS_TEST.dmp logfile=soe_ORDERS_TEST.log tables=soe.ORDERS_TEST flashback_scn=2531067
+
+Export: Release 19.0.0.0.0 - Production on Tue Nov 7 10:41:56 2023
+Version 19.3.0.0.0
+
+Copyright (c) 1982, 2019, Oracle and/or its affiliates.  All rights reserved.
+
+Username: / as sysdba
+Password: 
+
+Connected to: Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Starting "SYS"."SYS_EXPORT_TABLE_01":  /******** AS SYSDBA directory=datapump_dir dumpfile=soe_ORDERS_TEST.dmp logfile=soe_ORDERS_TEST.log tables=soe.ORDERS_TEST flashback_scn=2531067 
+Processing object type TABLE_EXPORT/TABLE/TABLE_DATA
+Processing object type TABLE_EXPORT/TABLE/STATISTICS/TABLE_STATISTICS
+Processing object type TABLE_EXPORT/TABLE/STATISTICS/MARKER
+Processing object type TABLE_EXPORT/TABLE/TABLE
+. . exported "SOE"."ORDERS_TEST"                         92.88 MB 1081775 rows
+Master table "SYS"."SYS_EXPORT_TABLE_01" successfully loaded/unloaded
+******************************************************************************
+Dump file set for SYS.SYS_EXPORT_TABLE_01 is:
+  /u01/datapump/soe_ORDERS_TEST.dmp
+Job "SYS"."SYS_EXPORT_TABLE_01" successfully completed at Tue Nov 7 10:42:09 2023 elapsed 0 00:00:08
+
+[oracle@srv1 datapump]$ 
+[oracle@srv1 datapump]$ 
+[oracle@srv1 datapump]$ 
+[oracle@srv1 datapump]$ 
+[oracle@srv1 datapump]$ 
+[oracle@srv1 datapump]$ cd /u01/datapump
+[oracle@srv1 datapump]$ 
+[oracle@srv1 datapump]$ mkdir -p /u01/datapump2
+[oracle@srv1 datapump]$ mkdir -p /u01/datapump3
+[oracle@srv1 datapump]$ 
+[oracle@srv1 datapump]$ 
+[oracle@srv1 datapump]$ 
+[oracle@srv1 datapump]$ sqlplus / as sysdba
+
+SQL*Plus: Release 19.0.0.0.0 - Production on Tue Nov 7 10:43:58 2023
+Version 19.3.0.0.0
+
+Copyright (c) 1982, 2019, Oracle.  All rights reserved.
+
+
+Connected to:
+Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Version 19.3.0.0.0
+
+SQL> 
+SQL> create or replace directory datapump_dir1 as '/u01/datapump2';
+
+Directory created.
+
+SQL> 
+SQL> create or replace directory datapump_dir2 as '/u01/datapump3';
+
+Directory created.
+
+SQL> 
+SQL> exit 
+Disconnected from Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Version 19.3.0.0.0
+[oracle@srv1 datapump]$ expdp dumpfile=DATAPUMP_DIR:FULL_%U.dmp,DATAPUMP_DIR1:FULL_%U.dmp,DATAPUMP_DIR2:FULL_%U.dmp
+
+Export: Release 19.0.0.0.0 - Production on Tue Nov 7 10:49:12 2023
+Version 19.3.0.0.0
+
+Copyright (c) 1982, 2019, Oracle and/or its affiliates.  All rights reserved.
+
+Username: / as sysdba
+UDE-00002: invalid username or password
+
+Username: 
+UDE-00005: unexpected End-Of-File encountered while reading input
+
+
+[oracle@srv1 datapump]$ expdp dumpfile=DATAPUMP_DIR:FULL_%U.dmp,DATAPUMP_DIR1:FULL_%U.dmp,DATAPUMP_DIR2:FULL_%U.dmp
+
+Export: Release 19.0.0.0.0 - Production on Tue Nov 7 10:49:31 2023
+Version 19.3.0.0.0
+
+Copyright (c) 1982, 2019, Oracle and/or its affiliates.  All rights reserved.
+
+Username: / as sysdba^[[D
+UDE-00002: invalid username or password
+
+Username: 
+UDE-00005: unexpected End-Of-File encountered while reading input
+
+
+[oracle@srv1 datapump]$ 
+[oracle@srv1 datapump]$ 
+[oracle@srv1 datapump]$ expdp dumpfile=DATAPUMP_DIR:FULL_%U.dmp,DATAPUMP_DIR1:FULL_%U.dmp,DATAPUMP_DIR2:FULL_%U.dmp
+
+Export: Release 19.0.0.0.0 - Production on Tue Nov 7 10:49:37 2023
+Version 19.3.0.0.0
+
+Copyright (c) 1982, 2019, Oracle and/or its affiliates.  All rights reserved.
+
+Username: / as sysdba
+Password: 
+
+Connected to: Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Starting "SYS"."SYS_EXPORT_SCHEMA_01":  /******** AS SYSDBA dumpfile=DATAPUMP_DIR:FULL_%U.dmp,DATAPUMP_DIR1:FULL_%U.dmp,DATAPUMP_DIR2:FULL_%U.dmp 
+ORA-31655: no data or metadata objects selected for job
+Job "SYS"."SYS_EXPORT_SCHEMA_01" completed with 1 error(s) at Tue Nov 7 10:49:52 2023 elapsed 0 00:00:11
+
+[oracle@srv1 datapump]$ expdp dumpfile=DATAPUMP_DIR:FULL_%U.dmp,DATAPUMP_DIR1:FULL_%U.dmp,DATAPUMP_DIR2:FULL_%U.dmp logfile=FULL_01.log  directory=DATAPUMP_DIR FULL=Y
+
+Export: Release 19.0.0.0.0 - Production on Tue Nov 7 10:50:22 2023
+Version 19.3.0.0.0
+
+Copyright (c) 1982, 2019, Oracle and/or its affiliates.  All rights reserved.
+
+Username: / as sysdba
+Password: 
+
+Connected to: Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Starting "SYS"."SYS_EXPORT_FULL_01":  /******** AS SYSDBA dumpfile=DATAPUMP_DIR:FULL_%U.dmp,DATAPUMP_DIR1:FULL_%U.dmp,DATAPUMP_DIR2:FULL_%U.dmp logfile=FULL_01.log directory=DATAPUMP_DIR FULL=Y 
+Processing object type DATABASE_EXPORT/EARLY_OPTIONS/VIEWS_AS_TABLES/TABLE_DATA
+Processing object type DATABASE_EXPORT/NORMAL_OPTIONS/TABLE_DATA
+Processing object type DATABASE_EXPORT/NORMAL_OPTIONS/VIEWS_AS_TABLES/TABLE_DATA
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/TABLE_DATA
+Processing object type DATABASE_EXPORT/SCHEMA/PACKAGE_BODIES/PACKAGE/PACKAGE_BODY
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/INDEX/STATISTICS/INDEX_STATISTICS
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/INDEX/STATISTICS/FUNCTIONAL_INDEX/INDEX_STATISTICS
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/INDEX/STATISTICS/BITMAP_INDEX/INDEX_STATISTICS
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/STATISTICS/TABLE_STATISTICS
+Processing object type DATABASE_EXPORT/STATISTICS/MARKER
+Processing object type DATABASE_EXPORT/PRE_SYSTEM_IMPCALLOUT/MARKER
+Processing object type DATABASE_EXPORT/PRE_INSTANCE_IMPCALLOUT/MARKER
+Processing object type DATABASE_EXPORT/TABLESPACE
+Processing object type DATABASE_EXPORT/PROFILE
+Processing object type DATABASE_EXPORT/SCHEMA/USER
+Processing object type DATABASE_EXPORT/ROLE
+Processing object type DATABASE_EXPORT/RADM_FPTM
+Processing object type DATABASE_EXPORT/GRANT/SYSTEM_GRANT/PROC_SYSTEM_GRANT
+Processing object type DATABASE_EXPORT/SCHEMA/GRANT/SYSTEM_GRANT
+Processing object type DATABASE_EXPORT/SCHEMA/ROLE_GRANT
+Processing object type DATABASE_EXPORT/SCHEMA/DEFAULT_ROLE
+Processing object type DATABASE_EXPORT/SCHEMA/ON_USER_GRANT
+Processing object type DATABASE_EXPORT/SCHEMA/TABLESPACE_QUOTA
+Processing object type DATABASE_EXPORT/RESOURCE_COST
+Processing object type DATABASE_EXPORT/TRUSTED_DB_LINK
+Processing object type DATABASE_EXPORT/SCHEMA/SEQUENCE/SEQUENCE
+Processing object type DATABASE_EXPORT/DIRECTORY/DIRECTORY
+Processing object type DATABASE_EXPORT/SYSTEM_PROCOBJACT/PRE_SYSTEM_ACTIONS/PROCACT_SYSTEM
+Processing object type DATABASE_EXPORT/SYSTEM_PROCOBJACT/PROCOBJ
+Processing object type DATABASE_EXPORT/SYSTEM_PROCOBJACT/POST_SYSTEM_ACTIONS/PROCACT_SYSTEM
+Processing object type DATABASE_EXPORT/SCHEMA/PROCACT_SCHEMA
+Processing object type DATABASE_EXPORT/EARLY_OPTIONS/VIEWS_AS_TABLES/TABLE
+Processing object type DATABASE_EXPORT/EARLY_POST_INSTANCE_IMPCALLOUT/MARKER
+Processing object type DATABASE_EXPORT/NORMAL_OPTIONS/TABLE
+Processing object type DATABASE_EXPORT/NORMAL_OPTIONS/VIEWS_AS_TABLES/TABLE
+Processing object type DATABASE_EXPORT/NORMAL_POST_INSTANCE_IMPCALLOUT/MARKER
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/TABLE
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/IDENTITY_COLUMN
+Processing object type DATABASE_EXPORT/SCHEMA/PACKAGE/PACKAGE_SPEC
+Processing object type DATABASE_EXPORT/SCHEMA/PACKAGE/CODE_BASE_GRANT
+Processing object type DATABASE_EXPORT/SCHEMA/FUNCTION/FUNCTION
+Processing object type DATABASE_EXPORT/SCHEMA/PROCEDURE/PROCEDURE
+Processing object type DATABASE_EXPORT/SCHEMA/PACKAGE/COMPILE_PACKAGE/PACKAGE_SPEC/ALTER_PACKAGE_SPEC
+Processing object type DATABASE_EXPORT/SCHEMA/FUNCTION/ALTER_FUNCTION
+Processing object type DATABASE_EXPORT/SCHEMA/PROCEDURE/ALTER_PROCEDURE
+Processing object type DATABASE_EXPORT/SCHEMA/VIEW/VIEW
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/INDEX/INDEX
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/INDEX/FUNCTIONAL_INDEX/INDEX
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/CONSTRAINT/CONSTRAINT
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/CONSTRAINT/REF_CONSTRAINT
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/INDEX/BITMAP_INDEX/INDEX
+Processing object type DATABASE_EXPORT/FINAL_POST_INSTANCE_IMPCALLOUT/MARKER
+Processing object type DATABASE_EXPORT/SCHEMA/POST_SCHEMA/PROCACT_SCHEMA
+Processing object type DATABASE_EXPORT/AUDIT_UNIFIED/AUDIT_POLICY_ENABLE
+Processing object type DATABASE_EXPORT/POST_SYSTEM_IMPCALLOUT/MARKER
+. . exported "SYS"."KU$_USER_MAPPING_VIEW"               6.070 KB      37 rows
+. . exported "SYSTEM"."REDO_DB"                          25.59 KB       1 rows
+. . exported "WMSYS"."WM$WORKSPACES_TABLE$"              12.10 KB       1 rows
+. . exported "WMSYS"."WM$HINT_TABLE$"                    9.984 KB      97 rows
+. . exported "LBACSYS"."OLS$INSTALLATIONS"               6.960 KB       2 rows
+. . exported "WMSYS"."WM$WORKSPACE_PRIV_TABLE$"          7.078 KB      11 rows
+. . exported "SYS"."DAM_CONFIG_PARAM$"                   6.531 KB      14 rows
+. . exported "SYS"."TSDP_SUBPOL$"                        6.328 KB       1 rows
+. . exported "WMSYS"."WM$NEXTVER_TABLE$"                 6.375 KB       1 rows
+. . exported "LBACSYS"."OLS$PROPS"                       6.234 KB       5 rows
+. . exported "WMSYS"."WM$ENV_VARS$"                      6.015 KB       3 rows
+. . exported "SYS"."TSDP_PARAMETER$"                     5.953 KB       1 rows
+. . exported "SYS"."TSDP_POLICY$"                        5.921 KB       1 rows
+. . exported "WMSYS"."WM$VERSION_HIERARCHY_TABLE$"       5.984 KB       1 rows
+. . exported "WMSYS"."WM$EVENTS_INFO$"                   5.812 KB      12 rows
+. . exported "LBACSYS"."OLS$AUDIT_ACTIONS"               5.757 KB       8 rows
+. . exported "LBACSYS"."OLS$DIP_EVENTS"                  5.539 KB       2 rows
+. . exported "AUDSYS"."AUD$UNIFIED":"AUD_UNIFIED_P0"         0 KB       0 rows
+. . exported "AUDSYS"."AUD$UNIFIED":"SYS_P181"           147.5 KB     189 rows
+. . exported "AUDSYS"."AUD$UNIFIED":"SYS_P241"           52.27 KB       3 rows
+. . exported "LBACSYS"."OLS$AUDIT"                           0 KB       0 rows
+. . exported "LBACSYS"."OLS$COMPARTMENTS"                    0 KB       0 rows
+. . exported "LBACSYS"."OLS$DIP_DEBUG"                       0 KB       0 rows
+. . exported "LBACSYS"."OLS$GROUPS"                          0 KB       0 rows
+. . exported "LBACSYS"."OLS$LAB"                             0 KB       0 rows
+. . exported "LBACSYS"."OLS$LEVELS"                          0 KB       0 rows
+. . exported "LBACSYS"."OLS$POL"                             0 KB       0 rows
+. . exported "LBACSYS"."OLS$POLICY_ADMIN"                    0 KB       0 rows
+. . exported "LBACSYS"."OLS$POLS"                            0 KB       0 rows
+. . exported "LBACSYS"."OLS$POLT"                            0 KB       0 rows
+. . exported "LBACSYS"."OLS$PROFILE"                         0 KB       0 rows
+. . exported "LBACSYS"."OLS$PROFILES"                        0 KB       0 rows
+. . exported "LBACSYS"."OLS$PROG"                            0 KB       0 rows
+. . exported "LBACSYS"."OLS$SESSINFO"                        0 KB       0 rows
+. . exported "LBACSYS"."OLS$USER"                            0 KB       0 rows
+. . exported "LBACSYS"."OLS$USER_COMPARTMENTS"               0 KB       0 rows
+. . exported "LBACSYS"."OLS$USER_GROUPS"                     0 KB       0 rows
+. . exported "LBACSYS"."OLS$USER_LEVELS"                     0 KB       0 rows
+. . exported "SYS"."AUD$"                                    0 KB       0 rows
+. . exported "SYS"."DAM_CLEANUP_EVENTS$"                     0 KB       0 rows
+. . exported "SYS"."DAM_CLEANUP_JOBS$"                       0 KB       0 rows
+. . exported "SYS"."TSDP_ASSOCIATION$"                       0 KB       0 rows
+. . exported "SYS"."TSDP_CONDITION$"                         0 KB       0 rows
+. . exported "SYS"."TSDP_FEATURE_POLICY$"                    0 KB       0 rows
+. . exported "SYS"."TSDP_PROTECTION$"                        0 KB       0 rows
+. . exported "SYS"."TSDP_SENSITIVE_DATA$"                    0 KB       0 rows
+. . exported "SYS"."TSDP_SENSITIVE_TYPE$"                    0 KB       0 rows
+. . exported "SYS"."TSDP_SOURCE$"                            0 KB       0 rows
+. . exported "SYSTEM"."REDO_LOG"                             0 KB       0 rows
+. . exported "WMSYS"."WM$BATCH_COMPRESSIBLE_TABLES$"         0 KB       0 rows
+. . exported "WMSYS"."WM$CONSTRAINTS_TABLE$"                 0 KB       0 rows
+. . exported "WMSYS"."WM$CONS_COLUMNS$"                      0 KB       0 rows
+. . exported "WMSYS"."WM$LOCKROWS_INFO$"                     0 KB       0 rows
+. . exported "WMSYS"."WM$MODIFIED_TABLES$"                   0 KB       0 rows
+. . exported "WMSYS"."WM$MP_GRAPH_WORKSPACES_TABLE$"         0 KB       0 rows
+. . exported "WMSYS"."WM$MP_PARENT_WORKSPACES_TABLE$"        0 KB       0 rows
+. . exported "WMSYS"."WM$NESTED_COLUMNS_TABLE$"              0 KB       0 rows
+. . exported "WMSYS"."WM$RESOLVE_WORKSPACES_TABLE$"          0 KB       0 rows
+. . exported "WMSYS"."WM$RIC_LOCKING_TABLE$"                 0 KB       0 rows
+. . exported "WMSYS"."WM$RIC_TABLE$"                         0 KB       0 rows
+. . exported "WMSYS"."WM$RIC_TRIGGERS_TABLE$"                0 KB       0 rows
+. . exported "WMSYS"."WM$UDTRIG_DISPATCH_PROCS$"             0 KB       0 rows
+. . exported "WMSYS"."WM$UDTRIG_INFO$"                       0 KB       0 rows
+. . exported "WMSYS"."WM$VERSION_TABLE$"                     0 KB       0 rows
+. . exported "WMSYS"."WM$VT_ERRORS_TABLE$"                   0 KB       0 rows
+. . exported "WMSYS"."WM$WORKSPACE_SAVEPOINTS_TABLE$"        0 KB       0 rows
+. . exported "MDSYS"."RDF_PARAM$"                        6.515 KB       3 rows
+. . exported "SYS"."AUDTAB$TBS$FOR_EXPORT"               5.953 KB       2 rows
+. . exported "SYS"."DBA_SENSITIVE_DATA"                      0 KB       0 rows
+. . exported "SYS"."DBA_TSDP_POLICY_PROTECTION"              0 KB       0 rows
+. . exported "SYS"."FGA_LOG$FOR_EXPORT"                      0 KB       0 rows
+. . exported "SYS"."NACL$_ACE_EXP"                           0 KB       0 rows
+. . exported "SYS"."NACL$_HOST_EXP"                      6.976 KB       2 rows
+. . exported "SYS"."NACL$_WALLET_EXP"                        0 KB       0 rows
+. . exported "SYS"."SQL$TEXT_DATAPUMP"                       0 KB       0 rows
+. . exported "SYS"."SQL$_DATAPUMP"                           0 KB       0 rows
+. . exported "SYS"."SQLOBJ$AUXDATA_DATAPUMP"                 0 KB       0 rows
+. . exported "SYS"."SQLOBJ$DATA_DATAPUMP"                    0 KB       0 rows
+. . exported "SYS"."SQLOBJ$PLAN_DATAPUMP"                    0 KB       0 rows
+. . exported "SYS"."SQLOBJ$_DATAPUMP"                        0 KB       0 rows
+. . exported "SYSTEM"."SCHEDULER_JOB_ARGS"               8.648 KB       4 rows
+. . exported "SYSTEM"."SCHEDULER_PROGRAM_ARGS"           9.726 KB      13 rows
+. . exported "WMSYS"."WM$EXP_MAP"                        7.718 KB       3 rows
+. . exported "WMSYS"."WM$METADATA_MAP"                       0 KB       0 rows
+. . exported "SOE"."ORDER_ITEMS"                         170.4 MB 3735896 rows
+. . exported "SOE"."ORDERS"                              114.9 MB 1352070 rows
+. . exported "SOE"."ORDERS2"                             114.9 MB 1352070 rows
+. . exported "SOE"."ORDERS_TEST"                         81.58 MB  947950 rows
+. . exported "SOE"."INVENTORIES"                         15.27 MB  902171 rows
+. . exported "SOE"."LOGON"                               9.065 MB  442208 rows
+. . exported "SOE"."CUSTOMERS"                           4.983 MB   45703 rows
+. . exported "SOE"."ADDRESSES"                           4.084 MB   55703 rows
+. . exported "SOE"."CARD_DETAILS"                        2.402 MB   55703 rows
+. . exported "SOE"."PRODUCT_DESCRIPTIONS"                224.1 KB    1000 rows
+. . exported "SOE"."PRODUCT_INFORMATION"                 186.4 KB    1000 rows
+. . exported "SOE"."EMP"                                 51.39 KB     879 rows
+. . exported "SOE"."WAREHOUSES"                          36.03 KB    1000 rows
+. . exported "SOE"."JOB_HISTORY"                         14.60 KB     246 rows
+. . exported "SOE"."JOBS"                                5.976 KB      23 rows
+. . exported "SOE"."ORDERENTRY_METADATA"                 5.609 KB       4 rows
+. . exported "SOE"."DEPT"                                5.632 KB       7 rows
+. . exported "SOE"."V"                                       0 KB       0 rows
+Master table "SYS"."SYS_EXPORT_FULL_01" successfully loaded/unloaded
+******************************************************************************
+Dump file set for SYS.SYS_EXPORT_FULL_01 is:
+  /u01/datapump/FULL_01.dmp
+Job "SYS"."SYS_EXPORT_FULL_01" successfully completed at Tue Nov 7 10:52:21 2023 elapsed 0 00:01:53
+
+[oracle@srv1 datapump]$ expdp dumpfile=DATAPUMP_DIR:FULL_01%U.dmp,DATAPUMP_DIR1:FULL_01%U.dmp,DATAPUMP_DIR2:FULL_01%U.dmp logfile=FULL_01.log  directory=DATAPUMP_DIR,datapump_dir2 FULL=Y
+LRM-00112: multiple values not allowed for parameter 'directory'
+
+[oracle@srv1 datapump]$ 
+[oracle@srv1 datapump]$ expdp dumpfile=DATAPUMP_DIR:FULL_01%U.dmp,DATAPUMP_DIR1:FULL_01%U.dmp,DATAPUMP_DIR2:FULL_01%U.dmp logfile=FULL_01.log  directory=DATAPUMP_DIR FULL=Y parallel=3
+
+Export: Release 19.0.0.0.0 - Production on Tue Nov 7 10:53:19 2023
+Version 19.3.0.0.0
+
+Copyright (c) 1982, 2019, Oracle and/or its affiliates.  All rights reserved.
+
+Username: / as sysdba
+Password: 
+
+Connected to: Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Starting "SYS"."SYS_EXPORT_FULL_01":  /******** AS SYSDBA dumpfile=DATAPUMP_DIR:FULL_01%U.dmp,DATAPUMP_DIR1:FULL_01%U.dmp,DATAPUMP_DIR2:FULL_01%U.dmp logfile=FULL_01.log directory=DATAPUMP_DIR FULL=Y parallel=3 
+Processing object type DATABASE_EXPORT/EARLY_OPTIONS/VIEWS_AS_TABLES/TABLE_DATA
+Processing object type DATABASE_EXPORT/NORMAL_OPTIONS/VIEWS_AS_TABLES/TABLE_DATA
+Processing object type DATABASE_EXPORT/NORMAL_OPTIONS/TABLE_DATA
+Processing object type DATABASE_EXPORT/SCHEMA/PACKAGE_BODIES/PACKAGE/PACKAGE_BODY
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/INDEX/STATISTICS/INDEX_STATISTICS
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/INDEX/STATISTICS/FUNCTIONAL_INDEX/INDEX_STATISTICS
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/INDEX/STATISTICS/BITMAP_INDEX/INDEX_STATISTICS
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/STATISTICS/TABLE_STATISTICS
+Processing object type DATABASE_EXPORT/PRE_SYSTEM_IMPCALLOUT/MARKER
+Processing object type DATABASE_EXPORT/PRE_INSTANCE_IMPCALLOUT/MARKER
+Processing object type DATABASE_EXPORT/TABLESPACE
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/TABLE_DATA
+Processing object type DATABASE_EXPORT/PROFILE
+Processing object type DATABASE_EXPORT/SCHEMA/USER
+Processing object type DATABASE_EXPORT/ROLE
+Processing object type DATABASE_EXPORT/RADM_FPTM
+Processing object type DATABASE_EXPORT/SCHEMA/GRANT/SYSTEM_GRANT
+Processing object type DATABASE_EXPORT/SCHEMA/ROLE_GRANT
+Processing object type DATABASE_EXPORT/GRANT/SYSTEM_GRANT/PROC_SYSTEM_GRANT
+Processing object type DATABASE_EXPORT/SCHEMA/DEFAULT_ROLE
+Processing object type DATABASE_EXPORT/SCHEMA/ON_USER_GRANT
+Processing object type DATABASE_EXPORT/SCHEMA/TABLESPACE_QUOTA
+Processing object type DATABASE_EXPORT/RESOURCE_COST
+Processing object type DATABASE_EXPORT/TRUSTED_DB_LINK
+Processing object type DATABASE_EXPORT/SCHEMA/SEQUENCE/SEQUENCE
+Processing object type DATABASE_EXPORT/DIRECTORY/DIRECTORY
+Processing object type DATABASE_EXPORT/SYSTEM_PROCOBJACT/PRE_SYSTEM_ACTIONS/PROCACT_SYSTEM
+Processing object type DATABASE_EXPORT/SYSTEM_PROCOBJACT/PROCOBJ
+Processing object type DATABASE_EXPORT/STATISTICS/MARKER
+Processing object type DATABASE_EXPORT/SYSTEM_PROCOBJACT/POST_SYSTEM_ACTIONS/PROCACT_SYSTEM
+Processing object type DATABASE_EXPORT/SCHEMA/PROCACT_SCHEMA
+Processing object type DATABASE_EXPORT/EARLY_POST_INSTANCE_IMPCALLOUT/MARKER
+Processing object type DATABASE_EXPORT/EARLY_OPTIONS/VIEWS_AS_TABLES/TABLE
+Processing object type DATABASE_EXPORT/NORMAL_POST_INSTANCE_IMPCALLOUT/MARKER
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/TABLE
+Processing object type DATABASE_EXPORT/NORMAL_OPTIONS/VIEWS_AS_TABLES/TABLE
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/IDENTITY_COLUMN
+Processing object type DATABASE_EXPORT/SCHEMA/PACKAGE/PACKAGE_SPEC
+Processing object type DATABASE_EXPORT/SCHEMA/PACKAGE/CODE_BASE_GRANT
+Processing object type DATABASE_EXPORT/SCHEMA/FUNCTION/FUNCTION
+Processing object type DATABASE_EXPORT/SCHEMA/PROCEDURE/PROCEDURE
+Processing object type DATABASE_EXPORT/SCHEMA/PACKAGE/COMPILE_PACKAGE/PACKAGE_SPEC/ALTER_PACKAGE_SPEC
+Processing object type DATABASE_EXPORT/SCHEMA/FUNCTION/ALTER_FUNCTION
+Processing object type DATABASE_EXPORT/SCHEMA/PROCEDURE/ALTER_PROCEDURE
+Processing object type DATABASE_EXPORT/SCHEMA/VIEW/VIEW
+Processing object type DATABASE_EXPORT/NORMAL_OPTIONS/TABLE
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/INDEX/INDEX
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/INDEX/FUNCTIONAL_INDEX/INDEX
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/CONSTRAINT/CONSTRAINT
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/CONSTRAINT/REF_CONSTRAINT
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/INDEX/BITMAP_INDEX/INDEX
+Processing object type DATABASE_EXPORT/FINAL_POST_INSTANCE_IMPCALLOUT/MARKER
+Processing object type DATABASE_EXPORT/SCHEMA/POST_SCHEMA/PROCACT_SCHEMA
+Processing object type DATABASE_EXPORT/AUDIT_UNIFIED/AUDIT_POLICY_ENABLE
+Processing object type DATABASE_EXPORT/POST_SYSTEM_IMPCALLOUT/MARKER
+. . exported "MDSYS"."RDF_PARAM$"                        6.515 KB       3 rows
+. . exported "SYS"."KU$_USER_MAPPING_VIEW"               6.070 KB      37 rows
+. . exported "SYSTEM"."REDO_DB"                          25.59 KB       1 rows
+. . exported "WMSYS"."WM$WORKSPACES_TABLE$"              12.10 KB       1 rows
+. . exported "WMSYS"."WM$HINT_TABLE$"                    9.984 KB      97 rows
+. . exported "SYS"."AUDTAB$TBS$FOR_EXPORT"               5.953 KB       2 rows
+. . exported "SYS"."DBA_SENSITIVE_DATA"                      0 KB       0 rows
+. . exported "LBACSYS"."OLS$INSTALLATIONS"               6.960 KB       2 rows
+. . exported "SYS"."DBA_TSDP_POLICY_PROTECTION"              0 KB       0 rows
+. . exported "SYS"."FGA_LOG$FOR_EXPORT"                      0 KB       0 rows
+. . exported "WMSYS"."WM$WORKSPACE_PRIV_TABLE$"          7.078 KB      11 rows
+. . exported "SYS"."NACL$_ACE_EXP"                           0 KB       0 rows
+. . exported "SYS"."DAM_CONFIG_PARAM$"                   6.531 KB      14 rows
+. . exported "SYS"."TSDP_SUBPOL$"                        6.328 KB       1 rows
+. . exported "WMSYS"."WM$NEXTVER_TABLE$"                 6.375 KB       1 rows
+. . exported "LBACSYS"."OLS$PROPS"                       6.234 KB       5 rows
+. . exported "SYS"."NACL$_HOST_EXP"                      6.976 KB       2 rows
+. . exported "SYS"."NACL$_WALLET_EXP"                        0 KB       0 rows
+. . exported "SYS"."SQL$TEXT_DATAPUMP"                       0 KB       0 rows
+. . exported "SYS"."SQL$_DATAPUMP"                           0 KB       0 rows
+. . exported "SYS"."SQLOBJ$AUXDATA_DATAPUMP"                 0 KB       0 rows
+. . exported "SYS"."SQLOBJ$DATA_DATAPUMP"                    0 KB       0 rows
+. . exported "WMSYS"."WM$ENV_VARS$"                      6.015 KB       3 rows
+. . exported "SYS"."SQLOBJ$PLAN_DATAPUMP"                    0 KB       0 rows
+. . exported "SYS"."SQLOBJ$_DATAPUMP"                        0 KB       0 rows
+. . exported "SYS"."TSDP_PARAMETER$"                     5.953 KB       1 rows
+. . exported "SYS"."TSDP_POLICY$"                        5.921 KB       1 rows
+. . exported "WMSYS"."WM$VERSION_HIERARCHY_TABLE$"       5.984 KB       1 rows
+. . exported "WMSYS"."WM$EVENTS_INFO$"                   5.812 KB      12 rows
+. . exported "SYSTEM"."SCHEDULER_JOB_ARGS"               8.648 KB       4 rows
+. . exported "LBACSYS"."OLS$AUDIT_ACTIONS"               5.757 KB       8 rows
+. . exported "LBACSYS"."OLS$DIP_EVENTS"                  5.539 KB       2 rows
+. . exported "AUDSYS"."AUD$UNIFIED":"AUD_UNIFIED_P0"         0 KB       0 rows
+. . exported "AUDSYS"."AUD$UNIFIED":"SYS_P181"           147.5 KB     189 rows
+. . exported "AUDSYS"."AUD$UNIFIED":"SYS_P241"           52.27 KB       3 rows
+. . exported "LBACSYS"."OLS$AUDIT"                           0 KB       0 rows
+. . exported "LBACSYS"."OLS$COMPARTMENTS"                    0 KB       0 rows
+. . exported "LBACSYS"."OLS$DIP_DEBUG"                       0 KB       0 rows
+. . exported "LBACSYS"."OLS$GROUPS"                          0 KB       0 rows
+. . exported "LBACSYS"."OLS$LAB"                             0 KB       0 rows
+. . exported "LBACSYS"."OLS$LEVELS"                          0 KB       0 rows
+. . exported "LBACSYS"."OLS$POL"                             0 KB       0 rows
+. . exported "LBACSYS"."OLS$POLICY_ADMIN"                    0 KB       0 rows
+. . exported "LBACSYS"."OLS$POLS"                            0 KB       0 rows
+. . exported "LBACSYS"."OLS$POLT"                            0 KB       0 rows
+. . exported "LBACSYS"."OLS$PROFILE"                         0 KB       0 rows
+. . exported "LBACSYS"."OLS$PROFILES"                        0 KB       0 rows
+. . exported "LBACSYS"."OLS$PROG"                            0 KB       0 rows
+. . exported "LBACSYS"."OLS$SESSINFO"                        0 KB       0 rows
+. . exported "LBACSYS"."OLS$USER"                            0 KB       0 rows
+. . exported "LBACSYS"."OLS$USER_COMPARTMENTS"               0 KB       0 rows
+. . exported "LBACSYS"."OLS$USER_GROUPS"                     0 KB       0 rows
+. . exported "LBACSYS"."OLS$USER_LEVELS"                     0 KB       0 rows
+. . exported "SYS"."AUD$"                                    0 KB       0 rows
+. . exported "SYS"."DAM_CLEANUP_EVENTS$"                     0 KB       0 rows
+. . exported "SYSTEM"."SCHEDULER_PROGRAM_ARGS"           9.726 KB      13 rows
+. . exported "SYS"."DAM_CLEANUP_JOBS$"                       0 KB       0 rows
+. . exported "SYS"."TSDP_ASSOCIATION$"                       0 KB       0 rows
+. . exported "SYS"."TSDP_CONDITION$"                         0 KB       0 rows
+. . exported "SYS"."TSDP_FEATURE_POLICY$"                    0 KB       0 rows
+. . exported "SYS"."TSDP_PROTECTION$"                        0 KB       0 rows
+. . exported "SYS"."TSDP_SENSITIVE_DATA$"                    0 KB       0 rows
+. . exported "SYS"."TSDP_SENSITIVE_TYPE$"                    0 KB       0 rows
+. . exported "SYS"."TSDP_SOURCE$"                            0 KB       0 rows
+. . exported "SYSTEM"."REDO_LOG"                             0 KB       0 rows
+. . exported "WMSYS"."WM$BATCH_COMPRESSIBLE_TABLES$"         0 KB       0 rows
+. . exported "WMSYS"."WM$CONSTRAINTS_TABLE$"                 0 KB       0 rows
+. . exported "WMSYS"."WM$CONS_COLUMNS$"                      0 KB       0 rows
+. . exported "WMSYS"."WM$LOCKROWS_INFO$"                     0 KB       0 rows
+. . exported "WMSYS"."WM$MODIFIED_TABLES$"                   0 KB       0 rows
+. . exported "WMSYS"."WM$MP_GRAPH_WORKSPACES_TABLE$"         0 KB       0 rows
+. . exported "WMSYS"."WM$MP_PARENT_WORKSPACES_TABLE$"        0 KB       0 rows
+. . exported "WMSYS"."WM$NESTED_COLUMNS_TABLE$"              0 KB       0 rows
+. . exported "WMSYS"."WM$RESOLVE_WORKSPACES_TABLE$"          0 KB       0 rows
+. . exported "WMSYS"."WM$RIC_LOCKING_TABLE$"                 0 KB       0 rows
+. . exported "WMSYS"."WM$RIC_TABLE$"                         0 KB       0 rows
+. . exported "WMSYS"."WM$RIC_TRIGGERS_TABLE$"                0 KB       0 rows
+. . exported "WMSYS"."WM$UDTRIG_DISPATCH_PROCS$"             0 KB       0 rows
+. . exported "WMSYS"."WM$UDTRIG_INFO$"                       0 KB       0 rows
+. . exported "WMSYS"."WM$VERSION_TABLE$"                     0 KB       0 rows
+. . exported "WMSYS"."WM$VT_ERRORS_TABLE$"                   0 KB       0 rows
+. . exported "WMSYS"."WM$WORKSPACE_SAVEPOINTS_TABLE$"        0 KB       0 rows
+. . exported "SOE"."ORDER_ITEMS"                         170.4 MB 3735896 rows
+. . exported "SOE"."ORDERS"                              114.9 MB 1352070 rows
+. . exported "SOE"."ORDERS2"                             114.9 MB 1352070 rows
+. . exported "WMSYS"."WM$EXP_MAP"                        7.718 KB       3 rows
+. . exported "SOE"."ORDERS_TEST"                         81.58 MB  947950 rows
+. . exported "SOE"."INVENTORIES"                         15.27 MB  902171 rows
+. . exported "SOE"."LOGON"                               9.065 MB  442208 rows
+. . exported "SOE"."CUSTOMERS"                           4.983 MB   45703 rows
+. . exported "SOE"."ADDRESSES"                           4.084 MB   55703 rows
+. . exported "SOE"."CARD_DETAILS"                        2.402 MB   55703 rows
+. . exported "SOE"."PRODUCT_DESCRIPTIONS"                224.1 KB    1000 rows
+. . exported "SOE"."PRODUCT_INFORMATION"                 186.4 KB    1000 rows
+. . exported "WMSYS"."WM$METADATA_MAP"                       0 KB       0 rows
+. . exported "SOE"."EMP"                                 51.39 KB     879 rows
+. . exported "SOE"."WAREHOUSES"                          36.03 KB    1000 rows
+. . exported "SOE"."JOB_HISTORY"                         14.60 KB     246 rows
+. . exported "SOE"."JOBS"                                5.976 KB      23 rows
+. . exported "SOE"."ORDERENTRY_METADATA"                 5.609 KB       4 rows
+. . exported "SOE"."DEPT"                                5.632 KB       7 rows
+. . exported "SOE"."V"                                       0 KB       0 rows
+Master table "SYS"."SYS_EXPORT_FULL_01" successfully loaded/unloaded
+******************************************************************************
+Dump file set for SYS.SYS_EXPORT_FULL_01 is:
+  /u01/datapump/FULL_0101.dmp
+  /u01/datapump2/FULL_0101.dmp
+  /u01/datapump3/FULL_0101.dmp
+Job "SYS"."SYS_EXPORT_FULL_01" successfully completed at Tue Nov 7 10:54:18 2023 elapsed 0 00:00:53
+
+[oracle@srv1 datapump]$ du -sh /u01/datapump/FULL_0101.dmp
+519M	/u01/datapump/FULL_0101.dmp
+[oracle@srv1 datapump]$ 
+[oracle@srv1 datapump]$ du -sh /u01/datapump2/FULL_0101.dmp
+3.9M	/u01/datapump2/FULL_0101.dmp
+[oracle@srv1 datapump]$ 
+[oracle@srv1 datapump]$ du -sh /u01/datapump3/FULL_0101.dmp
+48K	/u01/datapump3/FULL_0101.dmp
+[oracle@srv1 datapump]$ 
+[oracle@srv1 datapump]$ expdp dumpfile=DATAPUMP_DIR:FULL_01%U.dmp,DATAPUMP_DIR1:FULL_01%U.dmp,DATAPUMP_DIR2:FULL_01%U.dmp logfile=FULL_01.log  directory=DATAPUMP_DIR FULL=Y parallel=3 filesize=50M
+
+Export: Release 19.0.0.0.0 - Production on Tue Nov 7 10:55:18 2023
+Version 19.3.0.0.0
+
+Copyright (c) 1982, 2019, Oracle and/or its affiliates.  All rights reserved.
+
+Username: / as sysdba
+Password: 
+
+Connected to: Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+ORA-39001: invalid argument value
+ORA-39000: bad dump file specification
+ORA-31641: unable to create dump file "/u01/datapump/FULL_0101.dmp"
+ORA-27038: created file already exists
+Additional information: 1
+
+
+[oracle@srv1 datapump]$ 
+[oracle@srv1 datapump]$ 
+[oracle@srv1 datapump]$ expdp dumpfile=DATAPUMP_DIR:FULL_02%U.dmp,DATAPUMP_DIR1:FULL_02%U.dmp,DATAPUMP_DIR2:FULL_02%U.dmp logfile=FULL_01.log  directory=DATAPUMP_DIR FULL=Y parallel=3 filesize=50M
+
+Export: Release 19.0.0.0.0 - Production on Tue Nov 7 10:55:41 2023
+Version 19.3.0.0.0
+
+Copyright (c) 1982, 2019, Oracle and/or its affiliates.  All rights reserved.
+
+Username: / as sysdba
+Password: 
+
+Connected to: Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Starting "SYS"."SYS_EXPORT_FULL_01":  /******** AS SYSDBA dumpfile=DATAPUMP_DIR:FULL_02%U.dmp,DATAPUMP_DIR1:FULL_02%U.dmp,DATAPUMP_DIR2:FULL_02%U.dmp logfile=FULL_01.log directory=DATAPUMP_DIR FULL=Y parallel=3 filesize=50M 
+Processing object type DATABASE_EXPORT/EARLY_OPTIONS/VIEWS_AS_TABLES/TABLE_DATA
+Processing object type DATABASE_EXPORT/NORMAL_OPTIONS/VIEWS_AS_TABLES/TABLE_DATA
+Processing object type DATABASE_EXPORT/NORMAL_OPTIONS/TABLE_DATA
+Processing object type DATABASE_EXPORT/SCHEMA/PACKAGE_BODIES/PACKAGE/PACKAGE_BODY
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/INDEX/STATISTICS/INDEX_STATISTICS
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/INDEX/STATISTICS/FUNCTIONAL_INDEX/INDEX_STATISTICS
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/INDEX/STATISTICS/BITMAP_INDEX/INDEX_STATISTICS
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/STATISTICS/TABLE_STATISTICS
+Processing object type DATABASE_EXPORT/PRE_SYSTEM_IMPCALLOUT/MARKER
+Processing object type DATABASE_EXPORT/PRE_INSTANCE_IMPCALLOUT/MARKER
+Processing object type DATABASE_EXPORT/TABLESPACE
+Processing object type DATABASE_EXPORT/PROFILE
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/TABLE_DATA
+Processing object type DATABASE_EXPORT/SCHEMA/USER
+Processing object type DATABASE_EXPORT/ROLE
+Processing object type DATABASE_EXPORT/RADM_FPTM
+Processing object type DATABASE_EXPORT/SCHEMA/GRANT/SYSTEM_GRANT
+Processing object type DATABASE_EXPORT/SCHEMA/ROLE_GRANT
+Processing object type DATABASE_EXPORT/GRANT/SYSTEM_GRANT/PROC_SYSTEM_GRANT
+Processing object type DATABASE_EXPORT/SCHEMA/DEFAULT_ROLE
+Processing object type DATABASE_EXPORT/SCHEMA/ON_USER_GRANT
+Processing object type DATABASE_EXPORT/SCHEMA/TABLESPACE_QUOTA
+Processing object type DATABASE_EXPORT/RESOURCE_COST
+Processing object type DATABASE_EXPORT/TRUSTED_DB_LINK
+Processing object type DATABASE_EXPORT/SCHEMA/SEQUENCE/SEQUENCE
+Processing object type DATABASE_EXPORT/DIRECTORY/DIRECTORY
+Processing object type DATABASE_EXPORT/SYSTEM_PROCOBJACT/PRE_SYSTEM_ACTIONS/PROCACT_SYSTEM
+Processing object type DATABASE_EXPORT/SYSTEM_PROCOBJACT/PROCOBJ
+Processing object type DATABASE_EXPORT/STATISTICS/MARKER
+Processing object type DATABASE_EXPORT/SYSTEM_PROCOBJACT/POST_SYSTEM_ACTIONS/PROCACT_SYSTEM
+Processing object type DATABASE_EXPORT/SCHEMA/PROCACT_SCHEMA
+Processing object type DATABASE_EXPORT/EARLY_POST_INSTANCE_IMPCALLOUT/MARKER
+Processing object type DATABASE_EXPORT/EARLY_OPTIONS/VIEWS_AS_TABLES/TABLE
+Processing object type DATABASE_EXPORT/NORMAL_POST_INSTANCE_IMPCALLOUT/MARKER
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/TABLE
+Processing object type DATABASE_EXPORT/NORMAL_OPTIONS/VIEWS_AS_TABLES/TABLE
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/IDENTITY_COLUMN
+Processing object type DATABASE_EXPORT/SCHEMA/PACKAGE/PACKAGE_SPEC
+Processing object type DATABASE_EXPORT/SCHEMA/PACKAGE/CODE_BASE_GRANT
+Processing object type DATABASE_EXPORT/SCHEMA/FUNCTION/FUNCTION
+Processing object type DATABASE_EXPORT/SCHEMA/PROCEDURE/PROCEDURE
+Processing object type DATABASE_EXPORT/SCHEMA/PACKAGE/COMPILE_PACKAGE/PACKAGE_SPEC/ALTER_PACKAGE_SPEC
+Processing object type DATABASE_EXPORT/SCHEMA/FUNCTION/ALTER_FUNCTION
+Processing object type DATABASE_EXPORT/SCHEMA/PROCEDURE/ALTER_PROCEDURE
+Processing object type DATABASE_EXPORT/SCHEMA/VIEW/VIEW
+Processing object type DATABASE_EXPORT/NORMAL_OPTIONS/TABLE
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/INDEX/INDEX
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/INDEX/FUNCTIONAL_INDEX/INDEX
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/CONSTRAINT/CONSTRAINT
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/CONSTRAINT/REF_CONSTRAINT
+Processing object type DATABASE_EXPORT/SCHEMA/TABLE/INDEX/BITMAP_INDEX/INDEX
+Processing object type DATABASE_EXPORT/FINAL_POST_INSTANCE_IMPCALLOUT/MARKER
+Processing object type DATABASE_EXPORT/SCHEMA/POST_SCHEMA/PROCACT_SCHEMA
+Processing object type DATABASE_EXPORT/AUDIT_UNIFIED/AUDIT_POLICY_ENABLE
+Processing object type DATABASE_EXPORT/POST_SYSTEM_IMPCALLOUT/MARKER
+. . exported "SYS"."KU$_USER_MAPPING_VIEW"               6.070 KB      37 rows
+. . exported "MDSYS"."RDF_PARAM$"                        6.515 KB       3 rows
+. . exported "SYSTEM"."REDO_DB"                          25.59 KB       1 rows
+. . exported "WMSYS"."WM$WORKSPACES_TABLE$"              12.10 KB       1 rows
+. . exported "WMSYS"."WM$HINT_TABLE$"                    9.984 KB      97 rows
+. . exported "LBACSYS"."OLS$INSTALLATIONS"               6.960 KB       2 rows
+. . exported "WMSYS"."WM$WORKSPACE_PRIV_TABLE$"          7.078 KB      11 rows
+. . exported "SYS"."AUDTAB$TBS$FOR_EXPORT"               5.953 KB       2 rows
+. . exported "SYS"."DAM_CONFIG_PARAM$"                   6.531 KB      14 rows
+. . exported "SYS"."DBA_SENSITIVE_DATA"                      0 KB       0 rows
+. . exported "SYS"."TSDP_SUBPOL$"                        6.328 KB       1 rows
+. . exported "SYS"."DBA_TSDP_POLICY_PROTECTION"              0 KB       0 rows
+. . exported "SYS"."FGA_LOG$FOR_EXPORT"                      0 KB       0 rows
+. . exported "WMSYS"."WM$NEXTVER_TABLE$"                 6.375 KB       1 rows
+. . exported "SYS"."NACL$_ACE_EXP"                           0 KB       0 rows
+. . exported "LBACSYS"."OLS$PROPS"                       6.234 KB       5 rows
+. . exported "WMSYS"."WM$ENV_VARS$"                      6.015 KB       3 rows
+. . exported "SYS"."TSDP_PARAMETER$"                     5.953 KB       1 rows
+. . exported "SYS"."NACL$_HOST_EXP"                      6.976 KB       2 rows
+. . exported "SYS"."NACL$_WALLET_EXP"                        0 KB       0 rows
+. . exported "SYS"."TSDP_POLICY$"                        5.921 KB       1 rows
+. . exported "SYS"."SQL$TEXT_DATAPUMP"                       0 KB       0 rows
+. . exported "SYS"."SQL$_DATAPUMP"                           0 KB       0 rows
+. . exported "SYS"."SQLOBJ$AUXDATA_DATAPUMP"                 0 KB       0 rows
+. . exported "SYS"."SQLOBJ$DATA_DATAPUMP"                    0 KB       0 rows
+. . exported "SYS"."SQLOBJ$PLAN_DATAPUMP"                    0 KB       0 rows
+. . exported "WMSYS"."WM$VERSION_HIERARCHY_TABLE$"       5.984 KB       1 rows
+. . exported "SYS"."SQLOBJ$_DATAPUMP"                        0 KB       0 rows
+. . exported "WMSYS"."WM$EVENTS_INFO$"                   5.812 KB      12 rows
+. . exported "LBACSYS"."OLS$AUDIT_ACTIONS"               5.757 KB       8 rows
+. . exported "LBACSYS"."OLS$DIP_EVENTS"                  5.539 KB       2 rows
+. . exported "AUDSYS"."AUD$UNIFIED":"AUD_UNIFIED_P0"         0 KB       0 rows
+. . exported "AUDSYS"."AUD$UNIFIED":"SYS_P181"           147.5 KB     189 rows
+. . exported "SYSTEM"."SCHEDULER_JOB_ARGS"               8.648 KB       4 rows
+. . exported "AUDSYS"."AUD$UNIFIED":"SYS_P241"           52.27 KB       3 rows
+. . exported "LBACSYS"."OLS$AUDIT"                           0 KB       0 rows
+. . exported "LBACSYS"."OLS$COMPARTMENTS"                    0 KB       0 rows
+. . exported "LBACSYS"."OLS$DIP_DEBUG"                       0 KB       0 rows
+. . exported "LBACSYS"."OLS$GROUPS"                          0 KB       0 rows
+. . exported "LBACSYS"."OLS$LAB"                             0 KB       0 rows
+. . exported "LBACSYS"."OLS$LEVELS"                          0 KB       0 rows
+. . exported "LBACSYS"."OLS$POL"                             0 KB       0 rows
+. . exported "LBACSYS"."OLS$POLICY_ADMIN"                    0 KB       0 rows
+. . exported "LBACSYS"."OLS$POLS"                            0 KB       0 rows
+. . exported "LBACSYS"."OLS$POLT"                            0 KB       0 rows
+. . exported "LBACSYS"."OLS$PROFILE"                         0 KB       0 rows
+. . exported "LBACSYS"."OLS$PROFILES"                        0 KB       0 rows
+. . exported "LBACSYS"."OLS$PROG"                            0 KB       0 rows
+. . exported "LBACSYS"."OLS$SESSINFO"                        0 KB       0 rows
+. . exported "LBACSYS"."OLS$USER"                            0 KB       0 rows
+. . exported "LBACSYS"."OLS$USER_COMPARTMENTS"               0 KB       0 rows
+. . exported "LBACSYS"."OLS$USER_GROUPS"                     0 KB       0 rows
+. . exported "LBACSYS"."OLS$USER_LEVELS"                     0 KB       0 rows
+. . exported "SYS"."AUD$"                                    0 KB       0 rows
+. . exported "SYS"."DAM_CLEANUP_EVENTS$"                     0 KB       0 rows
+. . exported "SYS"."DAM_CLEANUP_JOBS$"                       0 KB       0 rows
+. . exported "SYS"."TSDP_ASSOCIATION$"                       0 KB       0 rows
+. . exported "SYS"."TSDP_CONDITION$"                         0 KB       0 rows
+. . exported "SYS"."TSDP_FEATURE_POLICY$"                    0 KB       0 rows
+. . exported "SYS"."TSDP_PROTECTION$"                        0 KB       0 rows
+. . exported "SYS"."TSDP_SENSITIVE_DATA$"                    0 KB       0 rows
+. . exported "SYS"."TSDP_SENSITIVE_TYPE$"                    0 KB       0 rows
+. . exported "SYS"."TSDP_SOURCE$"                            0 KB       0 rows
+. . exported "SYSTEM"."REDO_LOG"                             0 KB       0 rows
+. . exported "WMSYS"."WM$BATCH_COMPRESSIBLE_TABLES$"         0 KB       0 rows
+. . exported "WMSYS"."WM$CONSTRAINTS_TABLE$"                 0 KB       0 rows
+. . exported "WMSYS"."WM$CONS_COLUMNS$"                      0 KB       0 rows
+. . exported "WMSYS"."WM$LOCKROWS_INFO$"                     0 KB       0 rows
+. . exported "WMSYS"."WM$MODIFIED_TABLES$"                   0 KB       0 rows
+. . exported "WMSYS"."WM$MP_GRAPH_WORKSPACES_TABLE$"         0 KB       0 rows
+. . exported "WMSYS"."WM$MP_PARENT_WORKSPACES_TABLE$"        0 KB       0 rows
+. . exported "WMSYS"."WM$NESTED_COLUMNS_TABLE$"              0 KB       0 rows
+. . exported "WMSYS"."WM$RESOLVE_WORKSPACES_TABLE$"          0 KB       0 rows
+. . exported "WMSYS"."WM$RIC_LOCKING_TABLE$"                 0 KB       0 rows
+. . exported "WMSYS"."WM$RIC_TABLE$"                         0 KB       0 rows
+. . exported "WMSYS"."WM$RIC_TRIGGERS_TABLE$"                0 KB       0 rows
+. . exported "WMSYS"."WM$UDTRIG_DISPATCH_PROCS$"             0 KB       0 rows
+. . exported "WMSYS"."WM$UDTRIG_INFO$"                       0 KB       0 rows
+. . exported "WMSYS"."WM$VERSION_TABLE$"                     0 KB       0 rows
+. . exported "WMSYS"."WM$VT_ERRORS_TABLE$"                   0 KB       0 rows
+. . exported "WMSYS"."WM$WORKSPACE_SAVEPOINTS_TABLE$"        0 KB       0 rows
+. . exported "SYSTEM"."SCHEDULER_PROGRAM_ARGS"           9.726 KB      13 rows
+. . exported "SOE"."ORDER_ITEMS"                         170.4 MB 3735896 rows
+. . exported "SOE"."ORDERS"                              114.9 MB 1352070 rows
+. . exported "WMSYS"."WM$EXP_MAP"                        7.718 KB       3 rows
+. . exported "SOE"."ORDERS2"                             114.9 MB 1352070 rows
+. . exported "SOE"."ORDERS_TEST"                         81.58 MB  947950 rows
+. . exported "SOE"."INVENTORIES"                         15.27 MB  902171 rows
+. . exported "SOE"."LOGON"                               9.065 MB  442208 rows
+. . exported "SOE"."CUSTOMERS"                           4.983 MB   45703 rows
+. . exported "WMSYS"."WM$METADATA_MAP"                       0 KB       0 rows
+. . exported "SOE"."ADDRESSES"                           4.084 MB   55703 rows
+. . exported "SOE"."CARD_DETAILS"                        2.402 MB   55703 rows
+. . exported "SOE"."PRODUCT_DESCRIPTIONS"                224.1 KB    1000 rows
+. . exported "SOE"."PRODUCT_INFORMATION"                 186.4 KB    1000 rows
+. . exported "SOE"."EMP"                                 51.39 KB     879 rows
+. . exported "SOE"."WAREHOUSES"                          36.03 KB    1000 rows
+. . exported "SOE"."JOB_HISTORY"                         14.60 KB     246 rows
+. . exported "SOE"."JOBS"                                5.976 KB      23 rows
+. . exported "SOE"."ORDERENTRY_METADATA"                 5.609 KB       4 rows
+. . exported "SOE"."DEPT"                                5.632 KB       7 rows
+. . exported "SOE"."V"                                       0 KB       0 rows
+Master table "SYS"."SYS_EXPORT_FULL_01" successfully loaded/unloaded
+******************************************************************************
+Dump file set for SYS.SYS_EXPORT_FULL_01 is:
+  /u01/datapump/FULL_0201.dmp
+  /u01/datapump2/FULL_0201.dmp
+  /u01/datapump3/FULL_0201.dmp
+  /u01/datapump/FULL_0202.dmp
+  /u01/datapump2/FULL_0202.dmp
+  /u01/datapump3/FULL_0202.dmp
+  /u01/datapump/FULL_0203.dmp
+  /u01/datapump2/FULL_0203.dmp
+  /u01/datapump3/FULL_0203.dmp
+  /u01/datapump/FULL_0204.dmp
+  /u01/datapump2/FULL_0204.dmp
+  /u01/datapump3/FULL_0204.dmp
+  /u01/datapump/FULL_0205.dmp
+Job "SYS"."SYS_EXPORT_FULL_01" successfully completed at Tue Nov 7 10:56:41 2023 elapsed 0 00:00:56
+
+[oracle@srv1 datapump]$ du -sh /u01/datapump/FULL_0201.dmp
+50M	/u01/datapump/FULL_0201.dmp
+[oracle@srv1 datapump]$ 
